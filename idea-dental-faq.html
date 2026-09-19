@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dental FAQ | Idea Dental — Houston, TX</title>
+<title>Dental FAQ | Idea Dental, Houston, TX</title>
 <meta name="description" content="Answers to common questions about dental implants, Invisalign, braces, veneers, emergency dental care, insurance and payment plans at Idea Dental, a bilingual dentist in Houston, TX.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <!--
   FAQPage JSON-LD.
@@ -59,55 +59,88 @@
 
 <style>
   :root{
-    --ink:#12303a;        /* deep teal-ink, from brand blue family */
-    --ink-soft:#4a6670;
-    --paper:#f6f4ee;      /* warm off-white */
+    --ink:#0f2a33;
+    --ink-soft:#54707a;
+    --ink-mute:#5a757f;
+    --paper:#f9f8f3;
+    --paper-2:#f1efe6;
     --card:#ffffff;
-    --line:#e4ded1;       /* warm hairline */
-    --accent:#0a7ea4;     /* Idea Dental blue, calmed */
-    --accent-ink:#075a76;
-    --alert:#c0453b;      /* used ONLY for the emergency band */
-    --radius:14px;
+    --line:#e5e2d7;
+    --line-soft:#efede4;
+    --brand:#009adb;
+    --accent:#007bb0;
+    --accent-ink:#00628c;
+    --accent-deep:#00405c;
+    --on-accent:#ffffff;
+    --alert:#b8443a;
+    --gold:#d99b22;
     --maxw:820px;
+    --radius:14px;
   }
   :root:not([data-theme="light"]){}
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --ink:#eef3f4; --ink-soft:#a9bcc2; --paper:#0e1a1f; --card:#152730;
-      --line:#223942; --accent:#4cc4e6; --accent-ink:#8fddf1; --alert:#ef7c72;
-    }
+    --ink:#e9f1f3;
+    --ink-soft:#9db2ba;
+    --ink-mute:#7e959e;
+    --paper:#0c171c;
+    --paper-2:#111f26;
+    --card:#13242c;
+    --line:#233a44;
+    --line-soft:#1c303a;
+    --brand:#35b3e3;
+    --accent:#35b3e3;
+    --accent-ink:#7fd4f2;
+    --accent-deep:#0a3346;
+    --on-accent:#08161b;
+    --alert:#e8776c;
+    --gold:#e9bd56;
+  }
   }
   :root[data-theme="dark"]{
-    --ink:#eef3f4; --ink-soft:#a9bcc2; --paper:#0e1a1f; --card:#152730;
-    --line:#223942; --accent:#4cc4e6; --accent-ink:#8fddf1; --alert:#ef7c72;
+    --ink:#e9f1f3;
+    --ink-soft:#9db2ba;
+    --ink-mute:#7e959e;
+    --paper:#0c171c;
+    --paper-2:#111f26;
+    --card:#13242c;
+    --line:#233a44;
+    --line-soft:#1c303a;
+    --brand:#35b3e3;
+    --accent:#35b3e3;
+    --accent-ink:#7fd4f2;
+    --accent-deep:#0a3346;
+    --on-accent:#08161b;
+    --alert:#e8776c;
+    --gold:#e9bd56;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
     margin:0; background:var(--paper); color:var(--ink);
-    font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
 
   /* Header */
   header.masthead{padding:56px 0 20px; border-bottom:1px solid var(--line)}
-  .eyebrow{font-size:.86rem; letter-spacing:.02em; color:var(--accent-ink); font-weight:600; margin:0 0 10px}
+  .eyebrow{font-size:.86rem; letter-spacing:.02em; color:var(--accent-ink); font-weight:400; margin:0 0 10px}
   h1{
-    font-family:"Fraunces",Georgia,serif; font-weight:500;
+    font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif; font-weight:300;
     font-size:clamp(2.1rem,5.5vw,3.2rem); line-height:1.05; margin:0 0 14px; letter-spacing:-.01em;
   }
   .lede{font-size:1.06rem; color:var(--ink-soft); max-width:60ch; margin:0}
 
-  /* Emergency band — the one place we spend visual boldness */
+  /* Emergency band: the one place we spend visual boldness */
   .emergency{
     margin:26px 0 8px; background:var(--alert); color:#fff; border-radius:var(--radius);
     padding:18px 20px; display:flex; gap:16px; align-items:center; flex-wrap:wrap;
   }
-  .emergency b{font-weight:600}
+  .emergency b{font-weight:700}
   .emergency .call{
     margin-left:auto; background:#fff; color:var(--alert); text-decoration:none;
-    font-weight:600; padding:11px 18px; border-radius:10px; white-space:nowrap;
+    font-weight:700; padding:11px 18px; border-radius:10px; white-space:nowrap;
   }
   .emergency small{display:block; opacity:.92; font-weight:400}
   @media (max-width:560px){ .emergency .call{margin-left:0; width:100%; text-align:center} }
@@ -125,7 +158,7 @@
   /* Sections + questions */
   section.qset{padding:34px 0 6px}
   section.qset > h2{
-    font-family:"Fraunces",Georgia,serif; font-weight:500; font-size:1.5rem;
+    font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif; font-weight:300; font-size:1.5rem;
     margin:0 0 4px; letter-spacing:-.01em; scroll-margin-top:20px;
   }
   .qset > h2 + p.note{margin:2px 0 14px; color:var(--ink-soft); font-size:.95rem}
@@ -135,7 +168,7 @@
   }
   details.qa summary{
     cursor:pointer; list-style:none; padding:16px 40px 16px 2px; position:relative;
-    font-weight:600; font-size:1.04rem; color:var(--ink);
+    font-weight:700; font-size:1.04rem; color:var(--ink);
   }
   details.qa summary::-webkit-details-marker{display:none}
   details.qa summary::after{
@@ -158,11 +191,11 @@
     margin:48px 0 60px; background:var(--card); border:1px solid var(--line);
     border-radius:var(--radius); padding:30px 26px; text-align:center;
   }
-  footer.cta h2{font-family:"Fraunces",serif; font-weight:500; font-size:1.6rem; margin:0 0 6px}
+  footer.cta h2{font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif; font-weight:300; font-size:1.6rem; margin:0 0 6px}
   footer.cta p{color:var(--ink-soft); margin:0 0 18px}
   .btnrow{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
   .btn{
-    text-decoration:none; font-weight:600; padding:13px 22px; border-radius:11px;
+    text-decoration:none; font-weight:700; padding:13px 22px; border-radius:11px;
     border:1px solid var(--accent);
   }
   .btn.primary{background:var(--accent); color:#fff}
@@ -171,12 +204,56 @@
   .meta a{color:var(--accent-ink)}
 
   :focus-visible{outline:2.5px solid var(--accent); outline-offset:2px; border-radius:4px}
+
+  /* brand mark, matching index.html */
+  .sitelogo{display:inline-block; line-height:0; margin:0 0 22px; border-radius:8px}
+  .sitelogo img{display:block; height:46px; width:auto; aspect-ratio:476/176}
+  @media(max-width:600px){ .sitelogo img{height:38px} }
+
+  /* back arrow: uses real history when there is any, otherwise falls through
+     to the href so it still works without JS or on a direct landing */
+  .backlink{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:40px; height:40px; margin:0 12px 22px 0; vertical-align:middle;
+    border:1px solid var(--line); border-radius:11px;
+    background:var(--card); color:var(--accent-ink); text-decoration:none;
+    transition:transform .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .backlink svg{width:19px; height:19px; display:block}
+  .backlink:hover{transform:translateX(-2px); border-color:var(--accent); color:var(--accent)}
+  .sitelogo{vertical-align:middle}
+
+  /* FAQ filter. Plain text matching over the question and its answer; no
+     library, and the page still works with JS off (box is hidden then). */
+  .visually-hidden{position:absolute!important; width:1px; height:1px; margin:-1px;
+    padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
+  .faqsearch{position:relative; margin:0 0 clamp(18px,2.4vw,26px)}
+  .faqsearch-ico{position:absolute; left:16px; top:17px; width:19px; height:19px;
+    color:var(--ink-mute); pointer-events:none}
+  .faqsearch-input{
+    width:100%; box-sizing:border-box; font:inherit; font-size:1rem; color:var(--ink);
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:15px 16px 15px 46px; -webkit-appearance:none; appearance:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .faqsearch-input::placeholder{color:var(--ink-mute)}
+  .faqsearch-input:focus{
+    outline:none; border-color:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);
+  }
+  .faqsearch-input::-webkit-search-cancel-button{cursor:pointer}
+  .faqsearch-count{margin:10px 2px 0; font-size:.9rem; color:var(--ink-mute); min-height:1.2em}
+  .faqsearch-count a{color:var(--accent-ink); font-weight:700}
+  .qa-hidden{display:none !important}
+  /* without JS the filter cannot work, so it is not shown at all */
+  .no-js .faqsearch{display:none}
 </style>
 </head>
 <body>
 
 <header class="masthead">
   <div class="wrap">
+    <a class="backlink" href="index.html" aria-label="Go back to the previous page" title="Back" onclick="if(history.length&gt;1){history.back();return false}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a><a class="sitelogo" href="index.html"><img src="idea-dental-logo.png" alt="IDEA! Dental" width="476" height="176" decoding="async"></a>
     <p class="eyebrow">Idea Dental · Houston, TX · Se habla español</p>
     <h1>Questions patients ask us</h1>
     <p class="lede">Straight answers about treatments, emergencies, insurance and payment plans. For anything specific to your teeth, the dentist confirms it at your visit.</p>
@@ -205,7 +282,18 @@
 
 <main class="wrap">
 
-  <section class="qset" id="general">
+  
+    <div class="faqsearch">
+      <label class="visually-hidden" for="faqq">Search the questions</label>
+      <svg class="faqsearch-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" aria-hidden="true" focusable="false">
+        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+      </svg>
+      <input id="faqq" class="faqsearch-input" type="search" autocomplete="off"
+             placeholder="Search the questions…" aria-describedby="faqq-count">
+      <p id="faqq-count" class="faqsearch-count" role="status" aria-live="polite"></p>
+    </div>
+<section class="qset" id="general">
     <h2>About the practice</h2>
 
     <details class="qa"><summary>What is Idea Dental?</summary>
@@ -235,7 +323,7 @@
 
   <section class="qset" id="emergency">
     <h2>Dental emergencies</h2>
-    <p class="note">If you have trouble breathing or swallowing, call 911 or go to the nearest ER — those can be life-threatening.</p>
+    <p class="note">If you have trouble breathing or swallowing, call 911 or go to the nearest ER. Those can be life-threatening.</p>
 
     <details class="qa"><summary>Does Idea Dental offer emergency or same-day dental care?</summary>
       <div class="answer"><p>Yes. Idea Dental offers emergency and same-day dental care for problems like severe toothache, swelling, a knocked-out or broken tooth, or a lost crown or filling. Emergency care is available Tuesday and Wednesday 10:00 AM to 6:00 PM and on the 2nd and 4th Saturdays 10:00 AM to 4:00 PM. Call <a href="tel:+18326648640">(832) 664-8640</a> as early as possible so the team can prepare for your visit.</p></div>
@@ -346,7 +434,7 @@
     </details>
 
     <details class="qa"><summary>How much will my treatment cost?</summary>
-      <div class="answer"><p>The cost depends on the examination findings, the specific treatment you need, your insurance benefits and the agreed treatment plan, so a final price is confirmed after the dentist evaluates your teeth. Idea Dental is known for affordable pricing and offers payment plans for all patients. Contact the office for current fees for your treatment. <!-- CONFIRM: pricing figures — placeholders until Dr. Vu confirms --></p></div>
+      <div class="answer"><p>The cost depends on the examination findings, the specific treatment you need, your insurance benefits and the agreed treatment plan, so a final price is confirmed after the dentist evaluates your teeth. Idea Dental is known for affordable pricing and offers payment plans for all patients. Contact the office for current fees for your treatment. <!-- CONFIRM: pricing figures; placeholders until Dr. Vu confirms --></p></div>
     </details>
 
     <details class="qa"><summary>Do you take walk-ins?</summary>
@@ -360,17 +448,63 @@
 
   <footer class="cta">
     <h2>Still have a question?</h2>
-    <p>Our bilingual team is happy to help — in English or Spanish.</p>
+    <p>Our bilingual team is happy to help, in English or Spanish.</p>
     <div class="btnrow">
       <a class="btn primary" href="tel:+18326648640">Call (832) 664-8640</a>
       <a class="btn ghost" href="#">Request an appointment</a>
     </div>
     <p class="meta">
       Idea Dental · 216 W Little York Road, Suite B, Houston, TX 77076<br>
-      Care provided by Dr. Stephanie Vu, DDS · Se habla español
+      Se habla español
     </p>
   </footer>
 
 </main>
+<script>
+/* FAQ filter: matches typed words against each question and its answer.
+   Groups with no surviving question are hidden too. */
+(function () {
+  var input = document.getElementById("faqq");
+  if (!input) return;
+  var count = document.getElementById("faqq-count");
+  var items = [].slice.call(document.querySelectorAll("details.qa"));
+  var groups = [].slice.call(document.querySelectorAll("section.qset"));
+  var total = items.length;
+
+  items.forEach(function (d) {
+    d.dataset.text = (d.textContent || "").toLowerCase().replace(/\s+/g, " ");
+  });
+
+  function apply() {
+    var q = input.value.toLowerCase().trim();
+    var words = q ? q.split(/\s+/) : [];
+    var shown = 0;
+
+    items.forEach(function (d) {
+      var hit = words.every(function (w) { return d.dataset.text.indexOf(w) !== -1; });
+      d.classList.toggle("qa-hidden", !hit);
+      if (hit) { shown++; } else if (d.open) { d.open = false; }
+    });
+
+    groups.forEach(function (g) {
+      var any = g.querySelector("details.qa:not(.qa-hidden)");
+      g.classList.toggle("qa-hidden", !any);
+    });
+
+    if (!q) {
+      count.textContent = "";
+    } else if (shown === 0) {
+      count.innerHTML = 'No questions match \u201c' + q.replace(/[<&]/g, "") +
+        '\u201d. Try fewer words, or call <a href="tel:+18326648640">(832) 664-8640</a>.';
+    } else {
+      count.textContent = shown + (shown === 1 ? " question" : " questions") +
+        " of " + total;
+    }
+  }
+
+  input.addEventListener("input", apply);
+  input.addEventListener("search", apply);
+})();
+</script>
 </body>
 </html>

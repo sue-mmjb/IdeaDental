@@ -8,8 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="idea-dental-office.webp" type="image/webp" media="(min-width:761px)">
-<link rel="preload" as="image" href="idea-dental-office-960.webp" type="image/webp" media="(max-width:760px)">
+<link rel="preload" as="image" href="hero-poster.webp" type="image/webp">
 
 <!-- LocalBusiness (Dentist) + FAQPage. FAQ block kept in sync with visible homepage FAQs. Per Dr. Vu: no free-offer or zero-cost language anywhere. -->
 <script type="application/ld+json">
@@ -192,11 +191,11 @@
   /* Office photo. contrast(45%) sits on this pseudo-element, never on .hero
      itself, so the filter cannot touch the headline or the buttons. */
   .hero::before{
-    content:""; position:absolute; inset:0; z-index:-2;
-    background-image:url("idea-dental-office.jpg");
-    background-image:image-set(url("idea-dental-office.webp") type("image/webp"),
-                               url("idea-dental-office.jpg")  type("image/jpeg"));
-    background-size:cover; background-position:50% 55%; background-repeat:no-repeat;
+    content:""; position:absolute; inset:0; z-index:-3;
+    background-image:url("hero-poster.jpg");
+    background-image:image-set(url("hero-poster.webp") type("image/webp"),
+                               url("hero-poster.jpg")  type("image/jpeg"));
+    background-size:cover; background-position:50% 50%; background-repeat:no-repeat;
     filter:contrast(45%);
   }
   /* Paper veil over the photo. At 45% the darkest part of the shot (the wall
@@ -212,14 +211,19 @@
         color-mix(in srgb,var(--paper) 56%,transparent) 100%);
     box-shadow:inset 0 -1px 0 var(--line);
   }
-  /* lighter file for phones */
-  @media(max-width:760px){
-    .hero::before{
-      background-image:url("idea-dental-office-960.jpg");
-      background-image:image-set(url("idea-dental-office-960.webp") type("image/webp"),
-                                 url("idea-dental-office-960.jpg")  type("image/jpeg"));
-    }
+  /* The clip carries the same contrast(45%) the still had, so the veil in
+     ::after keeps its measured text contrast. It sits above the poster layer
+     and below the veil. */
+  .hero-video{
+    position:absolute; inset:0; z-index:-2;
+    width:100%; height:100%; object-fit:cover; object-position:50% 50%;
+    filter:contrast(45%); pointer-events:none;
   }
+  /* Phones and reduced-motion keep the poster still instead. The media
+     attribute on the <source> tags stops the file downloading at all on
+     narrow screens; this just hides the empty element. */
+  @media(max-width:760px){ .hero-video{display:none} }
+  @media (prefers-reduced-motion:reduce){ .hero-video{display:none} }
   .hero .wrap{max-width:900px}
   .hero .eyebrow{
     display:inline-flex; align-items:center; gap:9px;
@@ -238,7 +242,7 @@
     letter-spacing:-.032em; margin:0 0 clamp(18px,2.4vw,26px); color:var(--ink);
     max-width:17ch;
   }
-  .hero > .wrap > p{
+  .hero .herocopy > p{
     font-size:clamp(1.07rem,1.7vw,1.2rem); line-height:1.6; color:var(--ink-on-photo);
     max-width:54ch; margin:0 0 clamp(30px,4vw,42px);
   }
@@ -333,6 +337,14 @@
     border-color:color-mix(in srgb,var(--accent) 40%,var(--line));
   }
   .svc:hover::after{transform:scaleX(1)}
+  /* the set arrives on mixed backgrounds and ratios, so each is matted onto
+     one white 3:2 canvas that matches --card, letting the subjects sit
+     directly on the card with no visible image edge */
+  .svc picture{display:block; margin:0 0 18px}
+  .svc img{
+    display:block; width:100%; height:auto; aspect-ratio:3/2; object-fit:cover;
+    border-radius:12px; background:var(--card);
+  }
   .svc h3{margin:0 0 9px; font-size:1.19rem; font-weight:700; letter-spacing:-.02em; line-height:1.25}
   .svc p{margin:0; color:var(--ink-soft); font-size:.955rem; line-height:1.6}
   .svc .go{
@@ -345,6 +357,12 @@
   /* ---------- Why us: editorial hairline rhythm ---------- */
   .why{display:grid; grid-template-columns:repeat(auto-fit,minmax(248px,1fr)); gap:clamp(24px,3.4vw,40px) clamp(28px,3.6vw,48px)}
   .why .item{padding-top:22px; border-top:1px solid var(--line)}
+  .why .item picture{display:block; margin:0 0 16px}
+  .why .item img{
+    display:block; width:100%; height:auto; aspect-ratio:3/2; object-fit:cover;
+    border-radius:14px; background:var(--paper-2);
+    box-shadow:0 0 0 1px color-mix(in srgb,var(--line) 65%,transparent);
+  }
   .why .item h3{
     margin:0 0 8px; font-size:1.06rem; font-weight:700; letter-spacing:-.018em;
     line-height:1.3; color:var(--ink);
@@ -408,6 +426,11 @@
     box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 22%,transparent),
                0 0 0 9px color-mix(in srgb,var(--accent) 7%,transparent);
   }
+  /* headshots sit in the same circle the monogram used; the gradient stays
+     underneath as the colour shown while the photo loads */
+  .provider picture.badge{display:block; overflow:hidden; padding:0}
+  .provider picture.badge img{width:100%; height:100%; display:block;
+    object-fit:cover; border-radius:50%}
   .provider h3{margin:0 0 7px; font-size:1.28rem; font-weight:700; letter-spacing:-.022em}
   .provider p{margin:0; color:var(--ink-soft); font-size:.985rem; line-height:1.65; max-width:64ch}
   @media(max-width:560px){
@@ -481,6 +504,15 @@
   .loc .card2 > p a{color:var(--accent-ink); text-decoration:none; font-weight:700; font-size:.95rem}
   .loc .card2 > p a:hover{text-decoration:underline}
   @media(max-width:740px){.loc{grid-template-columns:1fr}}
+  /* map sits below both cards and spans the full column; the iframe is lazy so
+     nothing is fetched from Google until the section is nearly in view */
+  .mapwrap{
+    margin-top:clamp(16px,2.2vw,24px);
+    border:1px solid var(--line); border-radius:var(--radius-lg);
+    overflow:hidden; box-shadow:var(--sh-1); background:var(--paper-2);
+  }
+  .mapwrap iframe{display:block; width:100%; aspect-ratio:16/6; border:0}
+  @media(max-width:740px){ .mapwrap iframe{aspect-ratio:4/3} }
 
   /* ---------- Footer ---------- */
   footer.site{
@@ -556,6 +588,63 @@
     *,*::before,*::after{animation-duration:.01ms !important; animation-iteration-count:1 !important;
       transition-duration:.01ms !important; scroll-behavior:auto !important}
   }
+
+  /* FAQ filter. Plain text matching over the question and its answer; no
+     library, and the page still works with JS off (box is hidden then). */
+  .visually-hidden{position:absolute!important; width:1px; height:1px; margin:-1px;
+    padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0}
+  .faqsearch{position:relative; margin:0 0 clamp(18px,2.4vw,26px)}
+  .faqsearch-ico{position:absolute; left:16px; top:17px; width:19px; height:19px;
+    color:var(--ink-mute); pointer-events:none}
+  .faqsearch-input{
+    width:100%; box-sizing:border-box; font:inherit; font-size:1rem; color:var(--ink);
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:15px 16px 15px 46px; -webkit-appearance:none; appearance:none;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .faqsearch-input::placeholder{color:var(--ink-mute)}
+  .faqsearch-input:focus{
+    outline:none; border-color:var(--accent);
+    box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);
+  }
+  .faqsearch-input::-webkit-search-cancel-button{cursor:pointer}
+  .faqsearch-count{margin:10px 2px 0; font-size:.9rem; color:var(--ink-mute); min-height:1.2em}
+  .faqsearch-count a{color:var(--accent-ink); font-weight:700}
+  .qa-hidden{display:none !important}
+  /* without JS the filter cannot work, so it is not shown at all */
+  .no-js .faqsearch{display:none}
+
+  /* Hero splits in two once there is room for it; the copy keeps its own
+     column so the measured text contrast over the video is unchanged. */
+  .herogrid{display:grid; gap:clamp(26px,4vw,44px); align-items:center}
+  @media(min-width:980px){
+    .hero .wrap.herogrid{max-width:var(--maxw); grid-template-columns:minmax(0,1fr) 360px}
+  }
+  /* kriss.ai slot. :empty means an unfilled slot leaves no gap in the hero. */
+  .chatslot{
+    display:flex; flex-direction:column; min-height:300px; overflow:hidden;
+    background:color-mix(in srgb,var(--card) 92%,transparent);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    border:1px solid var(--line); border-radius:var(--radius-lg);
+    box-shadow:var(--sh-2);
+  }
+  .chatslot:empty{display:none}
+  .chatslot > iframe, .chatslot > div[id], .chatslot > script + div{
+    flex:1; width:100%; border:0
+  }
+  .chatslot-ph{
+    flex:1; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:7px; padding:26px; text-align:center;
+    border:1.5px dashed color-mix(in srgb,var(--accent) 34%,var(--line));
+    border-radius:calc(var(--radius-lg) - 5px); margin:9px;
+    color:var(--ink-mute); font-size:.9rem;
+  }
+  .chatslot-ph b{color:var(--ink); font-size:1rem; font-weight:700}
+  .chatslot-dot{
+    width:9px; height:9px; border-radius:50%; background:var(--brand);
+    box-shadow:0 0 0 4px color-mix(in srgb,var(--brand) 18%,transparent);
+  }
+  @media(max-width:979px){ .chatslot{min-height:260px} }
 </style>
 </head>
 <body>
@@ -579,7 +668,12 @@
 
 <!-- 1 · Hero -->
 <section class="hero">
-  <div class="wrap">
+  <video class="hero-video" autoplay muted loop playsinline poster="hero-poster.jpg" aria-hidden="true" tabindex="-1">
+    <source src="hero-loop.webm" type="video/webm" media="(min-width:761px)">
+    <source src="hero-loop.mp4" type="video/mp4" media="(min-width:761px)">
+  </video>
+  <div class="wrap herogrid">
+    <div class="herocopy">
     <p class="eyebrow">Houston, TX · Se habla español</p>
     <h1>Quality dental care in Houston, for about half the cost.</h1>
     <p>From cleanings to implants, braces to same-day emergencies, Idea Dental gives Houston families honest, affordable care in English and Spanish.</p>
@@ -587,6 +681,22 @@
       <a class="btn primary" href="idea-dental-appointments.html">Request an appointment</a>
       <a class="btn ghost" href="tel:+18326648640">Call (832) 664-8640</a>
     </div>
+    </div>
+
+    <!-- ==================================================================
+         kriss.ai CHAT SLOT
+         Paste the embed snippet from your kriss.ai dashboard INSIDE this
+         <aside>, then delete the .chatslot-ph placeholder below it.
+         The slot hides itself automatically when it is empty, so removing
+         the placeholder without adding an embed is also safe.
+         ================================================================== -->
+    <aside class="chatslot" id="kriss-chat" aria-label="Chat with Idea Dental">
+      <div class="chatslot-ph">
+        <span class="chatslot-dot" aria-hidden="true"></span>
+        <b>Chat assistant</b>
+        <span>kriss.ai widget loads here</span>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -606,12 +716,12 @@
     <h2>Our services</h2>
     <p class="sub">One office for your whole family: general, cosmetic, orthodontic, restorative and emergency dentistry.</p>
     <div class="grid">
-      <a class="svc" href="idea-dental-implants.html"><h3>Dental Implants</h3><p>Permanent, natural-looking replacements for missing teeth.</p><span class="go">Learn more →</span></a>
-      <a class="svc" href="idea-dental-invisalign.html"><h3>Invisalign</h3><p>Straighten teeth with clear, removable aligners.</p><span class="go">Learn more →</span></a>
-      <a class="svc" href="idea-dental-braces.html"><h3>Braces</h3><p>Metal and clear braces for kids, teens and adults.</p><span class="go">Learn more →</span></a>
-      <a class="svc" href="idea-dental-veneers.html"><h3>Veneers</h3><p>Custom porcelain shells for a brighter, even smile.</p><span class="go">Learn more →</span></a>
-      <a class="svc" href="idea-dental-emergency.html"><h3>Emergency Dentist</h3><p>Same-day care for pain, breaks and knocked-out teeth.</p><span class="go">Learn more →</span></a>
-      <a class="svc" href="idea-dental-faq.html"><h3>Have a question?</h3><p>Answers on treatments, insurance, payment and more.</p><span class="go">Read FAQs →</span></a>
+      <a class="svc" href="idea-dental-implants.html"><picture><source srcset="svc-dental-implants.webp" type="image/webp"><img src="svc-dental-implants.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Dental Implants</h3><p>Permanent, natural-looking replacements for missing teeth.</p><span class="go">Learn more →</span></a>
+      <a class="svc" href="idea-dental-invisalign.html"><picture><source srcset="svc-invisalign.webp" type="image/webp"><img src="svc-invisalign.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Invisalign</h3><p>Straighten teeth with clear, removable aligners.</p><span class="go">Learn more →</span></a>
+      <a class="svc" href="idea-dental-braces.html"><picture><source srcset="svc-braces.webp" type="image/webp"><img src="svc-braces.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Braces</h3><p>Metal and clear braces for kids, teens and adults.</p><span class="go">Learn more →</span></a>
+      <a class="svc" href="idea-dental-veneers.html"><picture><source srcset="svc-veneers.webp" type="image/webp"><img src="svc-veneers.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Veneers</h3><p>Custom porcelain shells for a brighter, even smile.</p><span class="go">Learn more →</span></a>
+      <a class="svc" href="idea-dental-emergency.html"><picture><source srcset="svc-emergency.webp" type="image/webp"><img src="svc-emergency.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Emergency Dentist</h3><p>Same-day care for pain, breaks and knocked-out teeth.</p><span class="go">Learn more →</span></a>
+      <a class="svc" href="idea-dental-faq.html"><picture><source srcset="svc-faq.webp" type="image/webp"><img src="svc-faq.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Have a question?</h3><p>Answers on treatments, insurance, payment and more.</p><span class="go">Read FAQs →</span></a>
     </div>
   </div>
 </section>
@@ -622,12 +732,12 @@
     <h2>Why patients choose Idea Dental</h2>
     <p class="sub">Real reasons, not slogans.</p>
     <div class="why">
-      <div class="item"><h3>About half the cost</h3><p>We're known for affordable pricing on the treatments Houston families need most.</p></div>
-      <div class="item"><h3>Bilingual team</h3><p>Discuss your care comfortably in English or Spanish. Se habla español.</p></div>
-      <div class="item"><h3>Modern iTero® 3D scanner</h3><p>No goopy impressions, and you can preview your Invisalign results before you start.</p></div>
-      <div class="item"><h3>Payment plans for all patients</h3><p>Spread out the cost of care instead of paying all at once.</p></div>
-      <div class="item"><h3>Emergency &amp; walk-ins</h3><p>Same-day care and walk-ins welcome on Tuesdays and Wednesdays.</p></div>
-      <div class="item"><h3>Whole-family care</h3><p>Children, teens and adults are all seen under one roof.</p></div>
+      <div class="item"><picture><source srcset="why-half-the-cost.webp" type="image/webp"><img src="why-half-the-cost.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>About half the cost</h3><p>We're known for affordable pricing on the treatments Houston families need most.</p></div>
+      <div class="item"><picture><source srcset="why-bilingual-team.webp" type="image/webp"><img src="why-bilingual-team.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Bilingual team</h3><p>Discuss your care comfortably in English or Spanish. Se habla español.</p></div>
+      <div class="item"><picture><source srcset="why-itero-scanner.webp" type="image/webp"><img src="why-itero-scanner.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Modern iTero® 3D scanner</h3><p>No goopy impressions, and you can preview your Invisalign results before you start.</p></div>
+      <div class="item"><picture><source srcset="why-payment-plans.webp" type="image/webp"><img src="why-payment-plans.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Payment plans for all patients</h3><p>Spread out the cost of care instead of paying all at once.</p></div>
+      <div class="item"><picture><source srcset="why-emergency-walkins.webp" type="image/webp"><img src="why-emergency-walkins.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Emergency &amp; walk-ins</h3><p>Same-day care and walk-ins welcome on Tuesdays and Wednesdays.</p></div>
+      <div class="item"><picture><source srcset="why-family-care.webp" type="image/webp"><img src="why-family-care.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture><h3>Whole-family care</h3><p>Children, teens and adults are all seen under one roof.</p></div>
     </div>
   </div>
 </section>
@@ -668,15 +778,15 @@
     <h2>Meet the providers</h2>
     <p class="sub" style="margin-bottom:22px">Care from a dedicated, bilingual team at Idea Dental.</p>
     <div class="provider">
-      <div class="badge" aria-hidden="true">SV</div>
+      <picture class="badge"><source srcset="dr-stephanie-vu.webp" type="image/webp"><img src="dr-stephanie-vu.jpg" alt="" width="240" height="240" loading="lazy" decoding="async"></picture>
       <div>
         <h3>Dr. Stephanie Vu, DDS</h3>
         <p>Dr. Vu is a dedicated dentist who provides exceptional care to patients at Idea Dental in Houston, offering general, cosmetic, orthodontic and emergency care to patients of all ages in both English and Spanish.</p>
-        <!-- CONFIRM: headshot. Dr. Vu noted no recent headshot; monogram used in place of a photo rather than a stock image. -->
+        <!-- SOURCE: headshot supplied by the practice, cropped from the existing meet-the-providers section. -->
       </div>
     </div>
     <div class="provider" style="margin-top:16px">
-      <div class="badge" aria-hidden="true">NR</div>
+      <picture class="badge"><source srcset="dr-nukul-rathi.webp" type="image/webp"><img src="dr-nukul-rathi.jpg" alt="" width="240" height="240" loading="lazy" decoding="async"></picture>
       <div>
         <h3>Dr. Nukul Rathi</h3>
         <p>Idea Dental is proud to have Dr. Nukul Rathi as a visiting provider. Dr. Rathi specializes in implants and full-mouth rehabilitation.</p>
@@ -704,6 +814,16 @@
   <div class="wrap" style="max-width:820px">
     <h2>Frequently asked questions</h2>
     <p class="sub">A few of the most common. <a href="idea-dental-faq.html">See all FAQs →</a></p>
+    <div class="faqsearch">
+      <label class="visually-hidden" for="faqq">Search the questions</label>
+      <svg class="faqsearch-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" aria-hidden="true" focusable="false">
+        <circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>
+      </svg>
+      <input id="faqq" class="faqsearch-input" type="search" autocomplete="off"
+             placeholder="Search the questions…" aria-describedby="faqq-count">
+      <p id="faqq-count" class="faqsearch-count" role="status" aria-live="polite"></p>
+    </div>
 
     <details class="qa" open><summary>Do you accept dental insurance?</summary>
       <div class="answer"><p>Idea Dental works with many dental insurance plans. Because coverage and your out-of-pocket responsibility vary by plan and treatment, our team verifies your benefits before treatment so you know what to expect. Call <a href="tel:+18326648640">(832) 664-8640</a> or ask at your visit and we'll help check your coverage.</p></div>
@@ -736,7 +856,7 @@
           <dt>Phone</dt><dd><a href="tel:+18326648640">(832) 664-8640</a></dd>
           <dt>Languages</dt><dd>English &amp; Spanish</dd>
         </dl>
-        <p style="margin-top:14px"><a href="https://www.google.com/maps/place/Idea+Dental/@29.87029,-95.4039867,17z">Get directions →</a></p>
+        <p style="margin-top:14px"><a href="https://www.google.com/maps?ll=29.87029,-95.401798&amp;z=16&amp;t=m&amp;hl=en-US&amp;gl=US&amp;mapclient=embed&amp;cid=13311229180157124321">Get directions →</a></p>
       </div>
       <div class="card2">
         <h3>Hours</h3>
@@ -750,6 +870,12 @@
           <dt>Sun</dt><dd>Closed</dd>
         </dl>
       </div>
+    </div>
+    <div class="mapwrap">
+      <iframe
+        title="Google map showing Idea Dental at 216 W Little York Road, Suite B, Houston, TX 77076"
+        src="https://www.google.com/maps/embed?pb=!1m3!2m1!1sIdea+Dental,+216+W+Little+York+Rd,+Houston,+TX+77076!6i16"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
     </div>
   </div>
 </section>
@@ -792,5 +918,51 @@
   <a class="b" href="idea-dental-appointments.html">Book appointment</a>
 </div>
 
+<script>
+/* FAQ filter: matches typed words against each question and its answer.
+   Groups with no surviving question are hidden too. */
+(function () {
+  var input = document.getElementById("faqq");
+  if (!input) return;
+  var count = document.getElementById("faqq-count");
+  var items = [].slice.call(document.querySelectorAll("details.qa"));
+  var groups = [].slice.call(document.querySelectorAll("section.qset"));
+  var total = items.length;
+
+  items.forEach(function (d) {
+    d.dataset.text = (d.textContent || "").toLowerCase().replace(/\s+/g, " ");
+  });
+
+  function apply() {
+    var q = input.value.toLowerCase().trim();
+    var words = q ? q.split(/\s+/) : [];
+    var shown = 0;
+
+    items.forEach(function (d) {
+      var hit = words.every(function (w) { return d.dataset.text.indexOf(w) !== -1; });
+      d.classList.toggle("qa-hidden", !hit);
+      if (hit) { shown++; } else if (d.open) { d.open = false; }
+    });
+
+    groups.forEach(function (g) {
+      var any = g.querySelector("details.qa:not(.qa-hidden)");
+      g.classList.toggle("qa-hidden", !any);
+    });
+
+    if (!q) {
+      count.textContent = "";
+    } else if (shown === 0) {
+      count.innerHTML = 'No questions match \u201c' + q.replace(/[<&]/g, "") +
+        '\u201d. Try fewer words, or call <a href="tel:+18326648640">(832) 664-8640</a>.';
+    } else {
+      count.textContent = shown + (shown === 1 ? " question" : " questions") +
+        " of " + total;
+    }
+  }
+
+  input.addEventListener("input", apply);
+  input.addEventListener("search", apply);
+})();
+</script>
 </body>
 </html>

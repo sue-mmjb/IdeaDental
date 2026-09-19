@@ -7,7 +7,7 @@
 <meta name="description" content="Emergency and same-day dental care in Houston for toothache, broken or knocked-out teeth, lost crowns and fillings. Tue/Wed 10–6, 2nd & 4th Sat 10–4. Bilingual team. Call (832) 664-8640.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <!--
   Two JSON-LD blocks: MedicalWebPage (the service/entity) + FAQPage (kept in
@@ -48,49 +48,92 @@
 
 <style>
   :root{
-    --ink:#12303a; --ink-soft:#4a6670; --paper:#f6f4ee; --card:#ffffff;
-    --line:#e4ded1; --accent:#0a7ea4; --accent-ink:#075a76;
-    --alert:#c0453b; --alert-ink:#9a352d; --radius:14px; --maxw:860px;
+    --ink:#0f2a33;
+    --ink-soft:#54707a;
+    --ink-mute:#5a757f;
+    --paper:#f9f8f3;
+    --paper-2:#f1efe6;
+    --card:#ffffff;
+    --line:#e5e2d7;
+    --line-soft:#efede4;
+    --brand:#009adb;
+    --accent:#007bb0;
+    --accent-ink:#00628c;
+    --accent-deep:#00405c;
+    --on-accent:#ffffff;
+    --alert:#b8443a;
+    --alert-ink:#8f342c;
+    --gold:#d99b22;
+    --maxw:860px;
+    --radius:14px;
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --ink:#eef3f4; --ink-soft:#a9bcc2; --paper:#0e1a1f; --card:#152730;
-      --line:#223942; --accent:#4cc4e6; --accent-ink:#8fddf1; --alert:#ef7c72; --alert-ink:#ef7c72;
-    }
+    --ink:#e9f1f3;
+    --ink-soft:#9db2ba;
+    --ink-mute:#7e959e;
+    --paper:#0c171c;
+    --paper-2:#111f26;
+    --card:#13242c;
+    --line:#233a44;
+    --line-soft:#1c303a;
+    --brand:#35b3e3;
+    --accent:#35b3e3;
+    --accent-ink:#7fd4f2;
+    --accent-deep:#0a3346;
+    --on-accent:#08161b;
+    --alert:#e8776c;
+    --alert-ink:#f0a49c;
+    --gold:#e9bd56;
+  }
   }
   :root[data-theme="dark"]{
-    --ink:#eef3f4; --ink-soft:#a9bcc2; --paper:#0e1a1f; --card:#152730;
-    --line:#223942; --accent:#4cc4e6; --accent-ink:#8fddf1; --alert:#ef7c72; --alert-ink:#ef7c72;
+    --ink:#e9f1f3;
+    --ink-soft:#9db2ba;
+    --ink-mute:#7e959e;
+    --paper:#0c171c;
+    --paper-2:#111f26;
+    --card:#13242c;
+    --line:#233a44;
+    --line-soft:#1c303a;
+    --brand:#35b3e3;
+    --accent:#35b3e3;
+    --accent-ink:#7fd4f2;
+    --accent-deep:#0a3346;
+    --on-accent:#08161b;
+    --alert:#e8776c;
+    --alert-ink:#f0a49c;
+    --gold:#e9bd56;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0; background:var(--paper); color:var(--ink);
-    font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
     font-size:17px; line-height:1.6; -webkit-font-smoothing:antialiased; padding-bottom:76px}
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
 
   /* URGENCY-FIRST HERO: phone + hours above everything */
   .hero{background:var(--alert); color:#fff; padding:34px 0 30px}
-  .hero .eyebrow{font-size:.9rem; font-weight:600; opacity:.95; margin:0 0 8px}
-  .hero h1{font-family:"Fraunces",Georgia,serif; font-weight:500;
+  .hero .eyebrow{font-size:.9rem; font-weight:400; opacity:.95; margin:0 0 8px}
+  .hero h1{font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif; font-weight:300;
     font-size:clamp(2rem,5.5vw,3rem); line-height:1.05; margin:0 0 8px; letter-spacing:-.01em}
   .hero p.sub{font-size:1.06rem; opacity:.96; margin:0 0 20px; max-width:56ch}
   .herocall{display:flex; gap:14px; flex-wrap:wrap; align-items:center}
-  .herocall a.call{background:#fff; color:var(--alert); text-decoration:none; font-weight:600;
+  .herocall a.call{background:#fff; color:var(--alert); text-decoration:none; font-weight:700;
     font-size:1.15rem; padding:14px 24px; border-radius:12px}
-  .herocall a.book{color:#fff; text-decoration:none; font-weight:600; padding:14px 20px;
+  .herocall a.book{color:#fff; text-decoration:none; font-weight:700; padding:14px 20px;
     border:1.5px solid rgba(255,255,255,.7); border-radius:12px}
   .hours{margin-top:18px; background:rgba(255,255,255,.14); border-radius:12px; padding:14px 18px; font-size:1rem}
-  .hours b{font-weight:600}
+  .hours b{font-weight:700}
   .warn911{margin-top:14px; font-size:.95rem; opacity:.95}
 
   main{padding:38px 0 10px}
   section{padding:22px 0}
-  h2{font-family:"Fraunces",Georgia,serif; font-weight:500; font-size:1.55rem; margin:0 0 14px; letter-spacing:-.01em}
+  h2{font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif; font-weight:300; font-size:1.55rem; margin:0 0 14px; letter-spacing:-.01em}
   p{max-width:68ch}
   .lead{color:var(--ink-soft)}
 
-  /* first-aid cards — genuine info grouping, not decoration */
+  /* first-aid cards: genuine info grouping, not decoration */
   .firstaid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px}
   .firstaid .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px 18px}
   .firstaid .card h3{margin:0 0 8px; font-size:1.05rem; color:var(--alert-ink)}
@@ -107,7 +150,7 @@
 
   details.qa{border-bottom:1px solid var(--line)}
   details.qa summary{cursor:pointer; list-style:none; padding:16px 40px 16px 2px; position:relative;
-    font-weight:600; font-size:1.03rem}
+    font-weight:700; font-size:1.03rem}
   details.qa summary::-webkit-details-marker{display:none}
   details.qa summary::after{content:"+"; position:absolute; right:6px; top:50%; transform:translateY(-50%);
     font-weight:400; font-size:1.5rem; color:var(--accent)}
@@ -115,7 +158,7 @@
   details.qa .answer{padding:0 2px 18px; color:var(--ink-soft); max-width:68ch}
   details.qa .answer a{color:var(--accent-ink)}
 
-  .related a{color:var(--accent-ink); font-weight:600; text-decoration:none}
+  .related a{color:var(--accent-ink); font-weight:700; text-decoration:none}
   .related a:hover{text-decoration:underline}
 
   .provline{margin:26px 0 10px; color:var(--ink-soft); font-size:.92rem}
@@ -123,19 +166,38 @@
   /* sticky mobile call bar */
   .stickybar{position:fixed; left:0; right:0; bottom:0; display:none; gap:10px; padding:10px 14px;
     background:var(--card); border-top:1px solid var(--line); z-index:50}
-  .stickybar a{flex:1; text-align:center; text-decoration:none; font-weight:600; padding:12px; border-radius:10px}
+  .stickybar a{flex:1; text-align:center; text-decoration:none; font-weight:700; padding:12px; border-radius:10px}
   .stickybar .c{background:var(--alert); color:#fff}
   .stickybar .b{background:var(--accent); color:#fff}
   @media (max-width:640px){ .stickybar{display:flex} body{padding-bottom:70px} }
 
   :focus-visible{outline:2.5px solid #fff; outline-offset:2px}
   main :focus-visible{outline-color:var(--accent)}
+
+  /* brand mark, matching index.html */
+  .sitelogo{display:inline-block; line-height:0; margin:0 0 22px; border-radius:8px}
+  .sitelogo img{display:block; height:46px; width:auto; aspect-ratio:476/176}
+  @media(max-width:600px){ .sitelogo img{height:38px} }
+
+  /* back arrow: uses real history when there is any, otherwise falls through
+     to the href so it still works without JS or on a direct landing */
+  .backlink{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:40px; height:40px; margin:0 12px 22px 0; vertical-align:middle;
+    border:1px solid var(--line); border-radius:11px;
+    background:var(--card); color:var(--accent-ink); text-decoration:none;
+    transition:transform .18s ease, border-color .18s ease, color .18s ease;
+  }
+  .backlink svg{width:19px; height:19px; display:block}
+  .backlink:hover{transform:translateX(-2px); border-color:var(--accent); color:var(--accent)}
+  .sitelogo{vertical-align:middle}
 </style>
 </head>
 <body>
 
 <header class="hero">
   <div class="wrap">
+    <a class="backlink" href="index.html" aria-label="Go back to the previous page" title="Back" onclick="if(history.length&gt;1){history.back();return false}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a><a class="sitelogo" href="index.html"><img src="idea-dental-logo.png" alt="IDEA! Dental" width="476" height="176" decoding="async"></a>
     <p class="eyebrow">Idea Dental · Houston, TX · Se habla español</p>
     <h1>Emergency &amp; same-day dentist in Houston</h1>
     <p class="sub">In pain or dealing with a broken or knocked-out tooth? We keep time for same-day dental emergencies. Call us first if you can.</p>
@@ -146,7 +208,7 @@
     <div class="hours">
       <b>Emergency &amp; same-day hours:</b> Tuesday &amp; Wednesday 10:00 AM–6:00 PM · 2nd &amp; 4th Saturdays 10:00 AM–4:00 PM
     </div>
-    <p class="warn911">If you have trouble breathing or swallowing, or severe facial swelling, call 911 or go to the nearest emergency room — those can be life-threatening.</p>
+    <p class="warn911">If you have trouble breathing or swallowing, or severe facial swelling, call 911 or go to the nearest emergency room. Those can be life-threatening.</p>
   </div>
 </header>
 
@@ -154,7 +216,7 @@
 
   <section>
     <h2>What we treat same-day</h2>
-    <p class="lead">If you're not sure whether it's an emergency, call and describe what's happening — the team will tell you what to do next. We commonly help with:</p>
+    <p class="lead">If you're not sure whether it's an emergency, call and describe what's happening. The team will tell you what to do next. We commonly help with:</p>
     <ul class="treatlist">
       <li>Severe or lasting toothache</li>
       <li>Knocked-out tooth</li>
@@ -172,7 +234,7 @@
     <div class="firstaid">
       <div class="card">
         <h3>Knocked-out tooth</h3>
-        <p>Hold it by the crown, not the root. Rinse gently — don't scrub. Put it back in the socket if you can, or keep it in milk. Best saved within about an hour, so call now.</p>
+        <p>Hold it by the crown, not the root. Rinse gently, don't scrub. Put it back in the socket if you can, or keep it in milk. Best saved within about an hour, so call now.</p>
       </div>
       <div class="card">
         <h3>Lost crown or filling</h3>
@@ -229,7 +291,7 @@
   <section class="related">
     <h2>Related</h2>
     <p><a href="#">Dental implants</a> · <a href="#">Braces &amp; Invisalign</a> · <a href="#">Read all FAQs</a> · <a href="#">Contact &amp; directions</a></p>
-    <p class="provline">Care provided by Dr. Stephanie Vu, DDS · 216 W Little York Road, Suite B, Houston, TX 77076 · Se habla español</p>
+    <p class="provline">216 W Little York Road, Suite B, Houston, TX 77076 · Se habla español</p>
   </section>
 
 </main>
