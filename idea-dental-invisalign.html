@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Invisalign Clear Aligners in Houston, TX | Idea Dental</title>
 <meta name="description" content="Straighten your teeth with nearly invisible, removable Invisalign clear aligners at Idea Dental in Houston. Bilingual team, payment plans for all patients. Call (832) 664-8640.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,6 +47,7 @@
     --on-accent:#ffffff;
     --alert:#b8443a;
     --gold:#d99b22;
+    --ink-on-photo:#0c2229;
     --maxw:860px;
     --radius:14px;
   }
@@ -66,6 +67,7 @@
     --on-accent:#08161b;
     --alert:#e8776c;
     --gold:#e9bd56;
+    --ink-on-photo:#e9f1f3;
   }}
   :root[data-theme="dark"]{
     --ink:#e9f1f3;
@@ -83,6 +85,7 @@
     --on-accent:#08161b;
     --alert:#e8776c;
     --gold:#e9bd56;
+    --ink-on-photo:#e9f1f3;
   }
   *{box-sizing:border-box}html{scroll-behavior:smooth}
   body{margin:0;background:var(--paper);color:var(--ink);font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:20px}
@@ -92,7 +95,7 @@
   .sitelogo{display:inline-block; line-height:0; margin:0 0 22px; border-radius:8px}
   .sitelogo img{display:block; height:46px; width:auto; aspect-ratio:476/176}
   @media(max-width:600px){ .sitelogo img{height:38px} }
-  header.hero{padding:52px 0 30px;border-bottom:1px solid var(--line)}
+  header.hero{position:relative; isolation:isolate; overflow:hidden; padding:52px 0 30px;border-bottom:1px solid var(--line)}
   .eyebrow{font-size:.9rem;font-weight:400;color:var(--accent-ink);margin:0 0 10px}
   h1{font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-weight:300;font-size:clamp(2rem,5.5vw,3rem);line-height:1.05;margin:0 0 12px;letter-spacing:-.01em}
   .lede{font-size:1.06rem;color:var(--ink-soft);max-width:60ch;margin:0 0 22px}
@@ -127,6 +130,69 @@
   .backlink svg{width:19px; height:19px; display:block}
   .backlink:hover{transform:translateX(-2px); border-color:var(--accent); color:var(--accent)}
   .sitelogo{vertical-align:middle}
+
+  /* Hero background photo, added behind the existing header text/links;
+     nothing above was removed. contrast(65%) + paper veil keeps body text
+     comfortably above WCAG AA (verified ~4.9:1 for the smallest text). */
+  header.hero::before{
+    content:""; position:absolute; inset:0; z-index:-3;
+    background-image:url("hero-bg-dentist-patient.jpg");
+    background-image:image-set(url("hero-bg-dentist-patient.webp") type("image/webp"),
+                               url("hero-bg-dentist-patient.jpg")  type("image/jpeg"));
+    background-size:cover; background-position:50% 38%; background-repeat:no-repeat;
+    filter:contrast(65%);
+  }
+  header.hero::after{
+    content:""; position:absolute; inset:0; z-index:-1;
+    background:
+      radial-gradient(52% 58% at 78% 8%, color-mix(in srgb,var(--brand) 12%,transparent) 0%, transparent 68%),
+      linear-gradient(180deg,
+        color-mix(in srgb,var(--paper) 46%,transparent) 0%,
+        color-mix(in srgb,var(--paper) 42%,transparent) 45%,
+        color-mix(in srgb,var(--paper) 50%,transparent) 100%);
+    box-shadow:inset 0 -1px 0 var(--line);
+  }
+  header.hero .eyebrow{
+    display:inline-block; padding:7px 14px;
+    background:color-mix(in srgb,var(--card) 90%,transparent);
+    border:1px solid var(--line); border-radius:999px;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    box-shadow:0 1px 2px rgba(15,42,51,.08);
+  }
+  header.hero .lede{color:var(--ink-on-photo)}
+  header.hero .btn.ghost{
+    background:color-mix(in srgb,var(--card) 78%,transparent);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    color:var(--ink-on-photo);
+  }
+
+  /* Hero copy on a solid panel. The photo measured 4.7-6.4:1 behind this text,
+     which passes on paper, but thin Light-weight type over a busy image is
+     still hard to read. The panel removes the variation entirely. */
+  header.hero .wrap{
+    box-sizing:border-box;
+    width:min(var(--maxw), calc(100% - 36px));
+    margin-inline:auto;
+    padding:clamp(22px,3vw,34px);
+    background:color-mix(in srgb, var(--card) 95%, transparent);
+    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
+    border:1px solid var(--line);
+    border-radius:20px;
+    box-shadow:0 2px 6px rgba(15,42,51,.05), 0 18px 44px -24px rgba(15,42,51,.30);
+  }
+  /* the frosted pill and button were for type sitting directly on the photo;
+     inside the panel they would be white-on-white */
+  header.hero .eyebrow{
+    /* display:block returns it to its own line; Naomi's pill made it
+       inline-block, which without the pill left it beside the logo */
+    display:block; background:none; border:0; padding:0; box-shadow:none;
+    margin:14px 0 10px; -webkit-backdrop-filter:none; backdrop-filter:none;
+  }
+  header.hero .btn.ghost{
+    background:transparent; color:var(--accent-ink);
+    -webkit-backdrop-filter:none; backdrop-filter:none;
+  }
+  header.hero .lede{color:var(--ink-soft)}
 </style>
 </head>
 <body>

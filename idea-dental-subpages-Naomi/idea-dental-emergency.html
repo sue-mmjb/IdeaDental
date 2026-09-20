@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Emergency &amp; Same-Day Dentist in Houston, TX | Idea Dental</title>
 <meta name="description" content="Emergency and same-day dental care in Houston for toothache, broken or knocked-out teeth, lost crowns and fillings. Tue/Wed 10–6, 2nd & 4th Sat 10–4. Bilingual team. Call (832) 664-8640.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -204,17 +204,14 @@
     background-image:image-set(url("hero-bg-treatment-room.webp") type("image/webp"),
                                url("hero-bg-treatment-room.jpg")  type("image/jpeg"));
     background-size:cover; background-position:50% 38%; background-repeat:no-repeat;
-    filter:contrast(45%);
+    filter:contrast(65%);
   }
   .hero::after{
     content:""; position:absolute; inset:0; z-index:-1;
-    /* measured: at the old 70-78% the white text fell to 3.91:1, under AA.
-       88%+ with contrast(45%) puts it at 4.84:1 with the photo still read-
-       able through the red. */
     background:linear-gradient(180deg,
-      color-mix(in srgb,var(--alert) 90%,transparent) 0%,
-      color-mix(in srgb,var(--alert) 88%,transparent) 50%,
-      color-mix(in srgb,var(--alert) 92%,transparent) 100%);
+      color-mix(in srgb,var(--alert) 74%,transparent) 0%,
+      color-mix(in srgb,var(--alert) 70%,transparent) 50%,
+      color-mix(in srgb,var(--alert) 78%,transparent) 100%);
   }
 </style>
 </head>

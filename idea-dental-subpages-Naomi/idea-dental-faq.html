@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dental FAQ | Idea Dental, Houston, TX</title>
 <meta name="description" content="Answers to common questions about dental implants, Invisalign, braces, veneers, emergency dental care, insurance and payment plans at Idea Dental, a bilingual dentist in Houston, TX.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -297,34 +297,6 @@
     -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
     color:var(--ink-on-photo);
   }
-
-  /* Hero copy on a solid panel. The photo measured 4.7-6.4:1 behind this text,
-     which passes on paper, but thin Light-weight type over a busy image is
-     still hard to read. The panel removes the variation entirely. */
-  header.masthead .wrap{
-    box-sizing:border-box;
-    width:min(var(--maxw), calc(100% - 36px));
-    margin-inline:auto;
-    padding:clamp(22px,3vw,34px);
-    background:color-mix(in srgb, var(--card) 95%, transparent);
-    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
-    border:1px solid var(--line);
-    border-radius:20px;
-    box-shadow:0 2px 6px rgba(15,42,51,.05), 0 18px 44px -24px rgba(15,42,51,.30);
-  }
-  /* the frosted pill and button were for type sitting directly on the photo;
-     inside the panel they would be white-on-white */
-  header.masthead .eyebrow{
-    /* display:block returns it to its own line; Naomi's pill made it
-       inline-block, which without the pill left it beside the logo */
-    display:block; background:none; border:0; padding:0; box-shadow:none;
-    margin:14px 0 10px; -webkit-backdrop-filter:none; backdrop-filter:none;
-  }
-  header.masthead .btn.ghost{
-    background:transparent; color:var(--accent-ink);
-    -webkit-backdrop-filter:none; backdrop-filter:none;
-  }
-  header.masthead .lede{color:var(--ink-soft)}
 </style>
 </head>
 <body>

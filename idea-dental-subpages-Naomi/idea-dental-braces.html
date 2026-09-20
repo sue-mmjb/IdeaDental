@@ -2,9 +2,9 @@
 <html lang="en-US">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Porcelain Veneers in Houston, TX | Idea Dental</title>
-<meta name="description" content="Transform your smile with custom porcelain veneers at Idea Dental in Houston. Natural-looking results, bilingual team, payment plans for all patients. Call (832) 664-8640.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Braces in Houston, TX: Metal &amp; Clear | Idea Dental</title>
+<meta name="description" content="Traditional metal and clear braces for children, teens and adults at Idea Dental in Houston. Bilingual team, payment plans for all patients. Call (832) 664-8640.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
@@ -23,8 +23,9 @@
 <script type="application/ld+json">
 {
   "@context":"https://schema.org","@type":"FAQPage","mainEntity":[
-    {"@type":"Question","name":"What are porcelain veneers?","acceptedAnswer":{"@type":"Answer","text":"Porcelain veneers are thin, custom-made shells bonded to the front of your teeth to improve their color, shape, size or length. They are a cosmetic option for teeth that are discolored, chipped or uneven, or for discoloration that whitening cannot fix, and they give a natural-looking, lasting result."}},
-    {"@type":"Question","name":"Are veneers or whitening right for me?","acceptedAnswer":{"@type":"Answer","text":"Whitening brightens the natural shade of healthy teeth, while veneers change the color, shape and size of teeth and can fix discoloration that whitening cannot. If your teeth are chipped, uneven or stained in a way whitening won't correct, veneers may be the better option. The dentist helps you decide at your consultation."}}
+    {"@type":"Question","name":"What types of braces do you offer?","acceptedAnswer":{"@type":"Answer","text":"Idea Dental offers traditional metal braces, clear (tooth-colored) braces, and clear aligners such as Invisalign, including options for teens and adults. Traditional braces remain the most reliable choice for complex cases, while clear braces and aligners are less noticeable. The orthodontic team helps you choose based on your goals and budget."}},
+    {"@type":"Question","name":"At what age should my child see an orthodontist?","acceptedAnswer":{"@type":"Answer","text":"The American Association of Orthodontists recommends a child first see an orthodontist by around age seven. At that age treatment often isn't needed yet, but an early check lets the dentist monitor how the teeth and jaw are developing and catch problems while they are simpler to correct."}},
+    {"@type":"Question","name":"Is Invisalign better than braces?","acceptedAnswer":{"@type":"Answer","text":"Neither is universally better; it depends on your case. Invisalign is popular with teens and adults because it is nearly invisible and removable, while traditional or clear braces can handle more complex tooth movements. At your consultation the dentist can recommend the best fit for your smile."}}
   ]
 }
 </script>
@@ -103,11 +104,12 @@
   .btn.primary{background:var(--accent);color:#fff}.btn.ghost{color:var(--accent-ink);background:transparent}
   main{padding:12px 0}section{padding:26px 0;border-bottom:1px solid var(--line)}section:last-of-type{border-bottom:0}
   h2{font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-weight:300;font-size:1.5rem;margin:0 0 12px;letter-spacing:-.01em}
+  h3{font-size:1.1rem;margin:0 0 6px}
   p{max-width:68ch;margin:0 0 12px}.lead{color:var(--ink-soft)}
-  ol.process{list-style:none;counter-reset:step;padding:0;margin:0;display:grid;gap:14px}
-  ol.process li{counter-increment:step;position:relative;padding-left:52px;color:var(--ink-soft)}
-  ol.process li::before{content:counter(step);position:absolute;left:0;top:-2px;width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:grid;place-items:center}
-  ol.process li b{color:var(--ink);font-weight:700}
+  .types{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .types .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .types .card p{margin:0;font-size:.96rem;color:var(--ink-soft)}
+  .candidacy{color:var(--ink-soft);padding-left:20px;max-width:64ch}.candidacy li{margin-bottom:7px}
   .cost{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px}.cost p{margin:0 0 10px}
   details.qa{border-bottom:1px solid var(--line)}details.qa:last-of-type{border-bottom:0}
   details.qa summary{cursor:pointer;list-style:none;padding:16px 40px 16px 2px;position:relative;font-weight:700;font-size:1.03rem}
@@ -137,9 +139,9 @@
      comfortably above WCAG AA (verified ~4.9:1 for the smallest text). */
   header.hero::before{
     content:""; position:absolute; inset:0; z-index:-3;
-    background-image:url("hero-bg-dentist-patient.jpg");
-    background-image:image-set(url("hero-bg-dentist-patient.webp") type("image/webp"),
-                               url("hero-bg-dentist-patient.jpg")  type("image/jpeg"));
+    background-image:url("hero-bg-treatment-room.jpg");
+    background-image:image-set(url("hero-bg-treatment-room.webp") type("image/webp"),
+                               url("hero-bg-treatment-room.jpg")  type("image/jpeg"));
     background-size:cover; background-position:50% 38%; background-repeat:no-repeat;
     filter:contrast(65%);
   }
@@ -166,34 +168,6 @@
     -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
     color:var(--ink-on-photo);
   }
-
-  /* Hero copy on a solid panel. The photo measured 4.7-6.4:1 behind this text,
-     which passes on paper, but thin Light-weight type over a busy image is
-     still hard to read. The panel removes the variation entirely. */
-  header.hero .wrap{
-    box-sizing:border-box;
-    width:min(var(--maxw), calc(100% - 36px));
-    margin-inline:auto;
-    padding:clamp(22px,3vw,34px);
-    background:color-mix(in srgb, var(--card) 95%, transparent);
-    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
-    border:1px solid var(--line);
-    border-radius:20px;
-    box-shadow:0 2px 6px rgba(15,42,51,.05), 0 18px 44px -24px rgba(15,42,51,.30);
-  }
-  /* the frosted pill and button were for type sitting directly on the photo;
-     inside the panel they would be white-on-white */
-  header.hero .eyebrow{
-    /* display:block returns it to its own line; Naomi's pill made it
-       inline-block, which without the pill left it beside the logo */
-    display:block; background:none; border:0; padding:0; box-shadow:none;
-    margin:14px 0 10px; -webkit-backdrop-filter:none; backdrop-filter:none;
-  }
-  header.hero .btn.ghost{
-    background:transparent; color:var(--accent-ink);
-    -webkit-backdrop-filter:none; backdrop-filter:none;
-  }
-  header.hero .lede{color:var(--ink-soft)}
 </style>
 </head>
 <body>
@@ -202,8 +176,8 @@
   <div class="wrap">
     <a class="backlink" href="index.html" aria-label="Go back to the previous page" title="Back" onclick="if(history.length&gt;1){history.back();return false}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a><a class="sitelogo" href="index.html"><img src="idea-dental-logo.png" alt="IDEA! Dental" width="476" height="176" decoding="async"></a>
     <p class="eyebrow">Idea Dental · Houston, TX · Se habla español</p>
-    <h1>Porcelain veneers in Houston</h1>
-    <p class="lede">Custom shells that reshape and brighten your smile with natural-looking, lasting results. Bilingual team, payment plans for all patients.</p>
+    <h1>Braces in Houston for kids, teens &amp; adults</h1>
+    <p class="lede">Straighten your smile with metal or clear braces, fitted by a team that treats the whole family. Payment plans for all patients.</p>
     <div class="btnrow">
       <a class="btn primary" href="tel:+18326648640">Call (832) 664-8640</a>
       <a class="btn ghost" href="idea-dental-appointments.html">Request an appointment</a>
@@ -214,51 +188,61 @@
 <main class="wrap">
 
   <section>
-    <h2>What porcelain veneers are</h2>
-    <p class="lead">Porcelain veneers are wafer-thin, custom-made shells of tooth-colored material designed to cover the front surface of teeth and improve their appearance. These shells are bonded to the front of the teeth, changing their color, shape, size or length.</p>
-    <p class="lead">We recommend veneers for anyone experiencing discoloration that can't be fixed with whitening, teeth that are damaged, or if you're simply unhappy with the shape or look of your natural teeth.</p>
+    <h2>What braces do</h2>
+    <p class="lead">Even though there are many types of braces, traditional braces are still the most popular option. Great strides in technology have been made since they were first used, so they're becoming more comfortable and effective. Traditional braces use stainless steel brackets and archwires to move your teeth into their proper position, and many teens like to decorate them with different colored bands at every adjustment.</p>
   </section>
 
   <section>
-    <h2>Who veneers are for</h2>
-    <p class="lead">Veneers are a good option if you have discoloration whitening can't correct, chipped or damaged teeth, uneven or misshapen teeth, or gaps you'd like to close cosmetically. If your main goal is simply a brighter shade on healthy teeth, whitening may be a better fit. The dentist helps you choose.</p>
+    <h2>Types we offer</h2>
+    <div class="types">
+      <div class="card">
+        <h3>Traditional metal braces</h3>
+        <p>The most reliable option, especially for complex cases. Durable, effective, and customizable with colored bands.</p>
+      </div>
+      <div class="card">
+        <h3>Clear braces</h3>
+        <p>Much less noticeable than metal, giving teens and adults a discreet option. They can stain from coffee, tea and wine, so care matters, and we offer payment plans for all patients.</p>
+      </div>
+      <div class="card">
+        <h3>Clear aligners (Invisalign)</h3>
+        <p>Removable and nearly invisible. <a href="idea-dental-invisalign.html">See our Invisalign page →</a></p>
+      </div>
+    </div>
   </section>
 
   <section>
-    <h2>What to expect</h2>
-    <ol class="process">
-      <li><b>Consultation.</b> The dentist examines your teeth, discusses your goals, and confirms veneers are right for you.</li>
-      <li><b>Preparation.</b> The teeth are lightly prepared and an impression or digital scan is taken.</li>
-      <li><b>Custom fabrication.</b> Your veneers are made to match your desired color, shape and size.</li>
-      <li><b>Bonding.</b> The finished veneers are bonded to the front of your teeth.</li>
-    </ol>
-    <!-- CONFIRM: number of visits / any temporary phase -->
+    <h2>Braces for every age</h2>
+    <p class="lead">Braces aren't just for children anymore. Idea Dental treats kids, teens and adults, and offers early treatment when it's needed. It is typically recommended that children begin seeing an orthodontist around age seven. The earlier a problem is caught, the easier it usually is to treat.</p>
   </section>
 
   <section>
     <h2>Cost &amp; payment</h2>
     <div class="cost">
-      <p>The cost of veneers depends on how many teeth you're treating and your treatment plan, which the dentist confirms at your consultation.</p>
+      <p>The cost of braces depends on the type you choose and how much correction your teeth need, which the dentist confirms at your consultation.</p>
       <p>Idea Dental is known for affordable pricing and offers <b>payment plans for all patients</b>, and we verify your insurance benefits before treatment.</p>
       <!-- CONFIRM: pricing figures, accepted insurance, financing partner(s) -->
     </div>
   </section>
 
   <section>
-    <h2>Common questions about veneers</h2>
+    <h2>Common questions about braces</h2>
 
-    <details class="qa" open><summary>What are porcelain veneers?</summary>
-      <div class="answer"><p>Porcelain veneers are thin, custom-made shells bonded to the front of your teeth to improve their color, shape, size or length. They are a cosmetic option for teeth that are discolored, chipped or uneven, or for discoloration that whitening cannot fix, and they give a natural-looking, lasting result.</p></div>
+    <details class="qa" open><summary>What types of braces do you offer?</summary>
+      <div class="answer"><p>Idea Dental offers traditional metal braces, clear (tooth-colored) braces, and clear aligners such as Invisalign, including options for teens and adults. Traditional braces remain the most reliable choice for complex cases, while clear braces and aligners are less noticeable. The orthodontic team helps you choose based on your goals and budget.</p></div>
     </details>
 
-    <details class="qa"><summary>Are veneers or whitening right for me?</summary>
-      <div class="answer"><p>Whitening brightens the natural shade of healthy teeth, while veneers change the color, shape and size of teeth and can fix discoloration that whitening cannot. If your teeth are chipped, uneven or stained in a way whitening won't correct, veneers may be the better option. The dentist helps you decide at your consultation.</p></div>
+    <details class="qa"><summary>At what age should my child see an orthodontist?</summary>
+      <div class="answer"><p>The American Association of Orthodontists recommends a child first see an orthodontist by around age seven. At that age treatment often isn't needed yet, but an early check lets the dentist monitor how the teeth and jaw are developing and catch problems while they are simpler to correct.</p></div>
+    </details>
+
+    <details class="qa"><summary>Is Invisalign better than braces?</summary>
+      <div class="answer"><p>Neither is universally better; it depends on your case. Invisalign is popular with teens and adults because it is nearly invisible and removable, while traditional or clear braces can handle more complex tooth movements. At your consultation the dentist can recommend the best fit for your smile.</p></div>
     </details>
   </section>
 
   <section class="related">
     <h2>Related</h2>
-    <p><a href="idea-dental-invisalign.html">Invisalign</a> · <a href="idea-dental-implants.html">Dental implants</a> · <a href="idea-dental-faq.html">Read all FAQs</a> · <a href="idea-dental-appointments.html">Request an appointment</a></p>
+    <p><a href="idea-dental-invisalign.html">Invisalign</a> · <a href="idea-dental-veneers.html">Veneers</a> · <a href="idea-dental-faq.html">Read all FAQs</a> · <a href="idea-dental-appointments.html">Request an appointment</a></p>
     <p class="provline">216 W Little York Road, Suite B, Houston, TX 77076 · Se habla español</p>
   </section>
 
