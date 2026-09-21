@@ -174,7 +174,7 @@
   .stickybar .b{background:var(--accent); color:#fff}
   @media (max-width:640px){ .stickybar{display:flex} body{padding-bottom:70px} }
 
-  :focus-visible{outline:2.5px solid #fff; outline-offset:2px}
+  :focus-visible{outline:2.5px solid var(--accent); outline-offset:2px}
   main :focus-visible{outline-color:var(--accent)}
 
   /* brand mark, matching index.html */
@@ -216,33 +216,368 @@
       color-mix(in srgb,var(--alert) 88%,transparent) 50%,
       color-mix(in srgb,var(--alert) 92%,transparent) 100%);
   }
+
+  /* ---------- Service navigation, above and below the content ----------
+     Same strip top and bottom so the other services are always one click
+     away. Site tokens only: this page has no --gutter or --ease, so the
+     20px inset and the timings are written out to match .wrap. */
+  .svcnav{background:var(--card); border-block:1px solid var(--line)}
+  .svcnav ul{
+    display:flex; flex-wrap:wrap; justify-content:space-between;
+    gap:10px 22px; list-style:none;
+    max-width:var(--maxw); margin:0 auto; padding:14px 20px;
+  }
+  .svcnav a{
+    display:inline-flex; align-items:center; gap:9px;
+    color:var(--ink); text-decoration:none;
+    font-size:.93rem; letter-spacing:-.005em; white-space:nowrap;
+    transition:color .22s cubic-bezier(.2,.7,.3,1);
+  }
+  /* the small ring that marks each item */
+  .svcnav a::before{
+    content:""; width:7px; height:7px; border-radius:50%; flex:none;
+    border:1.5px solid var(--accent); background:transparent;
+    transition:background-color .22s cubic-bezier(.2,.7,.3,1), border-color .22s;
+  }
+  .svcnav a:hover{color:var(--accent-ink)}
+  .svcnav a:hover::before{background:var(--accent)}
+  .svcnav a[aria-current="page"]{color:var(--accent-ink); font-weight:700}
+  .svcnav a[aria-current="page"]::before{background:var(--accent)}
+  .svcnav a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
+  /* the closing strip sits on paper so it reads as the end of the page */
+  .svcnav--foot{background:var(--paper); border-top:1px solid var(--line)}
+  @media(max-width:560px){
+    .svcnav ul{justify-content:flex-start; gap:10px 18px; padding:12px 20px}
+    .svcnav a{font-size:.88rem}
+  }
+
+  /* ================= EMERGENCY DENTIST PAGE ======================
+     The Idea Dental storefront photograph is the visual thread: the
+     hero, one mid-page band and the closing "where to find us" frame,
+     each at a different crop.
+
+     The supplied frame was a 1024x639 screenshot carrying two artifacts,
+     a black bar welded to the right edge and a Google Maps mini-map card
+     in the bottom-left. Both are cropped away rather than painted over,
+     leaving 1006x549 of untouched photograph.
+
+     Contrast, measured on this photograph at the hero crop with the text
+     in the lower left: --ink clears AA from a 0.58 veil upward, where even
+     the single worst pixel sits at 4.66:1. --ink-soft never clears AA over
+     it (3.10:1 at its best), so nothing over the photo uses --ink-soft.
+     The wash is deliberately light so the illuminated sign stays bright.
+
+     The red urgency treatment is not lost: it moves off the full hero
+     background, where a 90% red veil would have buried the storefront,
+     and onto the call button and the 911 notice, where it still reads as
+     urgent without hiding the photograph the page is built around.
+     ================================================================ */
+
+  /* ---------- hero ----------
+     The frame is 1.83:1 and a 1440-wide hero at the usual 80vh is about
+     2:1, so object-fit:cover leaves roughly 50px of vertical play and
+     100px of horizontal: object-position has almost nothing to work with,
+     and the sign lands dead centre whatever it is set to. Two things fix
+     the collision with the headline instead. The hero is deliberately
+     TALLER than the photo's own aspect, which makes the scale
+     height-driven and parks the sign in the upper third; and the veil
+     carries a second, vertical pass that leaves the sign bright and
+     washes the lower half the copy actually sits on. */
+  .emergency-page-hero{
+    position:relative; isolation:isolate; overflow:hidden;
+    min-height:clamp(560px,92vh,880px); display:flex; align-items:flex-end;
+    padding:clamp(28px,5vh,56px) 0 clamp(36px,6vh,64px);
+    background:var(--paper); color:var(--ink);
+    border-bottom:1px solid var(--line);
+  }
+  .emergency-page-hero-media{position:absolute; inset:0; z-index:0; display:block}
+  .emergency-page-hero-media img{
+    width:100%; height:100%; object-fit:cover; object-position:50% 50%;
+    display:block; will-change:transform;
+  }
+  .emergency-page-hero-veil{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:
+      linear-gradient(180deg,
+        color-mix(in srgb,var(--paper) 8%,transparent) 0%,
+        color-mix(in srgb,var(--paper) 10%,transparent) 30%,
+        color-mix(in srgb,var(--paper) 46%,transparent) 62%,
+        color-mix(in srgb,var(--paper) 58%,transparent) 100%),
+      linear-gradient(100deg,
+        color-mix(in srgb,var(--paper) 66%,transparent) 0%,
+        color-mix(in srgb,var(--paper) 54%,transparent) 46%,
+        color-mix(in srgb,var(--paper) 34%,transparent) 100%);
+  }
+  /* .wrap is a flex item here, so without an explicit width it shrinks to
+     its own text and margin:0 auto centres that narrow box, putting the
+     headline off the column the body copy uses. */
+  .emergency-page-hero-inner{position:relative; z-index:2; width:100%}
+
+  .emergency-page-hero .eyebrow{
+    color:var(--accent-ink); font-size:.9rem; font-weight:400;
+    opacity:1; margin:0 0 8px;
+  }
+  .emergency-page-hero h1{
+    font-weight:300; font-size:clamp(2.1rem,5.4vw,3.6rem); line-height:1.04;
+    letter-spacing:-.032em; color:var(--ink); max-width:16ch; margin:0 0 14px;
+  }
+  /* --ink-soft never clears AA over this photo, so the sub uses the
+     darker on-photo ink instead */
+  .emergency-page-hero p.sub{
+    color:var(--ink-on-photo); font-size:clamp(1.02rem,1.75vw,1.18rem);
+    line-height:1.55; max-width:48ch; opacity:1; margin:0 0 clamp(20px,3vw,26px);
+  }
+  .emergency-page-hero .backlink{background:var(--card)}
+
+  /* the red stays, on the action rather than on the whole frame */
+  .emergency-page-hero .herocall a.call{
+    background:var(--alert); color:#fff; box-shadow:0 2px 14px rgba(0,0,0,.14);
+  }
+  .emergency-page-hero .herocall a.book{
+    color:var(--ink); border:1.5px solid var(--ink-on-photo);
+    background:color-mix(in srgb,var(--paper) 62%,transparent);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  }
+  /* ---------- the urgent strip, directly under the hero ----------
+     The hours and the 911 notice used to sit inside the hero. They are the
+     two facts on this page a person in trouble most needs to read exactly,
+     and over a photograph they were both harder to read and the reason the
+     hero content grew tall enough to collide with the sign. On a solid
+     strip immediately below they are still the first thing after the
+     headline, and nothing competes with them. */
+  .emergency-page-urgent{
+    background:var(--card); border-bottom:1px solid var(--line);
+    padding:clamp(16px,2.4vw,22px) 0;
+  }
+  .emergency-page-urgent .hours{
+    margin:0; padding:0; background:transparent; border:0; border-radius:0;
+    color:var(--ink); font-size:clamp(.98rem,1.6vw,1.06rem); line-height:1.55;
+    -webkit-backdrop-filter:none; backdrop-filter:none;
+  }
+  .emergency-page-urgent .warn911{
+    margin:12px 0 0; color:var(--alert-ink); font-weight:700; opacity:1;
+    border-left:3px solid var(--alert); padding-left:12px; max-width:72ch;
+  }
+
+  /* ---------- the mid-page band, a second crop ---------- */
+
+
+
+
+
+  /* ---------- the urgent problems, as editorial rows ----------
+     A <ul> with CSS counters, not an <ol>: the numbers are a reading aid,
+     and nothing on the page says one of these problems outranks another.
+     Counter text never enters textContent either, so it cannot leak into
+     copied text or a find-in-page match. */
+  .emergency-page-problems{
+    list-style:none; margin:0; padding:0;
+    counter-reset:emgp; border-top:1px solid var(--line);
+  }
+  .emergency-page-problems li{
+    counter-increment:emgp;
+    display:grid; grid-template-columns:auto 1fr; gap:clamp(14px,2.4vw,26px);
+    align-items:baseline; padding:clamp(13px,1.9vw,18px) 0;
+    border-bottom:1px solid var(--line-soft);
+    font-size:clamp(1.02rem,1.9vw,1.2rem); color:var(--ink); line-height:1.4;
+  }
+  .emergency-page-problems li::before{
+    content:counter(emgp,decimal-leading-zero);
+    font-size:.76rem; font-weight:700; letter-spacing:.14em;
+    color:var(--accent-ink); font-variant-numeric:tabular-nums;
+  }
+
+  /* ---------- what to do right now ---------- */
+  .emergency-page-steps{
+    list-style:none; margin:0; padding:0;
+    counter-reset:emgs; border-top:1px solid var(--line);
+  }
+  .emergency-page-steps li{
+    counter-increment:emgs;
+    display:grid; grid-template-columns:auto 1fr; gap:clamp(16px,2.6vw,30px);
+    align-items:baseline; padding:clamp(18px,2.6vw,26px) 0;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .emergency-page-steps li::before{
+    content:counter(emgs,decimal-leading-zero);
+    font-size:.78rem; font-weight:700; letter-spacing:.14em;
+    color:var(--alert-ink); font-variant-numeric:tabular-nums;
+  }
+  .emergency-page-steps h3{
+    margin:0 0 6px; font-size:clamp(1.05rem,1.9vw,1.24rem);
+    font-weight:700; color:var(--ink); letter-spacing:-.012em;
+  }
+  .emergency-page-steps p{margin:0; color:var(--ink-soft); line-height:1.62; max-width:60ch}
+
+  /* ---------- premium accordion, the homepage pattern ----------
+     Native <details>, so keyboard support and no-JS both come for free.
+     No aria-expanded on <summary>: the browser already exposes the open
+     state, and adding it makes some screen readers announce it twice. */
+  .emergency-page-faq{counter-reset:emgq; border-top:1px solid var(--line)}
+  .emergency-page-faq details.qa{
+    counter-increment:emgq; position:relative;
+    border-bottom:1px solid var(--line); border-top:0;
+    padding-left:clamp(34px,5vw,54px);
+    transition:background-color .3s cubic-bezier(.2,.7,.3,1);
+  }
+  .emergency-page-faq details.qa::before{
+    content:counter(emgq,decimal-leading-zero);
+    position:absolute; left:0; top:clamp(19px,2.3vw,22px);
+    font-size:.72rem; font-weight:700; letter-spacing:.14em;
+    color:var(--accent-ink); font-variant-numeric:tabular-nums;
+  }
+  .emergency-page-faq details.qa[open]{background:color-mix(in srgb,var(--card) 60%,transparent)}
+  .emergency-page-faq details.qa summary{
+    padding:clamp(15px,2vw,19px) 44px clamp(15px,2vw,19px) 0;
+    font-size:clamp(1rem,1.7vw,1.1rem); letter-spacing:-.012em;
+    transition:color .24s cubic-bezier(.2,.7,.3,1);
+  }
+  .emergency-page-faq details.qa summary:hover{color:var(--accent-ink)}
+  .emergency-page-faq details.qa summary::after{
+    right:10px; transition:transform .3s cubic-bezier(.2,.7,.3,1);
+  }
+  .emergency-page-faq details.qa[open] summary::after{transform:translateY(-50%) rotate(180deg)}
+  .emergency-page-faq details.qa .answer{padding:0 10px 20px 0; line-height:1.66}
+
+  /* ---------- the closing call to action ---------- */
+  .emergency-page-cta{
+    background:var(--paper-2); border-top:1px solid var(--line);
+    padding:clamp(44px,7vw,84px) 0; text-align:center;
+  }
+  .emergency-page-cta h2{
+    font-weight:300; font-size:clamp(1.9rem,4.6vw,3rem); line-height:1.06;
+    letter-spacing:-.03em; margin:0 0 12px; color:var(--ink);
+  }
+  .emergency-page-cta .emergency-page-cta-sub{
+    color:var(--ink-soft); margin:0 auto clamp(24px,3.4vw,32px); max-width:52ch;
+  }
+  .emergency-page-cta-actions{
+    display:flex; gap:14px; flex-wrap:wrap; justify-content:center; align-items:center;
+  }
+  /* the phone action is the loudest thing on the page, by request */
+  .emergency-page-cta-actions a.call{
+    background:var(--alert); color:#fff; text-decoration:none; font-weight:700;
+    font-size:clamp(1.15rem,2.4vw,1.5rem); padding:clamp(16px,2.2vw,22px) clamp(26px,4vw,44px);
+    border-radius:14px; letter-spacing:-.01em;
+    transition:transform .24s cubic-bezier(.2,.7,.3,1), box-shadow .24s;
+    box-shadow:0 3px 18px color-mix(in srgb,var(--alert) 34%,transparent);
+  }
+  .emergency-page-cta-actions a.call:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 26px color-mix(in srgb,var(--alert) 42%,transparent);
+  }
+  .emergency-page-cta-actions a.book{
+    color:var(--accent-ink); text-decoration:none; font-weight:700;
+    font-size:1.02rem; padding:15px 24px; border-radius:12px;
+    border:1.5px solid var(--accent); background:var(--card);
+    transition:background-color .24s cubic-bezier(.2,.7,.3,1), color .24s;
+  }
+  .emergency-page-cta-actions a.book:hover{background:var(--accent); color:var(--on-accent)}
+
+  /* ---------- the final frame: where to find us, a third crop ---------- */
+  /* bottom-aligned for the same reason as the hero: centred copy landed
+     straight across the sign's letterforms */
+
+
+
+
+
+
+
+
+
+
+
+  /* ---------- mobile: the sign has to stay readable ----------
+     Full-bleed cover on a 390px viewport would scale this 1.83:1 frame to
+     roughly 1270px wide and show only the middle third, slicing the sign
+     in half. Below 760px the photo becomes a banner at its own aspect, so
+     the whole IDEA Dental sign and the entrance stay in frame, and the
+     copy sits on paper underneath it. */
+  @media (max-width:760px){
+    .emergency-page-hero{display:block; min-height:0; padding:0 0 clamp(28px,6vw,40px)}
+    .emergency-page-hero-media{position:static; inset:auto}
+    .emergency-page-hero-media img{
+      height:auto; aspect-ratio:1006/549; object-position:50% 50%;
+    }
+    .emergency-page-hero-veil{display:none}
+    .emergency-page-hero-inner{padding-top:clamp(20px,5vw,28px)}
+    .emergency-page-hero .backlink{margin-top:4px}
+    .emergency-page-hero h1{max-width:none}
+    .emergency-page-cta-actions{flex-direction:column; align-items:stretch}
+    .emergency-page-cta-actions a{text-align:center}
+  }
+
+  /* ---------- reveal states ----------
+     Scoped to .emgp-on, which JS adds only once the timelines are built.
+     With no JS, no GSAP or reduced motion the class never lands and every
+     one of these elements renders at its natural opacity. */
+  html.emgp-on .emergency-page-hero-inner > *,
+  html.emgp-on .emergency-page-problems li,
+  html.emgp-on .emergency-page-steps li,
+  html.emgp-on .emergency-page-cta > .wrap > *{opacity:0}
+
+  @media (prefers-reduced-motion: reduce){
+    html.emgp-on .emergency-page-hero-inner > *,
+    html.emgp-on .emergency-page-problems li,
+    html.emgp-on .emergency-page-steps li,
+    html.emgp-on .emergency-page-cta > .wrap > *{opacity:1 !important; transform:none !important}
+    .emergency-page-cta-actions a.call:hover{transform:none}
+  }
 </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="wrap">
-    <a class="backlink" href="index.html" aria-label="Go back to the previous page" title="Back" onclick="if(history.length&gt;1){history.back();return false}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a><a class="sitelogo" href="index.html"><img src="idea-dental-logo.png" alt="IDEA! Dental" width="476" height="176" decoding="async"></a>
+<header class="emergency-page-hero">
+  <!-- The Idea Dental storefront, supplied for this page. It is the visual
+       thread: the hero, one mid-page band and the closing frame all use it,
+       each at a different crop rather than the same composition repeated.
+       The wash is light (0.58 measured) so the illuminated sign stays bright
+       and the entrance stays recognisable, which is the whole point of the
+       photograph on this page: this is where you can come. -->
+  <picture class="emergency-page-hero-media"><source media="(max-width:640px)" srcset="emergency-storefront-640.webp" type="image/webp"><source media="(max-width:640px)" srcset="emergency-storefront-640.jpg" type="image/jpeg"><source srcset="emergency-storefront.webp" type="image/webp"><img src="emergency-storefront.jpg" alt="The Idea Dental storefront: the illuminated IDEA Dental sign above the glass entrance doors of the Houston office" width="1006" height="549" fetchpriority="high" decoding="async" sizes="100vw"></picture>
+  <div class="emergency-page-hero-veil" aria-hidden="true"></div>
+  <div class="wrap emergency-page-hero-inner">
+    <div><a class="backlink" href="index.html" aria-label="Go back to the previous page" title="Back" onclick="if(history.length&gt;1){history.back();return false}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a><a class="sitelogo" href="index.html"><img src="idea-dental-logo.png" alt="IDEA! Dental" width="476" height="176" decoding="async"></a></div>
     <p class="eyebrow">Idea Dental · Houston, TX · Se habla español</p>
     <h1>Emergency &amp; same-day dentist in Houston</h1>
     <p class="sub">In pain or dealing with a broken or knocked-out tooth? We keep time for same-day dental emergencies. Call us first if you can.</p>
     <div class="herocall">
       <a class="call" href="tel:+18326648640">Call (832) 664-8640</a>
-      <a class="book" href="#">Request an appointment</a>
+      <a class="book" href="idea-dental-appointments.html">Request an appointment</a>
     </div>
+  </div>
+</header>
+
+<!-- hours and the 911 notice, verbatim, lifted out of the hero onto a solid
+     strip: same position in the reading order, far easier to read. They are
+     deliberately left out of the reveal timeline so they are never faded in. -->
+<div class="emergency-page-urgent">
+  <div class="wrap">
     <div class="hours">
       <b>Emergency &amp; same-day hours:</b> Tuesday &amp; Wednesday 10:00 AM–6:00 PM · 2nd &amp; 4th Saturdays 10:00 AM–4:00 PM
     </div>
     <p class="warn911">If you have trouble breathing or swallowing, or severe facial swelling, call 911 or go to the nearest emergency room. Those can be life-threatening.</p>
   </div>
-</header>
+</div>
+
+<nav class="svcnav" aria-label="Our services">
+  <ul>
+    <li><a href="idea-dental-implants.html">Implants</a></li>
+    <li><a href="idea-dental-invisalign.html">Invisalign</a></li>
+    <li><a href="idea-dental-braces.html">Braces</a></li>
+    <li><a href="idea-dental-veneers.html">Veneers</a></li>
+    <li><a href="idea-dental-emergency.html" aria-current="page">Emergency</a></li>
+    <li><a href="idea-dental-faq.html">FAQ</a></li>
+  </ul>
+</nav>
 
 <main class="wrap">
 
   <section>
     <h2>What we treat same-day</h2>
     <p class="lead">If you're not sure whether it's an emergency, call and describe what's happening. The team will tell you what to do next. We commonly help with:</p>
-    <ul class="treatlist">
+    <ul class="emergency-page-problems">
       <li>Severe or lasting toothache</li>
       <li>Knocked-out tooth</li>
       <li>Broken or cracked tooth</li>
@@ -256,25 +591,35 @@
 
   <section>
     <h2>What to do right now</h2>
-    <div class="firstaid">
-      <div class="card">
-        <h3>Knocked-out tooth</h3>
-        <p>Hold it by the crown, not the root. Rinse gently, don't scrub. Put it back in the socket if you can, or keep it in milk. Best saved within about an hour, so call now.</p>
-      </div>
-      <div class="card">
-        <h3>Lost crown or filling</h3>
-        <p>Keep the crown if you have it and avoid chewing on that side. Don't use household glue. Call us to arrange a repair before the tooth is damaged further.</p>
-      </div>
-      <div class="card">
-        <h3>Broken or chipped tooth</h3>
-        <p>Save any pieces if you can and rinse your mouth with warm water. A cold compress helps swelling. Call for an evaluation as soon as possible.</p>
-      </div>
-      <div class="card">
-        <h3>Severe toothache</h3>
-        <p>Rinse with warm water and floss gently to remove trapped food. Don't place aspirin on the gum. Over-the-counter pain relief can help until we see you.</p>
-      </div>
-    </div>
+    <ul class="emergency-page-steps">
+      <li>
+        <div>
+          <h3>Knocked-out tooth</h3>
+          <p>Hold it by the crown, not the root. Rinse gently, don't scrub. Put it back in the socket if you can, or keep it in milk. Best saved within about an hour, so call now.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Lost crown or filling</h3>
+          <p>Keep the crown if you have it and avoid chewing on that side. Don't use household glue. Call us to arrange a repair before the tooth is damaged further.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Broken or chipped tooth</h3>
+          <p>Save any pieces if you can and rinse your mouth with warm water. A cold compress helps swelling. Call for an evaluation as soon as possible.</p>
+        </div>
+      </li>
+      <li>
+        <div>
+          <h3>Severe toothache</h3>
+          <p>Rinse with warm water and floss gently to remove trapped food. Don't place aspirin on the gum. Over-the-counter pain relief can help until we see you.</p>
+        </div>
+      </li>
+    </ul>
   </section>
+
+
 
   <section>
     <h2>Walk-ins welcome</h2>
@@ -289,7 +634,7 @@
     </div>
   </section>
 
-  <section>
+  <section class="emergency-page-faq">
     <h2>Emergency dentistry questions</h2>
 
     <details class="qa" open><summary>Does Idea Dental offer emergency or same-day dental care?</summary>
@@ -315,16 +660,153 @@
 
   <section class="related">
     <h2>Related</h2>
-    <p><a href="#">Dental implants</a> · <a href="#">Braces &amp; Invisalign</a> · <a href="#">Read all FAQs</a> · <a href="#">Contact &amp; directions</a></p>
+    <p><a href="idea-dental-implants.html">Dental implants</a> · <a href="idea-dental-braces.html">Braces &amp; Invisalign</a> · <a href="idea-dental-faq.html">Read all FAQs</a> · <a href="index.html#location">Contact &amp; directions</a></p>
     <p class="provline">216 W Little York Road, Suite B, Houston, TX 77076 · Se habla español</p>
   </section>
 
 </main>
 
+
+<section class="emergency-page-cta">
+  <div class="wrap">
+    <h2>Need dental care?</h2>
+    <p class="emergency-page-cta-sub">Call first if you can, so the team knows what is happening and can be ready when you arrive.</p>
+    <div class="emergency-page-cta-actions">
+      <a class="call" href="tel:+18326648640">Call (832) 664-8640</a>
+      <a class="book" href="idea-dental-appointments.html">Request an appointment</a>
+    </div>
+  </div>
+</section>
+
+
+<nav class="svcnav svcnav--foot" aria-label="Our services, end of page">
+  <ul>
+    <li><a href="idea-dental-implants.html">Implants</a></li>
+    <li><a href="idea-dental-invisalign.html">Invisalign</a></li>
+    <li><a href="idea-dental-braces.html">Braces</a></li>
+    <li><a href="idea-dental-veneers.html">Veneers</a></li>
+    <li><a href="idea-dental-emergency.html" aria-current="page">Emergency</a></li>
+    <li><a href="idea-dental-faq.html">FAQ</a></li>
+  </ul>
+</nav>
+
 <div class="stickybar">
   <a class="c" href="tel:+18326648640">Call now</a>
-  <a class="b" href="#">Request appointment</a>
+  <a class="b" href="idea-dental-appointments.html">Request appointment</a>
 </div>
 
+<!-- GSAP + ScrollTrigger for this page. Every other document loads its own
+     copy; this is a separate document, so this is its first and only import
+     here. -->
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script defer>
+/* =====================================================================
+   EMERGENCY DENTIST PAGE - storefront parallax and sequential reveals.
+
+   Nothing pins. The storefront settles out of a small push-in behind the
+   hero, the mid-page band and the closing frame drift gently as they pass,
+   and each group of content arrives once. Someone reaching this page is
+   usually in pain and in a hurry, so the motion is short and never delays
+   the phone number: the hero reveal is the first thing to run and it is
+   over in well under a second.
+
+   Progressive enhancement: the .emgp-on class that hides anything is added
+   HERE, and only after the timelines are built, so with no JS, no GSAP or
+   reduced motion the whole page reads normally.
+   ===================================================================== */
+(function () {
+  "use strict";
+
+  var hero = document.querySelector(".emergency-page-hero");
+  if (!hero) return;
+
+  function emgpStart() {
+    if (!window.gsap || !window.ScrollTrigger) return;
+    var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq && mq.matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    var root = document.documentElement;
+    root.classList.add("emgp-on");
+
+    try {
+      var mm = gsap.matchMedia();
+
+      mm.add({
+        wide:  "(min-width:761px)",
+        phone: "(max-width:760px)"
+      }, function (ctx) {
+        var wide = ctx.conditions.wide;
+        var dy   = wide ? 24 : 16;
+        var zoom = wide ? 1.07 : 1.04;   // gentle: the source is 1006px wide
+
+        /* ---- hero: the storefront settles out of a small push-in ---- */
+        var heroImg = hero.querySelector(".emergency-page-hero-media img");
+        if (heroImg && wide) {
+          gsap.fromTo(heroImg, { scale: zoom, yPercent: 0 },
+            { scale: 1, yPercent: 2, ease: "none",
+              scrollTrigger: { trigger: hero, start: "top top",
+                               end: "bottom top", scrub: 1 } });
+        }
+        var heroBits = hero.querySelectorAll(".emergency-page-hero-inner > *");
+        gsap.fromTo(heroBits, { opacity: 0, y: dy },
+          { opacity: 1, y: 0, duration: 0.5, stagger: 0.07, ease: "power2.out",
+            scrollTrigger: { trigger: hero, start: "top 95%", once: true } });
+
+        /* ---- the urgent problems arrive as a run ---- */
+        var probs = document.querySelectorAll(".emergency-page-problems li");
+        if (probs.length) {
+          gsap.fromTo(probs, { opacity: 0, y: dy * 0.6 },
+            { opacity: 1, y: 0, duration: 0.45, stagger: 0.055, ease: "power2.out",
+              scrollTrigger: { trigger: ".emergency-page-problems",
+                               start: "top 86%", once: true } });
+        }
+
+        /* ---- what to do right now ---- */
+        var steps = document.querySelectorAll(".emergency-page-steps li");
+        if (steps.length) {
+          gsap.fromTo(steps, { opacity: 0, y: dy * 0.7 },
+            { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out",
+              scrollTrigger: { trigger: ".emergency-page-steps",
+                               start: "top 85%", once: true } });
+        }
+
+        /* ---- the mid-page band drifts as it passes ---- */
+
+        /* ---- the closing call to action ---- */
+        var cta = document.querySelector(".emergency-page-cta");
+        if (cta) {
+          gsap.fromTo(cta.querySelectorAll(".emergency-page-cta > .wrap > *"),
+            { opacity: 0, y: dy }, { opacity: 1, y: 0, duration: 0.55,
+              stagger: 0.09, ease: "power2.out",
+              scrollTrigger: { trigger: cta, start: "top 82%", once: true } });
+        }
+
+        /* ---- the final frame: where to find us ---- */
+
+        return function () {
+          ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
+          gsap.set([heroBits, ".emergency-page-problems li", ".emergency-page-steps li",
+                    ".emergency-page-cta > .wrap > *",
+                    ".emergency-page-hero-media img"], { clearProps: "all" });
+        };
+      });
+
+      window.addEventListener("load", function () { ScrollTrigger.refresh(); }, { once: true });
+
+    } catch (err) {
+      root.classList.remove("emgp-on");
+      if (window.console) console.warn("Emergency page motion disabled:", err);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", emgpStart);
+  } else {
+    emgpStart();
+  }
+})();
+</script>
 </body>
 </html>
