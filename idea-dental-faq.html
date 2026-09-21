@@ -258,7 +258,9 @@
     outline:none; border-color:var(--accent);
     box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent);
   }
-  .faqsearch-input::-webkit-search-cancel-button{cursor:pointer}
+  /* the field now has its own clear button, so the browser's native
+     cancel cross would be a second one sitting beside it */
+  .faqsearch-input::-webkit-search-cancel-button{-webkit-appearance:none; display:none}
   .faqsearch-count{margin:10px 2px 0; font-size:.9rem; color:var(--ink-mute); min-height:1.2em}
   .faqsearch-count a{color:var(--accent-ink); font-weight:700}
   .qa-hidden{display:none !important}
@@ -575,8 +577,10 @@
      The field itself is unchanged; these only add the parts it was
      missing. Everything uses existing tokens. */
   .faqsearch-input{padding-right:46px}
+  /* the wrapper also holds the result count, so centring on it would sit
+     the button below the field; this matches the search icon's own offset */
   .faqsearch-clear{
-    position:absolute; top:50%; right:9px; transform:translateY(-50%);
+    position:absolute; top:12px; right:9px;
     width:30px; height:30px; padding:0; border:0; border-radius:50%;
     display:grid; place-items:center; cursor:pointer;
     background:transparent; color:var(--ink-mute);
