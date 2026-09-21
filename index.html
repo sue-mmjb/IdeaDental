@@ -798,7 +798,7 @@
      stuck blank. Scoped to .cine-on, so every other page, the reduced-motion
      path and the no-GSAP fallback all keep smooth anchor scrolling. */
   html.cine-on, html.svc-cine-on, html.why-cine-on, html.price-cine-on,
-  html.emg-cine-on, html.prov-cine-on, html.rev-on{scroll-behavior:auto}
+  html.emg-cine-on, html.prov-on, html.rev-on{scroll-behavior:auto}
   .cine-on .cinematic-hero{height:640vh}
   .cine-on .cinematic-stage{
     position:relative; height:100vh; overflow:hidden;
@@ -1547,30 +1547,28 @@
     .emg-cine-on .emergency-cinematic-progress{display:none}
   }
 
-  /* ================= CINEMATIC PROVIDERS ============================
+  /* ================= MEET THE PROVIDERS =============================
      Namespaced under .providers-* so nothing here can reach the hero,
      services, why-us, pricing, emergency, reviews, FAQ, location or the
      footer. It does not reuse .provider, so the old card rules cannot
      fight this one.
 
-     Short on purpose: an intro and one scene per provider. A human pause
-     after the informational and urgent sections, not another long runway.
+     Both providers are on screen together, in ordinary document flow.
+     The pinned one-at-a-time sequence and its 240vh runway are gone:
+     there is no stage, no progress rail and nothing absolutely
+     positioned, so the section is as tall as its content.
 
      Sharpness note: both headshots are 240px square originals and no
      larger version exists anywhere in the project. The portrait is
-     therefore capped at 180px, which still leaves headroom at the 1.06
-     starting scale, and the editorial weight comes from the type and the
-     space around it rather than from upscaling a face.
+     therefore capped at 180px, and the editorial weight comes from the
+     type and the space around it rather than from upscaling a face.
      =================================================================== */
-
-  /* ---- (a) default / fallback ---- */
   .providers-cinematic{background:var(--card); border-block:1px solid var(--line)}
   .providers-cinematic-inner{
     max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter); width:100%;
   }
-  .providers-scene{padding:clamp(34px,4.5vw,56px) 0}
-  .providers-intro{padding-top:0}
 
+  .providers-intro{margin:0 0 clamp(34px,4.6vw,60px)}
   .providers-intro h2{
     margin:0 0 12px; font-weight:300; color:var(--ink);
     font-size:clamp(2rem,5vw,3.3rem); line-height:1.08; letter-spacing:-.03em;
@@ -1580,6 +1578,13 @@
     margin:0; color:var(--ink-soft); font-size:clamp(1.05rem,1.7vw,1.28rem);
     line-height:1.55; max-width:42ch;
   }
+
+  /* the two of them, side by side and equal */
+  .providers-grid{
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:clamp(30px,4.4vw,72px); align-items:start;
+  }
+  .providers-card{min-width:0}
 
   /* the portrait, with a soft brand disc behind it for depth */
   .providers-figure{
@@ -1608,80 +1613,34 @@
     letter-spacing:.16em; text-transform:uppercase; color:var(--ink-mute);
   }
   .providers-num b{color:var(--accent-ink); font-weight:700}
-  .providers-scene h3{
+  .providers-card h3{
     margin:0 0 14px; font-weight:300; color:var(--ink);
-    font-size:clamp(1.7rem,3.8vw,2.7rem); line-height:1.12; letter-spacing:-.028em;
+    font-size:clamp(1.6rem,2.8vw,2.3rem); line-height:1.14; letter-spacing:-.026em;
     max-width:18ch; text-wrap:balance;
   }
   .providers-bio{
     margin:0; color:var(--ink-soft);
-    font-size:clamp(1rem,1.5vw,1.14rem); line-height:1.64; max-width:52ch;
+    font-size:clamp(1rem,1.3vw,1.09rem); line-height:1.64; max-width:none;
   }
 
-  .providers-cinematic-progress{display:none}
-
-  /* ---- (b) cinematic mode ---- */
-  .prov-cine-on .providers-cinematic{height:240vh; position:relative; padding:0}
-  .prov-cine-on .providers-cinematic-stage{
-    position:relative; height:100vh; overflow:hidden; background:var(--card);
-  }
-  .prov-cine-on .providers-scene{
-    position:absolute; inset:0; z-index:2; opacity:0;
-    display:flex; align-items:center;
-    padding:clamp(84px,11vh,116px) 0 clamp(64px,9vh,96px);
-    pointer-events:none;              /* only the live scene takes clicks */
-  }
-  .prov-cine-on .providers-scene.is-live{pointer-events:auto}
-  .prov-cine-on .providers-figure{will-change:transform}
-  .prov-cine-on .providers-bio{max-width:46ch}
-
-  .prov-cine-on .providers-cinematic-progress{
-    display:flex; align-items:center; gap:14px;
-    position:absolute; z-index:4; left:0; right:0;
-    bottom:clamp(24px,4vh,42px); opacity:0;
-    max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter);
-    font-size:.76rem; font-weight:700; letter-spacing:.14em; color:var(--ink-mute);
-  }
-  .prov-cine-on .providers-cinematic-progress-num{color:var(--accent-ink); min-width:2.2ch}
-  .prov-cine-on .providers-cinematic-rule{
-    position:relative; flex:1; height:1px; background:var(--line); overflow:hidden;
-  }
-  .prov-cine-on .providers-cinematic-rule i{
-    position:absolute; inset:0; display:block; background:var(--accent);
-    transform:scaleX(0); transform-origin:left center;
-  }
-
-  @media (max-width:1024px){
-    .prov-cine-on .providers-cinematic{height:220vh}
-  }
-  /* phones: the same vertical introduction, shorter runway, and clear of
-     the call bar fixed to the bottom of the viewport */
+  /* phones and small tablets: one under the other, clear of the call bar */
   @media (max-width:760px){
-    .prov-cine-on .providers-cinematic{height:180vh}
-    .prov-cine-on .providers-scene{
-      padding:clamp(76px,10vh,96px) 0 clamp(104px,15vh,130px);
-    }
-    .prov-cine-on .providers-cinematic-progress{bottom:clamp(88px,13vh,108px)}
-    .prov-cine-on .providers-intro h2{font-size:clamp(1.8rem,7.6vw,2.2rem); max-width:none}
-    .prov-cine-on .providers-intro .sub{font-size:1.02rem; max-width:none}
-    .prov-cine-on .providers-scene h3{font-size:clamp(1.5rem,6.4vw,1.95rem); max-width:none}
-    .prov-cine-on .providers-bio{font-size:.99rem; max-width:none}
-    .prov-cine-on .providers-figure{
-      width:clamp(112px,30vw,140px); margin-bottom:clamp(16px,3vh,24px);
-    }
+    .providers-grid{grid-template-columns:minmax(0,1fr); gap:clamp(34px,7vw,46px)}
+    .providers-intro h2{font-size:clamp(1.8rem,7.6vw,2.2rem); max-width:none}
+    .providers-intro .sub{font-size:1.02rem; max-width:none}
+    .providers-card h3{font-size:clamp(1.5rem,6.4vw,1.95rem); max-width:none}
+    .providers-bio{font-size:.99rem}
+    .providers-figure{width:clamp(112px,30vw,140px); margin-bottom:clamp(16px,3vh,24px)}
   }
 
-  /* Reduced motion never reaches .prov-cine-on (the script bails out
-     first). This is a second belt in case the class is ever applied some
-     other way. */
+  /* The reveal's hidden state is scoped to .prov-on, a class the script
+     only adds once its triggers are built, so no JS, no GSAP or reduced
+     motion all leave both providers visible in plain flow. */
+  .prov-on .providers-intro > *,
+  .prov-on .providers-card{opacity:0}
   @media (prefers-reduced-motion:reduce){
-    .prov-cine-on .providers-cinematic{height:auto; padding:var(--s-sec) 0}
-    .prov-cine-on .providers-cinematic-stage{height:auto; overflow:visible}
-    .prov-cine-on .providers-scene{
-      position:static; opacity:1; display:block; pointer-events:auto;
-      padding:clamp(34px,4.5vw,56px) 0;
-    }
-    .prov-cine-on .providers-cinematic-progress{display:none}
+    .prov-on .providers-intro > *,
+    .prov-on .providers-card{opacity:1}
   }
 
   /* ================= REVIEWS, TESTIMONIAL WALL ======================
@@ -2894,30 +2853,31 @@ document.documentElement.classList.remove("no-js");
   </div>
 </section>
 
-<!-- 7 · Meet the providers: a short, warm cinematic pause.
-     Deliberately the shortest pinned section after Emergency: an intro and
-     one scene per provider, nothing more. Plain document flow by default, so
-     with no JS, no GSAP or reduced motion both providers, their photographs,
-     names and bios read as ordinary stacked blocks.
+<!-- 7 · Meet the providers: both of them, side by side, in ordinary
+     document flow.
 
-     The two headshots are 240px square originals, the only ones that exist.
-     They are therefore shown at a size that stays sharp rather than blown up
-     into a soft face; the editorial scale comes from the typography and the
-     whitespace around them. -->
+     This replaces a pinned sequence that showed one provider at a time
+     over a 240vh runway. There is no stage, no runway, no progress rail
+     and nothing absolutely positioned, so the section is exactly as tall
+     as its content and Reviews below it starts where it always would.
+
+     Names, bios and photographs are unchanged.
+
+     The two headshots are 240px square originals, the only ones that
+     exist. They are therefore shown at a size that stays sharp rather
+     than blown up into a soft face; the editorial scale comes from the
+     typography and the whitespace around them. -->
 <section class="block providers-cinematic" id="providers-cinematic">
-  <div class="providers-cinematic-stage">
+  <div class="providers-cinematic-inner">
 
-    <!-- INTRO -->
-    <div class="providers-scene providers-intro" data-prov-scene="0">
-      <div class="providers-cinematic-inner">
-        <h2>Meet the providers</h2>
-        <p class="sub">Care from a dedicated, bilingual team at Idea Dental.</p>
-      </div>
+    <div class="providers-intro">
+      <h2>Meet the providers</h2>
+      <p class="sub">Care from a dedicated, bilingual team at Idea Dental.</p>
     </div>
 
-    <!-- 01 -->
-    <article class="providers-scene" data-prov-scene="1">
-      <div class="providers-cinematic-inner">
+    <div class="providers-grid">
+
+      <article class="providers-card">
         <div class="providers-figure">
           <span class="providers-tint" aria-hidden="true"></span>
           <picture class="badge"><source srcset="dr-stephanie-vu.webp" type="image/webp"><img src="dr-stephanie-vu.jpg" alt="" width="240" height="240" loading="lazy" decoding="async"></picture>
@@ -2926,12 +2886,9 @@ document.documentElement.classList.remove("no-js");
         <h3>Dr. Stephanie Vu, DDS</h3>
         <p class="providers-bio">Dr. Vu is a dedicated dentist who provides exceptional care to patients at Idea Dental in Houston, offering general, cosmetic, orthodontic and emergency care to patients of all ages in both English and Spanish.</p>
         <!-- SOURCE: headshot supplied by the practice, cropped from the existing meet-the-providers section. -->
-      </div>
-    </article>
+      </article>
 
-    <!-- 02 -->
-    <article class="providers-scene" data-prov-scene="2">
-      <div class="providers-cinematic-inner">
+      <article class="providers-card">
         <div class="providers-figure">
           <span class="providers-tint" aria-hidden="true"></span>
           <picture class="badge"><source srcset="dr-nukul-rathi.webp" type="image/webp"><img src="dr-nukul-rathi.jpg" alt="" width="240" height="240" loading="lazy" decoding="async"></picture>
@@ -2940,14 +2897,9 @@ document.documentElement.classList.remove("no-js");
         <h3>Dr. Nukul Rathi</h3>
         <p class="providers-bio">Idea Dental is proud to have Dr. Nukul Rathi as a visiting provider. Dr. Rathi specializes in implants and full-mouth rehabilitation.</p>
         <!-- SOURCE: bio confirmed from live site (meet-our-doctors). Visiting provider; do not imply full-time. -->
-      </div>
-    </article>
+      </article>
 
-    <div class="providers-cinematic-progress" aria-hidden="true">
-      <span class="providers-cinematic-progress-num">01</span>
-      <span class="providers-cinematic-rule"><i></i></span>
     </div>
-
   </div>
 </section>
 
@@ -4341,50 +4293,32 @@ document.documentElement.classList.remove("no-js");
 </script>
 <script defer>
 /* =====================================================================
-   CINEMATIC PROVIDERS - one scrubbed master timeline, three scenes.
+   MEET THE PROVIDERS - a short scroll reveal, nothing more.
 
-   Reuses the GSAP and ScrollTrigger already loaded for the hero. No extra
-   library, and its own timeline and ScrollTrigger so the six pinned
-   sections never share state.
+   Reuses the GSAP and ScrollTrigger already loaded for the hero. No pin,
+   no runway, no progress counter, no scene sequence: the timeline that
+   showed one provider at a time is gone, along with its ScrollTrigger.
 
-   Progressive enhancement, same contract as the rest: .prov-cine-on is
-   added HERE, and only once the timeline has been built without throwing.
-   No JS, no GSAP or reduced motion leaves both providers, their
+   Three triggers, one for the intro and one per provider, each over a
+   short range so an element reveals as it enters. Every one is
+   scrub:true, so the reveal is the scroll bar and freezes the instant
+   the wheel does, and each kills itself once it is past, writing the
+   finished state in place. After the first pass the section has no live
+   triggers and scrolling back up cannot un-reveal it.
+
+   Progressive enhancement, same contract as the rest: .prov-on is added
+   HERE, and only once the triggers have been built without throwing. No
+   JS, no GSAP or reduced motion leaves both providers, their
    photographs, names and bios in plain readable flow.
    ===================================================================== */
 (function () {
   "use strict";
 
-  var pvRoot = document.getElementById("providers-cinematic");
-  if (!pvRoot) return;
-
-  var pvStage = pvRoot.querySelector(".providers-cinematic-stage");
-  var pvIntro = pvRoot.querySelector('[data-prov-scene="0"]');
-  var pvBar   = pvRoot.querySelector(".providers-cinematic-progress");
-  var pvNum   = pvRoot.querySelector(".providers-cinematic-progress-num");
-  var pvFill  = pvRoot.querySelector(".providers-cinematic-rule i");
-
-  var pvScenes = [];
-  for (var pi = 1; pi <= 2; pi++) {
-    var pel = pvRoot.querySelector('[data-prov-scene="' + pi + '"]');
-    if (!pel) return;                     // markup incomplete: leave plain flow
-    pvScenes[pi] = {
-      el:    pel,
-      inner: pel.querySelector(".providers-cinematic-inner"),
-      fig:   pel.querySelector(".providers-figure")
-    };
-  }
-  if (!pvStage || !pvIntro) return;
-
-  /* Two providers, introduced one after the other. The second arrives from
-     the opposite side so the pair does not read as a slideshow. */
-  var PV_STYLE = [null,
-    { tx: -1, ty: 0.5 },
-    { tx:  1, ty: 0.5 }
-  ];
-
-  var PV_T0 = 14, PV_SLOT = 16, PV_FADE = 6;
-  var PV_TOTAL = PV_T0 + 2 * PV_SLOT + PV_FADE;                    // 52
+  var sec = document.getElementById("providers-cinematic");
+  if (!sec) return;
+  var intro = sec.querySelector(".providers-intro");
+  var cards = [].slice.call(sec.querySelectorAll(".providers-card"));
+  if (!intro || !cards.length) return;
 
   function pvStart() {
     if (!window.gsap || !window.ScrollTrigger) return;
@@ -4392,118 +4326,44 @@ document.documentElement.classList.remove("no-js");
     if (mq && mq.matches) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    document.documentElement.classList.add("prov-cine-on");
+    var root = document.documentElement;
+    root.classList.add("prov-on");
 
     try {
-      var pvMM = gsap.matchMedia();
-
-      pvMM.add({
-        desktop: "(min-width:1025px)",
-        tablet:  "(min-width:761px) and (max-width:1024px)",
-        phone:   "(max-width:760px)"
-      }, function (ctx) {
-        var c = ctx.conditions;
-        var dx = c.desktop ? 44 : c.tablet ? 34 : 18;
-        var dy = c.desktop ? 28 : c.tablet ? 24 : 16;
-        // gentle: these are 240px originals, so a big push-in would only
-        // magnify the softness
-        var zFrom = 1.06;
-
-        var pvTL = gsap.timeline({
-          defaults: { ease: "power2.out" },
+      /* The hidden state is a CSS rule under .prov-on, so finishing has
+         to write opacity:1 rather than clear it: clearing would hand
+         control back to that rule and the section would vanish. */
+      function build(trigger, targets, stagger) {
+        var done = false;
+        function lock(self) {
+          if (done) return;
+          done = true;
+          self.kill();
+          gsap.set(targets, { opacity: 1, clearProps: "transform" });
+        }
+        gsap.timeline({
           scrollTrigger: {
-            trigger: pvRoot,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: true,               // the real scroll position, with no easing
-            pin: pvStage,
-            anticipatePin: 1,
+            trigger: trigger,
+            start: "top 88%",
+            end: "top 62%",
+            scrub: true,
             invalidateOnRefresh: true,
-            onUpdate: pvPaint
-          }
-        });
+            onUpdate: function (self) { if (self.progress >= 1) lock(self); },
+            onLeave: lock,
+            onRefresh: function (self) { if (self.progress >= 1) lock(self); }
+          },
+          defaults: { ease: "power2.out" }
+        }).fromTo(targets, { opacity: 0, y: 22 },
+                           { opacity: 1, y: 0, duration: 1, stagger: stagger }, 0);
+      }
 
-        /* ---- INTRO -------------------------------------------------
-           Opaque from the first frame: the stage is already partly in
-           view before the pin engages, so a scene fading up from nothing
-           would show as an empty frame rising. */
-        var introInner = pvIntro.querySelector(".providers-cinematic-inner");
-        gsap.set(pvIntro, { opacity: 1 });
-        pvTL.fromTo(introInner, { y: dy, scale: 0.988 },
-                                { y: 0, scale: 1, duration: 8, ease: "none" }, 0);
-        pvTL.to(pvIntro, { opacity: 0, duration: 5, ease: "none" }, 8);
-        pvTL.to(introInner, { y: -dy, duration: 5 }, 8);
-        if (pvBar) pvTL.fromTo(pvBar, { opacity: 0 },
-                                      { opacity: 1, duration: 5 }, 8);
-
-        for (var n = 1; n <= 2; n++) {
-          var s     = pvScenes[n];
-          var st    = PV_STYLE[n];
-          var enter = PV_T0 + (n - 1) * PV_SLOT;
-          var exit  = PV_T0 + n * PV_SLOT;
-          var last  = (n === 2);
-
-          /* Sequential handoff, not a dissolve: the outgoing provider is
-             fully gone at the instant the next one starts, so two faces
-             and two names never stack on top of each other. */
-          pvTL.fromTo(s.el, { opacity: 0 },
-            { opacity: 1, duration: PV_FADE * 0.6, ease: "none" },
-            enter + PV_FADE * 0.5);
-          pvTL.fromTo(s.inner, { x: st.tx * dx, y: st.ty * dy },
-                               { x: 0, y: 0, duration: PV_FADE + 2 }, enter);
-
-          /* the portrait settles out of a small push-in for the whole time
-             the scene is up, so it is never perfectly still */
-          if (s.fig) {
-            var span = (last ? PV_TOTAL : exit + PV_FADE) - enter;
-            pvTL.fromTo(s.fig, { scale: zFrom },
-                               { scale: 1, duration: span, ease: "none" }, enter);
-          }
-
-          if (!last) {
-            pvTL.to(s.el,    { opacity: 0, duration: PV_FADE * 0.5, ease: "none" }, exit);
-            pvTL.to(s.inner, { x: st.tx * dx * -0.3, y: -dy * 0.6,
-                               duration: PV_FADE }, exit);
-          }
-        }
-
-        if (pvFill) {
-          gsap.set(pvFill, { transformOrigin: "left center" });
-          pvTL.fromTo(pvFill, { scaleX: 0 },
-            { scaleX: 1, duration: PV_TOTAL - PV_T0, ease: "none" }, PV_T0);
-        }
-
-        var pvLive = -1;
-        function pvPaint(self) {
-          var t = (self ? self.progress : 0) * PV_TOTAL;
-          var idx = t < PV_T0 - PV_FADE / 2
-            ? 0
-            : Math.min(2, Math.max(1, Math.floor((t - PV_T0 - PV_FADE / 2) / PV_SLOT) + 1));
-          if (idx === pvLive) return;
-          pvLive = idx;
-          for (var k = 1; k <= 2; k++) {
-            pvScenes[k].el.classList.toggle("is-live", k === idx);
-          }
-          if (pvNum) pvNum.textContent = idx ? ("0" + idx) : "01";
-        }
-        pvPaint(pvTL.scrollTrigger);
-
-        return function () {        // matchMedia cleanup on breakpoint change
-          pvTL.scrollTrigger && pvTL.scrollTrigger.kill();
-          pvTL.kill();
-          var all = [pvIntro, introInner, pvBar, pvFill];
-          for (var k = 1; k <= 2; k++) {
-            all.push(pvScenes[k].el, pvScenes[k].inner, pvScenes[k].fig);
-          }
-          gsap.set(all.filter(Boolean), { clearProps: "all" });
-          for (var m = 1; m <= 2; m++) { pvScenes[m].el.classList.remove("is-live"); }
-        };
-      });
+      build(intro, [].slice.call(intro.children), 0.18);
+      cards.forEach(function (card) { build(card, [card], 0); });
 
     } catch (err) {
-      // never strand the page mid-build: drop back to the stacked layout
-      document.documentElement.classList.remove("prov-cine-on");
-      if (window.console) console.warn("Cinematic providers disabled:", err);
+      // never strand the section mid-build: drop back to plain flow
+      root.classList.remove("prov-on");
+      if (window.console) console.warn("Providers reveal disabled:", err);
     }
   }
 
