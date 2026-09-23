@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en-US" data-theme="light">
+<html lang="en-US">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invisalign Clear Aligners in Houston, TX | Idea Dental</title>
 <meta name="description" content="Straighten your teeth with nearly invisible, removable Invisalign clear aligners at Idea Dental in Houston. Bilingual team, payment plans for all patients. Call (832) 664-8640.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -166,212 +166,29 @@
     color:var(--ink-on-photo);
   }
 
-  /* Hero copy on a solid panel. The photo measured 4.7-6.4:1 behind this text,
-     which passes on paper, but thin Light-weight type over a busy image is
-     still hard to read. The panel removes the variation entirely. */
-  header.hero .wrap{
-    box-sizing:border-box;
-    width:min(var(--maxw), calc(100% - 36px));
-    margin-inline:auto;
-    padding:clamp(22px,3vw,34px);
-    background:color-mix(in srgb, var(--card) 95%, transparent);
-    -webkit-backdrop-filter:blur(12px); backdrop-filter:blur(12px);
-    border:1px solid var(--line);
-    border-radius:20px;
-    box-shadow:0 2px 6px rgba(15,42,51,.05), 0 18px 44px -24px rgba(15,42,51,.30);
+  /* ---- Page transitions: smooth fade + slight rise between pages.
+     Chrome/Edge animate the swap when navigating to any other page on
+     this site that also carries this rule. Browsers that don't support
+     it (older Safari/Firefox) just navigate instantly as before --
+     nothing breaks, this is a progressive enhancement only. ---- */
+  @view-transition{ navigation:auto; }
+  ::view-transition-old(root),
+  ::view-transition-new(root){
+    animation-duration:.42s; animation-timing-function:cubic-bezier(.16,1,.3,1);
   }
-  /* the frosted pill and button were for type sitting directly on the photo;
-     inside the panel they would be white-on-white */
-  header.hero .eyebrow{
-    /* display:block returns it to its own line; Naomi's pill made it
-       inline-block, which without the pill left it beside the logo */
-    display:block; background:none; border:0; padding:0; box-shadow:none;
-    margin:14px 0 10px; -webkit-backdrop-filter:none; backdrop-filter:none;
-  }
-  header.hero .btn.ghost{
-    background:transparent; color:var(--accent-ink);
-    -webkit-backdrop-filter:none; backdrop-filter:none;
-  }
-  header.hero .lede{color:var(--ink-soft)}
-
-  /* ---------- Service navigation, above and below the content ----------
-     Same strip top and bottom so the other services are always one click
-     away. Site tokens only: this page has no --gutter or --ease, so the
-     20px inset and the timings are written out to match .wrap. */
-  .svcnav{background:var(--card); border-block:1px solid var(--line)}
-  .svcnav ul{
-    display:flex; flex-wrap:wrap; justify-content:space-between;
-    gap:10px 22px; list-style:none;
-    max-width:var(--maxw); margin:0 auto; padding:14px 20px;
-  }
-  .svcnav a{
-    display:inline-flex; align-items:center; gap:9px;
-    color:var(--ink); text-decoration:none;
-    font-size:.93rem; letter-spacing:-.005em; white-space:nowrap;
-    transition:color .22s cubic-bezier(.2,.7,.3,1);
-  }
-  /* the small ring that marks each item */
-  .svcnav a::before{
-    content:""; width:7px; height:7px; border-radius:50%; flex:none;
-    border:1.5px solid var(--accent); background:transparent;
-    transition:background-color .22s cubic-bezier(.2,.7,.3,1), border-color .22s;
-  }
-  .svcnav a:hover{color:var(--accent-ink)}
-  .svcnav a:hover::before{background:var(--accent)}
-  .svcnav a[aria-current="page"]{color:var(--accent-ink); font-weight:700}
-  .svcnav a[aria-current="page"]::before{background:var(--accent)}
-  .svcnav a:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:3px}
-  /* the closing strip sits on paper so it reads as the end of the page */
-  .svcnav--foot{background:var(--paper); border-top:1px solid var(--line)}
-  @media(max-width:560px){
-    .svcnav ul{justify-content:flex-start; gap:10px 18px; padding:12px 20px}
-    .svcnav a{font-size:.88rem}
-  }
-
-  /* ================= INVISALIGN PAGE =================================
-     The waiting-room photograph is the visual thread: hero, one
-     mid-page band, and the closing CTA, each at a different crop.
-
-     Contrast, measured against this photograph at a 2:1 hero crop with
-     the text in the left half: --ink clears AA (4.5:1) from a 0.44 veil,
-     but --ink-soft never clears it even at 0.82. So the wash sits at 0.54
-     and nothing over the photo uses --ink-soft.
-
-     The source is 1024x803, the only resolution supplied. Nothing upscales
-     it beyond its natural size in markup; the browser handles the rest.
-     =================================================================== */
-
-  /* ---------- hero ---------- */
-  .invisalign-hero{
-    position:relative; isolation:isolate; overflow:hidden;
-    min-height:clamp(520px,82vh,760px); display:flex; align-items:flex-end;
-    padding:clamp(28px,5vh,56px) 0 clamp(40px,7vh,72px);
-    border-bottom:1px solid var(--line);
-  }
-  .invisalign-hero-media{position:absolute; inset:0; z-index:0; display:block}
-  .invisalign-hero-media img{
-    width:100%; height:100%; object-fit:cover; object-position:50% 46%;
-    display:block; will-change:transform;
-  }
-  .invisalign-hero-veil{
-    position:absolute; inset:0; z-index:1; pointer-events:none;
-    background:linear-gradient(100deg,
-      color-mix(in srgb,var(--paper) 72%,transparent) 0%,
-      color-mix(in srgb,var(--paper) 58%,transparent) 46%,
-      color-mix(in srgb,var(--paper) 38%,transparent) 100%);
-  }
-  /* .wrap is a flex item here, so without an explicit width it shrinks to
-     its own text and margin:0 auto centres that narrow box, putting the
-     headline off the column the body copy uses. */
-  .invisalign-hero-inner{position:relative; z-index:2; width:100%}
-  .invisalign-hero .eyebrow{color:var(--accent-ink)}
-  .invisalign-hero h1{
-    font-weight:300; font-size:clamp(2.2rem,5.6vw,3.7rem); line-height:1.05;
-    letter-spacing:-.032em; color:var(--ink); max-width:15ch; margin:0 0 16px;
-  }
-  /* --ink-soft never clears AA over this photo, so the lede uses the
-     darker on-photo ink instead */
-  .invisalign-hero .lede{
-    color:var(--ink-on-photo); font-size:clamp(1.04rem,1.8vw,1.2rem);
-    line-height:1.55; max-width:46ch; margin:0;
-  }
-  .invisalign-hero .btnrow{margin-top:clamp(22px,3vw,30px)}
-
-  /* ---------- the mid-page band, a different crop ---------- */
-
-
-
-
-
-  /* ---------- the numbered process ---------- */
-  .invisalign-process{
-    list-style:none; margin:0; padding:0; counter-reset:none;
-    border-top:1px solid var(--line);
-  }
-  .invisalign-process li{
-    display:grid; grid-template-columns:auto 1fr; gap:clamp(16px,2.6vw,30px);
-    align-items:baseline; padding:clamp(18px,2.6vw,26px) 0;
-    border-bottom:1px solid var(--line-soft);
-  }
-  .invisalign-step-n{
-    font-size:.78rem; font-weight:700; letter-spacing:.14em;
-    color:var(--accent-ink); font-variant-numeric:tabular-nums;
-  }
-  .invisalign-step-b{font-size:1.02rem; line-height:1.62; color:var(--ink)}
-  .invisalign-step-b b{font-weight:700}
-
-  /* ---------- the closing CTA, a third crop ---------- */
-  .invisalign-cta{
-    position:relative; isolation:isolate; overflow:hidden;
-    padding:clamp(64px,11vh,120px) 0; margin-top:clamp(34px,5vw,60px);
-    border-top:1px solid var(--line);
-  }
-  .invisalign-cta-media{position:absolute; inset:0; z-index:0; display:block}
-  .invisalign-cta-media img{
-    width:100%; height:100%; object-fit:cover; display:block; will-change:transform;
-  }
-  /* a deeper wash here: this frame carries body copy, not just a headline */
-  .invisalign-cta-veil{
-    position:absolute; inset:0; z-index:1; pointer-events:none;
-    background:color-mix(in srgb,var(--paper) 80%,transparent);
-  }
-  .invisalign-cta-inner{position:relative; z-index:2}
-  .invisalign-cta-eyebrow{
-    margin:0 0 14px; font-size:.78rem; font-weight:700; letter-spacing:.16em;
-    text-transform:uppercase; color:var(--accent-ink);
-  }
-  .invisalign-cta h2{
-    margin:0 0 14px; font-weight:300; color:var(--ink);
-    font-size:clamp(1.9rem,4.6vw,3rem); line-height:1.08; letter-spacing:-.03em;
-    max-width:17ch;
-  }
-  .invisalign-cta-sub{
-    margin:0; color:var(--ink-on-photo); font-size:1.04rem; line-height:1.6;
-    max-width:44ch;
-  }
-  .invisalign-cta .btnrow{margin-top:clamp(22px,3vw,32px)}
-
-  @media(max-width:640px){
-    .invisalign-hero{min-height:clamp(440px,74vh,620px)}
-    .invisalign-hero-media img{object-position:52% 50%}
-    .invisalign-hero h1{max-width:none}
-    .invisalign-hero .lede{max-width:none}
-    .invisalign-cta h2{max-width:none}
-    .invisalign-cta-sub{max-width:none}
-    /* a gentler wash on the narrower crop, which shows less bright wall */
-    .invisalign-hero-veil{
-      background:linear-gradient(170deg,
-        color-mix(in srgb,var(--paper) 58%,transparent) 0%,
-        color-mix(in srgb,var(--paper) 76%,transparent) 62%,
-        color-mix(in srgb,var(--paper) 84%,transparent) 100%);
-    }
-  }
-
-  /* The reveals' hidden state is scoped to .inv-on, a class only the script
-     adds, so with no JS, no GSAP or reduced motion every word and every
-     image renders normally. */
-  .inv-on .invisalign-hero-inner > *,
-  .inv-on .invisalign-process li,
-  .inv-on .invisalign-cta-inner > *{opacity:0}
-
+  ::view-transition-old(root){ animation-name:idea-page-out; }
+  ::view-transition-new(root){ animation-name:idea-page-in; }
+  @keyframes idea-page-out{ to{ opacity:0; transform:translateY(-10px) } }
+  @keyframes idea-page-in{ from{ opacity:0; transform:translateY(14px) } }
   @media (prefers-reduced-motion:reduce){
-    .inv-on .invisalign-hero-inner > *,
-    .inv-on .invisalign-process li,
-    .inv-on .invisalign-cta-inner > *{opacity:1}
+    ::view-transition-old(root), ::view-transition-new(root){ animation:none !important }
   }
 </style>
 </head>
 <body>
 
-<header class="invisalign-hero">
-  <!-- The Idea Dental waiting room, supplied for this page. It is the visual
-       thread: the hero, one mid-page band and the closing frame all use it,
-       each at a different crop rather than the same composition repeated.
-       Measured on this photograph, --ink clears AA from a 0.44 veil upward,
-       so the wash is light and the room stays clearly readable. -->
-  <picture class="invisalign-hero-media"><source media="(max-width:640px)" srcset="invisalign-waiting-room-640.webp" type="image/webp"><source media="(max-width:640px)" srcset="invisalign-waiting-room-640.jpg" type="image/jpeg"><source srcset="invisalign-waiting-room.webp" type="image/webp"><img src="invisalign-waiting-room.jpg" alt="The waiting room at Idea Dental: cushioned chairs and a sofa around a stone table, with light blue walls and a television" width="1024" height="803" fetchpriority="high" decoding="async" sizes="100vw"></picture>
-  <div class="invisalign-hero-veil" aria-hidden="true"></div>
-  <div class="wrap invisalign-hero-inner">
+<header class="hero">
+  <div class="wrap">
     <a class="backlink" href="index.html" aria-label="Go back to the previous page" title="Back" onclick="if(history.length&gt;1){history.back();return false}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a><a class="sitelogo" href="index.html"><img src="idea-dental-logo.png" alt="IDEA! Dental" width="476" height="176" decoding="async"></a>
     <p class="eyebrow">Idea Dental · Houston, TX · Se habla español</p>
     <h1>Invisalign in Houston</h1>
@@ -383,17 +200,6 @@
   </div>
 </header>
 
-<nav class="svcnav" aria-label="Our services">
-  <ul>
-    <li><a href="idea-dental-implants.html">Implants</a></li>
-    <li><a href="idea-dental-invisalign.html" aria-current="page">Invisalign</a></li>
-    <li><a href="idea-dental-braces.html">Braces</a></li>
-    <li><a href="idea-dental-veneers.html">Veneers</a></li>
-    <li><a href="idea-dental-emergency.html">Emergency</a></li>
-    <li><a href="idea-dental-faq.html">FAQ</a></li>
-  </ul>
-</nav>
-
 <main class="wrap">
 
   <section>
@@ -401,8 +207,6 @@
     <p class="lead">Invisalign® is a modern alternative to braces that lets you straighten your teeth without installing metal in your mouth. Instead, a series of custom plastic trays, called aligners, gradually move your teeth into place. Each aligner is custom-made to fit your mouth, so you don't have to worry about the mouth irritation that traditional braces can cause.</p>
     <p class="lead">Because the aligners are removable, they're easy to keep clean, you can brush and floss normally, and since they're clear, most people won't even know you're wearing them unless you tell them.</p>
   </section>
-
-
 
   <section>
     <h2>Who Invisalign is for</h2>
@@ -451,130 +255,5 @@
   </section>
 
 </main>
-
-
-<section class="invisalign-cta">
-  <picture class="invisalign-cta-media"><source media="(max-width:640px)" srcset="invisalign-waiting-room-640.webp" type="image/webp"><source media="(max-width:640px)" srcset="invisalign-waiting-room-640.jpg" type="image/jpeg"><source srcset="invisalign-waiting-room.webp" type="image/webp"><img src="invisalign-waiting-room.jpg" alt="The waiting room at Idea Dental: cushioned chairs and a sofa around a stone table, with light blue walls and a television" width="1024" height="803" loading="lazy" style="object-position:50% 72%" decoding="async" sizes="100vw"></picture>
-  <div class="invisalign-cta-veil" aria-hidden="true"></div>
-  <div class="wrap invisalign-cta-inner">
-    <p class="invisalign-cta-eyebrow">Invisalign</p>
-    <h2>Ready to start your smile journey?</h2>
-    <p class="invisalign-cta-sub">The dentist confirms your treatment plan and price at your consultation, and can preview your Invisalign result with the iTero scanner.</p>
-    <div class="btnrow">
-      <a class="btn primary" href="idea-dental-appointments.html">Request an appointment</a>
-      <a class="btn ghost" href="tel:+18326648640">Call (832) 664-8640</a>
-    </div>
-  </div>
-</section>
-
-<nav class="svcnav svcnav--foot" aria-label="Our services, end of page">
-  <ul>
-    <li><a href="idea-dental-implants.html">Implants</a></li>
-    <li><a href="idea-dental-invisalign.html" aria-current="page">Invisalign</a></li>
-    <li><a href="idea-dental-braces.html">Braces</a></li>
-    <li><a href="idea-dental-veneers.html">Veneers</a></li>
-    <li><a href="idea-dental-emergency.html">Emergency</a></li>
-    <li><a href="idea-dental-faq.html">FAQ</a></li>
-  </ul>
-</nav>
-<!-- GSAP + ScrollTrigger for this page. The homepage loads its own copy; this
-     is a separate document, so this is its first and only import here. -->
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script defer>
-/* =====================================================================
-   INVISALIGN PAGE - hero parallax and sequential reveals.
-
-   No pinning anywhere: the hero photograph settles out of a small push-in
-   as you scroll past it, the band and the closing frame drift gently, and
-   each section arrives once. Progressive enhancement: the .imp-on class
-   that hides anything is added HERE and only after the timelines build,
-   so with no JS, no GSAP or reduced motion the whole page reads normally.
-   ===================================================================== */
-(function () {
-  "use strict";
-
-  var hero = document.querySelector(".invisalign-hero");
-  if (!hero) return;
-
-  function impStart() {
-    if (!window.gsap || !window.ScrollTrigger) return;
-    var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq && mq.matches) return;
-
-    gsap.registerPlugin(ScrollTrigger);
-    var root = document.documentElement;
-    root.classList.add("inv-on");
-
-    try {
-      var mm = gsap.matchMedia();
-
-      mm.add({
-        wide:  "(min-width:761px)",
-        phone: "(max-width:760px)"
-      }, function (ctx) {
-        var wide = ctx.conditions.wide;
-        var dy   = wide ? 26 : 18;
-        var zoom = wide ? 1.05 : 1.04;     // gentle: the source is only 1024px wide
-
-        /* ---- hero: the room settles out of a small push-in ---- */
-        var heroImg = hero.querySelector(".invisalign-hero-media img");
-        if (heroImg) {
-          gsap.fromTo(heroImg, { scale: zoom, yPercent: 0 },
-            { scale: 1, yPercent: wide ? 2.5 : 1.5, ease: "none",
-              scrollTrigger: { trigger: hero, start: "top top",
-                               end: "bottom top", scrub: 1 } });
-        }
-        var heroBits = hero.querySelectorAll(".invisalign-hero-inner > *");
-        gsap.fromTo(heroBits, { opacity: 0, y: dy },
-          { opacity: 1, y: 0, duration: 0.6, stagger: 0.09, ease: "power2.out",
-            scrollTrigger: { trigger: hero, start: "top 92%", once: true } });
-
-        /* ---- the mid-page band drifts as it passes ---- */
-
-        /* ---- the four steps arrive one after another ---- */
-        var steps = document.querySelectorAll(".invisalign-process li");
-        if (steps.length) {
-          gsap.fromTo(steps, { opacity: 0, y: dy * 0.7 },
-            { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: "power2.out",
-              scrollTrigger: { trigger: ".invisalign-process", start: "top 85%", once: true } });
-        }
-
-        /* ---- the closing frame ---- */
-        var cta = document.querySelector(".invisalign-cta");
-        if (cta) {
-          gsap.fromTo(cta.querySelectorAll(".invisalign-cta-inner > *"),
-            { opacity: 0, y: dy }, { opacity: 1, y: 0, duration: 0.6,
-              stagger: 0.09, ease: "power2.out",
-              scrollTrigger: { trigger: cta, start: "top 80%", once: true } });
-          gsap.fromTo(cta.querySelector(".invisalign-cta-media img"),
-            { scale: zoom }, { scale: 1, ease: "none",
-              scrollTrigger: { trigger: cta, start: "top bottom",
-                               end: "bottom top", scrub: 1 } });
-        }
-
-        return function () {
-          ScrollTrigger.getAll().forEach(function (t) { t.kill(); });
-          gsap.set([heroBits, ".invisalign-process li",
-                    ".invisalign-cta-inner > *", ".invisalign-hero-media img",
-                    ".invisalign-cta-media img"], { clearProps: "all" });
-        };
-      });
-
-      window.addEventListener("load", function () { ScrollTrigger.refresh(); }, { once: true });
-
-    } catch (err) {
-      root.classList.remove("inv-on");
-      if (window.console) console.warn("Invisalign page motion disabled:", err);
-    }
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", impStart);
-  } else {
-    impStart();
-  }
-})();
-</script>
 </body>
 </html>
