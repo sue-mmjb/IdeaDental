@@ -154,12 +154,12 @@
   @media(max-width:600px){ .brand img{height:42px} }
   /* ---------- Primary navigation ----------
      One set of links serves both layouts, so there is no duplicated markup
-     and no second source of truth: at 880px and up .nav is a row and the
+     and no second source of truth: at 1025px and up .nav is a row and the
      Services panel is an absolutely positioned dropdown; below that the
      same <nav> becomes a sheet under the bar and the same panel becomes an
      inline expander. The button, its aria state and the script are shared.
 
-     Note the header previously had NO navigation at all below 880px, only
+     Note the header previously had NO navigation at all below 1025px, only
      the sticky call bar. The toggle and the sheet are new. */
   .nav{display:none; gap:4px; margin-left:14px; align-items:center}
   .nav a{
@@ -228,11 +228,11 @@
     outline:2.5px solid var(--accent-deep); outline-offset:3px;
   }
 
-  @media(min-width:880px){
+  @media(min-width:1025px){
     .nav{display:flex}
     .navtoggle{display:none}
   }
-  @media(max-width:879px){
+  @media(max-width:1024px){
     /* the sheet drops out of the bar and scrolls if it has to, so it can
        never run past the bottom of the viewport */
     .nav{
@@ -378,33 +378,56 @@
   /* stacked buttons read as one deliberate block, and give bigger tap targets */
   @media(max-width:520px){ .hero .btnrow{gap:11px} .hero .btn{width:100%} }
 
-  /* ---------- Trust bar ---------- */
-  .trust{background:var(--card); border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
-  /* deterministic tracks so dividers never orphan on a wrapped line */
-  .trust .wrap{
-    display:grid; grid-template-columns:1fr; justify-content:center;
-    gap:11px 0; padding:clamp(16px,2.2vw,22px) var(--gutter); text-align:center;
+  /* ---------- Trust bar: a continuous ticker ----------
+     This one runs on its own clock rather than on the scroll position, so
+     it keeps moving whether the page is moving or not. Two identical sets
+     ride in the track and the track travels exactly one set's width, which
+     is what makes the loop close with no visible seam.
+
+     It is the one thing on the page that moves by itself, so it has the
+     two ways out that implies: hovering or tabbing into it stops it, and
+     under reduced motion it does not move at all. */
+  .trust{
+    background:var(--card);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .trust-marquee{
+    overflow:hidden; padding:clamp(14px,2vw,20px) 0;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);
+    mask-image:linear-gradient(90deg,transparent 0,#000 6%,#000 94%,transparent 100%);
+  }
+  .trust-track{
+    display:flex; width:max-content;
+    animation:trust-run 38s linear infinite;
+  }
+  .trust-marquee:hover .trust-track,
+  .trust-marquee:focus-within .trust-track{animation-play-state:paused}
+  .trust-set{display:flex; align-items:center; flex:none}
+  @keyframes trust-run{
+    from{transform:translate3d(0,0,0)}
+    to{transform:translate3d(-50%,0,0)}
   }
   .trust .item{
     position:relative; display:flex; align-items:center; justify-content:center;
-    gap:7px; padding:4px 8px; font-size:.9rem; line-height:1.45; color:var(--ink-soft);
+    gap:7px; padding:4px clamp(18px,2.6vw,34px); white-space:nowrap;
+    font-size:.9rem; line-height:1.45; color:var(--ink-soft);
   }
   .trust .item::before{
     content:""; position:absolute; left:0; top:50%; transform:translateY(-50%);
-    width:1px; height:18px; background:var(--line); display:none;
+    width:1px; height:18px; background:var(--line);
   }
   .trust .item b{color:var(--ink); font-weight:700}
   .trust .stars{color:var(--gold); letter-spacing:.06em; font-size:.92em}
-  @media(min-width:560px){
-    .trust .wrap{grid-template-columns:repeat(2,auto); gap:12px 0}
-    .trust .item{padding:4px clamp(14px,2.2vw,26px)}
-    .trust .item:nth-child(2)::before,
-    .trust .item:nth-child(4)::before{display:block}
-  }
-  @media(min-width:1100px){
-    .trust .wrap{grid-template-columns:repeat(4,auto)}
-    .trust .item{padding:4px 16px}
-    .trust .item:nth-child(n+2)::before{display:block}
+  /* still, centred rows: what the strip was before it started moving */
+  @media (prefers-reduced-motion:reduce){
+    .trust-marquee{
+      padding-inline:var(--gutter);
+      -webkit-mask-image:none; mask-image:none;
+    }
+    .trust-track{animation:none; width:100%; flex-wrap:wrap; justify-content:center}
+    .trust-set{flex-wrap:wrap; justify-content:center; gap:8px 0}
+    .trust-set[aria-hidden="true"]{display:none}
+    .trust .item{white-space:normal}
   }
 
   /* ---------- Section rhythm ---------- */
@@ -627,6 +650,28 @@
   footer.site{
     background:linear-gradient(170deg, var(--accent-deep), color-mix(in srgb,var(--accent-deep) 82%,#000 18%));
     color:#fff; padding:clamp(48px,6vw,68px) 0 clamp(28px,3vw,36px); margin-top:0;
+    position:relative; overflow:hidden; isolation:isolate;
+  }
+  /* The mark is meant to be felt rather than read: big enough to fill the
+     corner, faint enough that the address and the links keep every bit of
+     their contrast. It is a decorative layer, so it never takes a click. */
+  .footer-mark{
+    position:absolute; z-index:0; pointer-events:none; user-select:none;
+    right:clamp(18px,3vw,56px); bottom:clamp(14px,2.4vw,36px);
+    width:min(50vw,700px);
+    opacity:.07;
+  }
+  .footer-mark img{display:block; width:100%; height:auto}
+  footer.site .wrap{position:relative; z-index:1}
+  @media (max-width:760px){
+    /* centred on a phone, where there is no spare corner to sit in */
+    .footer-mark{
+      left:50%; right:auto; transform:translateX(-50%);
+      bottom:clamp(54px,9vw,86px); width:min(78vw,400px); opacity:.07;
+    }
+  }
+  @media (prefers-contrast:more){
+    .footer-mark{display:none}
   }
   footer.site .wrap{display:flex; flex-wrap:wrap; gap:clamp(28px,4vw,56px); justify-content:space-between}
   footer.site .col{min-width:180px}
@@ -795,9 +840,9 @@
      the pin start thousands of pixels out after any resize and left the hero
      stuck blank. Scoped to .cine-on, so every other page, the reduced-motion
      path and the no-GSAP fallback all keep smooth anchor scrolling. */
-  html.cine-on, html.svc-cine-on, html.why-cine-on, html.price-cine-on,
-  html.emg-cine-on, html.prov-on, html.rev-on{scroll-behavior:auto}
-  .cine-on .cinematic-hero{height:640vh}
+  html.cine-on, html.svc-cine-on, html.why-cine-on,
+  html.prov-on, html.rev-on{scroll-behavior:auto}
+  .cine-on .cinematic-hero{height:400vh}
   .cine-on .cinematic-stage{
     position:relative; height:100vh; overflow:hidden;
     /* GSAP does the pinning; no CSS sticky, so the two cannot fight */
@@ -835,11 +880,11 @@
 
   /* tablet: same story, shorter runway */
   @media (max-width:1024px){
-    .cine-on .cinematic-hero{height:560vh}
+    .cine-on .cinematic-hero{height:340vh}
   }
   /* phones: keep the storytelling, cut the runway and the travel */
   @media (max-width:760px){
-    .cine-on .cinematic-hero{height:470vh}
+    .cine-on .cinematic-hero{height:300vh}
     .cine-on .cinematic-line{max-width:none}
     .cine-on .cinematic-support{max-width:none}
   }
@@ -918,9 +963,40 @@
   .cinematic-service-link:hover{transform:translateX(4px); text-decoration:underline}
   .cinematic-service--urgent .cinematic-service-link{color:var(--alert)}
 
-  /* a plate, not a card: no border, no shadow, no padding around it */
+  /* The statement that stands over the sequence. In plain flow it is
+     simply the first block; in cinematic mode it is lifted to the top of
+     the stage and stays there. */
+  .cinematic-services-head{
+    padding:clamp(44px,6vw,76px) 0 clamp(18px,2.2vw,28px);
+  }
+  /* one sentence per line: the 16ch cap is for a title card with the stage
+     to itself, and this now shares the frame with a service */
+  .svc-cine-on .cinematic-services-head .cinematic-services-lead{
+    max-width:none;
+    font-size:clamp(1.7rem,3.4vw,2.7rem);
+  }
+
+  /* A plate, not a card: no border, no shadow, no padding around it. The
+     four sides are feathered instead of ending on a hard rectangle, so the
+     photograph dissolves into the section rather than sitting on it like a
+     pasted tile. Two gradients intersected give an even border all round;
+     a browser that cannot intersect mask layers simply shows the plate as
+     it always was. */
   .cinematic-service-image{
-    overflow:hidden; border-radius:var(--radius-lg); background:var(--card);
+    --feather:7%;
+    overflow:hidden; background:var(--card);
+    -webkit-mask-image:
+      linear-gradient(to right, transparent 0, #000 var(--feather),
+                      #000 calc(100% - var(--feather)), transparent 100%),
+      linear-gradient(to bottom, transparent 0, #000 var(--feather),
+                      #000 calc(100% - var(--feather)), transparent 100%);
+    -webkit-mask-composite:source-in;
+    mask-image:
+      linear-gradient(to right, transparent 0, #000 var(--feather),
+                      #000 calc(100% - var(--feather)), transparent 100%),
+      linear-gradient(to bottom, transparent 0, #000 var(--feather),
+                      #000 calc(100% - var(--feather)), transparent 100%);
+    mask-composite:intersect;
   }
   .cinematic-service-image img{
     display:block; width:100%; height:auto; aspect-ratio:3/2;
@@ -949,24 +1025,42 @@
      spells out "03 / 06", so a trailing total would just read as 06 / 06 */
 
   @media (min-width:761px){
-    .cinematic-service-layout{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr)}
+    /* the photograph takes the larger share of the row now */
+    .cinematic-service-layout{grid-template-columns:minmax(0,.74fr) minmax(0,1.26fr)}
   }
 
   /* ---- (b) cinematic mode ---- */
-  .svc-cine-on .cinematic-services{height:620vh; position:relative; margin-top:0}
+  /* The statement no longer eats a scene's worth of runway, so the section
+     is shorter than it was and every service still holds for as long. */
+  .svc-cine-on .cinematic-services{height:300vh; position:relative; margin-top:0}
   .svc-cine-on .cinematic-services-stage{
     position:relative; height:100vh; overflow:hidden;
+    /* heading on top at whatever height it needs, track takes the rest */
+    display:flex; flex-direction:column;
+    padding-top:clamp(92px,11vh,120px);   /* clears the sticky site header */
     /* GSAP does the pinning; no CSS sticky, so the two cannot fight */
+  }
+  /* it stands over the whole sequence and never moves */
+  .svc-cine-on .cinematic-services-head{
+    flex:none; z-index:5; margin:0;
+    padding:0 0 clamp(10px,1.8vh,24px);
+    pointer-events:none;              /* it holds no links */
+  }
+  .svc-cine-on .cinematic-services-track{
+    position:relative; flex:1 1 auto; min-height:0;
   }
   .svc-cine-on .cinematic-services-scene{
     position:absolute; inset:0; z-index:2; opacity:0;
     display:flex; align-items:center; justify-content:flex-start;
-    padding:clamp(84px,11vh,116px) 0 clamp(56px,8vh,84px);
+    padding:0 0 clamp(44px,6.5vh,76px);   /* clear of the progress rail */
     pointer-events:none;              /* only the live scene takes clicks */
   }
   .svc-cine-on .cinematic-services-scene.is-live{pointer-events:auto}
+  /* 3:2 left the plate width bound, so a taller ceiling did nothing at
+     all. A 4:3 frame uses the height the stage actually has. */
   .svc-cine-on .cinematic-service-image img{
-    max-height:min(52vh,430px); width:100%; object-fit:cover;
+    aspect-ratio:4/3;
+    max-height:min(64vh,560px); width:100%; object-fit:cover;
     will-change:transform;
   }
   .svc-cine-on .cinematic-service-copy,
@@ -979,16 +1073,23 @@
 
   /* tablet: same story, a touch less travel */
   @media (max-width:1024px){
-    .svc-cine-on .cinematic-services{height:560vh}
-    .svc-cine-on .cinematic-service-image img{max-height:min(44vh,380px)}
+    .svc-cine-on .cinematic-services{height:280vh}
+    .svc-cine-on .cinematic-service-image img{max-height:min(54vh,460px)}
   }
   /* phones: keep the sequence, cut the runway and stack the scene */
   @media (max-width:760px){
-    .svc-cine-on .cinematic-services{height:420vh}
-    .svc-cine-on .cinematic-services-scene{
-      align-items:center; padding:clamp(76px,10vh,96px) 0 clamp(64px,9vh,88px);
+    .svc-cine-on .cinematic-services{height:215vh}
+    .svc-cine-on .cinematic-services-stage{padding-top:clamp(80px,10dvh,100px)}
+    .svc-cine-on .cinematic-services-head .cinematic-services-lead{
+      font-size:clamp(1.55rem,6.4vw,2rem);
     }
-    .svc-cine-on .cinematic-service-image img{max-height:34vh}
+    .svc-cine-on .cinematic-services-scene{
+      align-items:center; padding:0 0 clamp(56px,8dvh,82px);
+    }
+    /* to both screen edges: the feather dissolves them, so a full bleed
+       reads as a photograph in the page rather than a tile on it */
+    .svc-cine-on .cinematic-service-image{margin-inline:calc(-1 * var(--gutter))}
+    .svc-cine-on .cinematic-service-image img{max-height:42dvh}
     .svc-cine-on .cinematic-service-copy h3{font-size:clamp(1.65rem,7.4vw,2.1rem)}
     .svc-cine-on .cinematic-service-desc{font-size:1rem}
   }
@@ -998,6 +1099,9 @@
   @media (prefers-reduced-motion:reduce){
     .svc-cine-on .cinematic-services{height:auto}
     .svc-cine-on .cinematic-services-stage{height:auto; overflow:visible}
+    .svc-cine-on .cinematic-services-head{
+      padding:clamp(44px,6vw,76px) 0 clamp(18px,2.2vw,28px);
+    }
     .svc-cine-on .cinematic-services-scene{
       position:static; opacity:1; pointer-events:auto;
       padding:clamp(44px,6vw,76px) 0;
@@ -1005,189 +1109,194 @@
     .svc-cine-on .cinematic-services-progress{display:none}
   }
 
-  /* ================= CINEMATIC WHY US ===============================
+  /* ================= WHY PATIENTS CHOOSE IDEA DENTAL ================
      Namespaced under .why-cinematic* so nothing here can reach the hero,
      the services stage, pricing, providers, reviews, FAQ or the footer.
-     It deliberately does NOT reuse .why / .why .item, so the old card
-     reveal cannot fight this timeline.
 
-     Two states, same progressive-enhancement contract as the other two:
-       (a) DEFAULT - no JS, GSAP missing, or reduced motion. Plain flow:
-           seven stacked editorial blocks, everything visible.
-       (b) .why-cine-on - added by script ONLY after its timeline builds.
+     One family photograph anchors the section and never moves. What
+     changes is the column beside it.
 
-     These six are real photographs, not the white-matted plates the
-     services section uses, so they can bleed off the edge of the frame.
-     The copy sits on --paper beside them rather than on top of them, which
-     keeps every line at the contrast the tokens were measured for.
+     Two states, the same progressive-enhancement contract as the rest:
+       (a) DEFAULT - no JS, no GSAP, reduced motion, or any phone. Plain
+           flow: the photograph, then the six reasons as an ordinary list.
+           Everything is readable with no script at all.
+       (b) .why-cine-on, 761px and up. The section pins for 300vh and the
+           six reasons cross fade one at a time in the right hand column.
+
+     The previous version gave every reason its own full bleed photograph
+     over a 560vh runway. One photograph and 300vh replaces it.
      =================================================================== */
 
   /* ---- (a) default / fallback ---- */
   .why-cinematic{background:var(--card); border-block:1px solid var(--line)}
-  .why-cinematic-inner{
-    max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter); width:100%;
-  }
-  .why-cinematic-scene{padding:clamp(40px,5.5vw,68px) 0}
-  .why-cinematic-intro{padding-top:0}
 
+  .why-cinematic-media{
+    overflow:hidden; border-radius:var(--radius-lg); background:var(--paper-2);
+    margin:0 0 clamp(26px,4vw,40px);
+  }
+  .why-cinematic-media img{
+    display:block; width:100%; height:auto; aspect-ratio:5/4;
+    object-fit:cover; object-position:center;
+  }
+
+  .why-cinematic-intro{margin:0 0 clamp(18px,2.4vw,28px)}
   .why-cinematic-intro h2{
     margin:0 0 12px; font-weight:300; color:var(--ink);
-    font-size:clamp(2rem,5vw,3.4rem); line-height:1.08; letter-spacing:-.03em;
+    font-size:clamp(2rem,4.4vw,3.1rem); line-height:1.08; letter-spacing:-.03em;
     max-width:17ch; text-wrap:balance;
   }
   .why-cinematic-intro .sub{
-    margin:0; color:var(--ink-soft); font-size:clamp(1.05rem,1.7vw,1.3rem);
+    margin:0; color:var(--ink-soft); font-size:clamp(1.05rem,1.6vw,1.24rem);
     max-width:40ch;
   }
 
-  .why-cinematic-media{
-    overflow:hidden; border-radius:var(--radius-lg);
-    margin:0 0 20px; background:var(--paper-2);
-  }
-  .why-cinematic-media img{
-    display:block; width:100%; height:auto; aspect-ratio:3/2; object-fit:cover;
-  }
-
+  .why-cinematic-scene{padding:clamp(24px,3.2vw,34px) 0; border-top:1px solid var(--line-soft)}
+  .why-cinematic-scene:first-child{border-top:0; padding-top:0}
   .why-cinematic-num{
-    margin:0 0 14px; font-size:.82rem; font-weight:700;
+    margin:0 0 10px; font-size:.8rem; font-weight:700;
     letter-spacing:.16em; text-transform:uppercase; color:var(--ink-mute);
   }
   .why-cinematic-num b{color:var(--accent-ink); font-weight:700}
   .why-cinematic-scene h3{
-    margin:0 0 14px; font-weight:300; color:var(--ink);
-    font-size:clamp(1.7rem,4vw,2.8rem); line-height:1.1; letter-spacing:-.028em;
-    max-width:15ch; text-wrap:balance;
+    margin:0 0 10px; font-weight:300; color:var(--ink);
+    font-size:clamp(1.5rem,2.6vw,2.2rem); line-height:1.12; letter-spacing:-.026em;
+    max-width:16ch; text-wrap:balance;
   }
   .why-cinematic-desc{
     margin:0; color:var(--ink-soft);
-    font-size:clamp(1rem,1.5vw,1.14rem); line-height:1.62; max-width:36ch;
+    font-size:clamp(1rem,1.35vw,1.1rem); line-height:1.62; max-width:42ch;
   }
 
-  /* hidden until there is a sequence for it to track */
+  /* meaningless without the sequence, so it only exists in cine mode */
   .why-cinematic-progress{display:none}
 
-  /* ---- (b) cinematic mode ---- */
-  .why-cine-on .why-cinematic{height:560vh; position:relative; padding:0}
+  /* ---- (b) cinematic mode, every width ---- */
+  /* Phones pin this section too. The layout restacks for them further
+     down: the photograph becomes a band across the top and the six
+     reasons cross fade underneath it, clear of the fixed call bar. */
+  .why-cine-on .why-cinematic{padding:0}
+  .why-cine-on .why-cinematic-runway{height:300vh; position:relative}
   .why-cine-on .why-cinematic-stage{
-    position:relative; height:100vh; overflow:hidden; background:var(--card);
+    /* tall enough for the photograph and its breathing room, and no
+       taller: a full 100vh here was mostly empty paper */
+    --why-img:min(52vw, 860px);
+    position:relative; height:clamp(600px,80vh,880px);
+    overflow:hidden; background:var(--card);
+    display:flex; align-items:center;
     /* GSAP does the pinning; no CSS sticky, so the two cannot fight */
   }
-  .why-cine-on .why-cinematic-scene{
-    position:absolute; inset:0; z-index:2; opacity:0;
-    display:flex; align-items:center;
-    padding:clamp(84px,11vh,116px) 0 clamp(60px,9vh,92px);
+  /* The photograph runs off the left edge of the viewport. Column one
+     is only the part of it that overlaps the wrap, so the copy still
+     lines up with every other section's right hand margin. */
+  .why-cine-on .why-cinematic-grid{
+    display:grid;
+    grid-template-columns:
+      calc(var(--why-img) - max(var(--gutter), (100vw - var(--maxw)) / 2 + var(--gutter)))
+      minmax(0,1fr);
+    gap:clamp(26px,3.2vw,56px); align-items:center; width:100%;
   }
-  .why-cine-on .why-cinematic-intro{padding-top:clamp(84px,11vh,116px)}
-
-  /* the photograph bleeds off the right edge of the frame, the copy keeps
-     its own column on the paper so no text ever sits over the image */
+  /* 5:4, not taller: the picture is landscape and the father is on its
+     left edge, so a portrait box would crop him off rather than show
+     more of him. At 5:4 the crop keeps 82% of the original width. */
   .why-cine-on .why-cinematic-media{
-    position:absolute; top:0; bottom:0; right:0; left:46%;
-    margin:0; border-radius:0; z-index:1; will-change:transform;
+    position:absolute; left:0; top:50%; transform:translateY(-50%);
+    width:var(--why-img); aspect-ratio:5/4; max-height:calc(100% - 40px);
+    margin:0; border-radius:0 var(--radius-lg) var(--radius-lg) 0;
   }
   .why-cine-on .why-cinematic-media img{
-    width:100%; height:100%; aspect-ratio:auto; object-fit:cover;
+    width:100%; height:100%; aspect-ratio:auto;
+    object-fit:cover; object-position:center;
   }
-  /* a soft edge where the photograph meets the paper, so it reads as one
-     composition rather than a pasted rectangle */
-  .why-cine-on .why-cinematic-media::after{
-    content:""; position:absolute; inset:0; pointer-events:none;
-    background:linear-gradient(90deg,
-      var(--card) 0%, color-mix(in srgb,var(--card) 55%,transparent) 7%,
-      transparent 18%);
+  .why-cine-on .why-cinematic-col{min-width:0; grid-column:2}
+  /* the six overlay each other, so the box is as tall as the tallest and
+     nothing below it shifts as they change */
+  .why-cine-on .why-cinematic-reasons{
+    position:relative; min-height:clamp(210px,27vh,260px);
   }
-  .why-cine-on .why-cinematic-inner{
-    position:relative; z-index:3;
-    will-change:transform,opacity;
+  .why-cine-on .why-cinematic-scene{
+    position:absolute; inset:0; opacity:0;
+    padding:0; border-top:0; will-change:transform,opacity;
   }
-  .why-cine-on .why-cinematic-scene h3{max-width:12ch}
-  .why-cine-on .why-cinematic-desc{max-width:30ch}
-  .why-cine-on .why-cinematic-inner > *{max-width:min(40ch,42vw)}
+  .why-cine-on .why-cinematic-scene h3{max-width:14ch}
+  .why-cine-on .why-cinematic-desc{max-width:36ch}
 
-  /* thin vertical rail down the left gutter */
   .why-cine-on .why-cinematic-progress{
-    display:flex; flex-direction:column; align-items:center; gap:10px;
-    position:absolute; z-index:4; left:max(14px,calc((100vw - var(--maxw)) / 2 - 26px));
-    top:50%; transform:translateY(-50%); opacity:0;
-    font-size:.72rem; font-weight:700; letter-spacing:.12em; color:var(--ink-mute);
+    display:flex; align-items:center; gap:14px; opacity:0;
+    margin:clamp(18px,2.4vw,28px) 0 0;
+    font-size:.74rem; font-weight:700; letter-spacing:.14em; color:var(--ink-mute);
   }
-  .why-cine-on .why-cinematic-progress-num{color:var(--accent-ink)}
-  /* no trailing total: the scene copy already reads "04 / 06", and a
-     second 06 under the rail just reads as 06 / 06 at the end */
-  .why-cine-on .why-cinematic-track{
-    position:relative; width:1px; height:clamp(90px,16vh,150px);
-    background:var(--line); overflow:hidden;
+  .why-cine-on .why-cinematic-progress-num{color:var(--accent-ink); min-width:2.2ch}
+  .why-cine-on .why-cinematic-rule{
+    position:relative; flex:1; max-width:220px;
+    height:1px; background:var(--line); overflow:hidden;
   }
-  .why-cine-on .why-cinematic-track i{
+  .why-cine-on .why-cinematic-rule i{
     position:absolute; inset:0; display:block; background:var(--accent);
-    transform:scaleY(0); transform-origin:top center;
+    transform:scaleX(0); transform-origin:left center;
+  }
+  
+
+  @media (min-width:761px) and (max-width:1024px){
+    .why-cine-on .why-cinematic-runway{height:260vh}
+    .why-cine-on .why-cinematic-stage{--why-img:min(48vw, 520px); height:clamp(560px,76vh,760px)}
+    .why-cine-on .why-cinematic-desc{max-width:none}
   }
 
-  /* tablet: same story, a shorter runway and a narrower media panel */
-  @media (max-width:1024px){
-    .why-cine-on .why-cinematic{height:500vh}
-    .why-cine-on .why-cinematic-media{left:52%}
-    .why-cine-on .why-cinematic-inner > *{max-width:min(36ch,46vw)}
-    .why-cine-on .why-cinematic-progress{left:12px}
-  }
-
-  /* phones: not a shrunken desktop. The photograph becomes a band across
-     the top of the frame and the copy sits under it on solid paper, so the
-     image stays dominant without ever covering a word. */
+  /* phones: the same sequence, restacked. The photograph is a band across
+     the top and the copy sits under it, with room left at the bottom for
+     the call bar that is fixed there. dvh, not vh, so the frame does not
+     jump when the browser's own bars slide away. */
   @media (max-width:760px){
-    .why-cine-on .why-cinematic{height:380vh}
-    .why-cine-on .why-cinematic-scene{
-      display:block; padding:0;
-    }
+    .why-cinematic-intro h2{font-size:clamp(1.8rem,7.4vw,2.2rem); max-width:none}
+    .why-cinematic-intro .sub{font-size:1.02rem; max-width:none}
+    .why-cinematic-scene h3{font-size:clamp(1.4rem,6vw,1.8rem); max-width:none}
+    .why-cinematic-desc{max-width:none}
+
+    .why-cine-on .why-cinematic-runway{height:260vh}
+    .why-cine-on .why-cinematic-stage{height:100dvh; display:block}
+    .why-cine-on .why-cinematic-grid{display:block; padding:0}
     .why-cine-on .why-cinematic-media{
-      left:0; right:0; top:0; bottom:auto; height:46vh;
+      position:absolute; left:0; right:0; top:0; transform:none;
+      width:auto; height:37dvh; aspect-ratio:auto; max-height:none;
+      border-radius:0;
     }
-    .why-cine-on .why-cinematic-media::after{
-      background:linear-gradient(180deg,
-        transparent 0%, transparent 72%,
-        color-mix(in srgb,var(--card) 55%,transparent) 90%, var(--card) 100%);
-    }
-    .why-cine-on .why-cinematic-inner{
-      position:absolute; top:46vh; left:0; right:0; bottom:0;
+    .why-cine-on .why-cinematic-col{
+      position:absolute; left:0; right:0; top:37dvh; bottom:0;
       display:flex; flex-direction:column; justify-content:center;
-      padding:0 var(--gutter) clamp(72px,10vh,96px);
+      padding:0 var(--gutter) calc(86px + env(safe-area-inset-bottom,0px));
     }
-    .why-cine-on .why-cinematic-inner > *{max-width:none}
-    .why-cine-on .why-cinematic-scene h3{font-size:clamp(1.6rem,7.2vw,2.1rem); max-width:none}
-    .why-cine-on .why-cinematic-desc{font-size:1rem; max-width:none}
-    /* the intro has no photograph, so it keeps the whole frame */
-    .why-cine-on .why-cinematic-intro{display:flex; align-items:center;
-      padding:clamp(76px,10vh,96px) 0 clamp(72px,10vh,96px)}
-    .why-cine-on .why-cinematic-intro .why-cinematic-inner{
-      position:static; display:block; padding:0 var(--gutter);
-    }
-    /* rail goes horizontal along the bottom where there is room for it */
-    .why-cine-on .why-cinematic-progress{
-      flex-direction:row; left:var(--gutter); right:var(--gutter);
-      top:auto; bottom:clamp(20px,3.5vh,34px); transform:none; gap:10px;
-    }
-    .why-cine-on .why-cinematic-track{
-      width:auto; flex:1; max-width:180px; height:1px;
-    }
-    .why-cine-on .why-cinematic-track i{transform:scaleX(0); transform-origin:left center}
+    /* the heading earns less room once it is sharing a 100dvh frame */
+    .why-cine-on .why-cinematic-intro{margin:0 0 12px}
+    .why-cine-on .why-cinematic-intro h2{font-size:clamp(1.5rem,6.2vw,1.85rem)}
+    .why-cine-on .why-cinematic-intro .sub{font-size:.96rem}
+    .why-cine-on .why-cinematic-reasons{min-height:clamp(170px,25dvh,220px)}
+    .why-cine-on .why-cinematic-scene h3{max-width:none}
+    .why-cine-on .why-cinematic-desc{max-width:none}
+    .why-cine-on .why-cinematic-progress{margin-top:14px}
+    .why-cine-on .why-cinematic-rule{max-width:140px}
   }
 
-  /* Reduced motion never reaches .why-cine-on (the script bails out first).
-     This is a second belt in case the class is ever applied some other way. */
+  /* Reduced motion never reaches .why-cine-on or .why-on (the script bails
+     out first). This is a second belt in case a class is applied some
+     other way. */
   @media (prefers-reduced-motion:reduce){
-    .why-cine-on .why-cinematic{height:auto; padding:var(--s-sec) 0}
-    .why-cine-on .why-cinematic-stage{height:auto; overflow:visible}
-    .why-cine-on .why-cinematic-scene{
-      position:static; opacity:1; display:block;
-      padding:clamp(40px,5.5vw,68px) 0;
-    }
+    .why-cine-on .why-cinematic{padding:var(--s-sec) 0}
+    .why-cine-on .why-cinematic-runway{height:auto}
+    .why-cine-on .why-cinematic-stage{height:auto; overflow:visible; display:block}
+    .why-cine-on .why-cinematic-grid{display:block}
     .why-cine-on .why-cinematic-media{
-      position:relative; inset:auto; left:auto; height:auto;
-      margin:0 0 20px; border-radius:var(--radius-lg);
+      position:static; transform:none; width:auto; aspect-ratio:auto;
+      max-height:none; border-radius:var(--radius-lg);
+      margin:0 0 clamp(26px,4vw,40px);
     }
-    .why-cine-on .why-cinematic-media::after{display:none}
-    .why-cine-on .why-cinematic-media img{aspect-ratio:3/2; height:auto}
-    .why-cine-on .why-cinematic-inner{position:static; padding:0 var(--gutter)}
+    .why-cine-on .why-cinematic-media img{aspect-ratio:5/4; height:auto}
+    .why-cine-on .why-cinematic-col{grid-column:auto}
+    .why-cine-on .why-cinematic-reasons{min-height:0}
+    .why-cine-on .why-cinematic-scene{
+      position:static; opacity:1; padding:clamp(24px,3.2vw,34px) 0;
+      border-top:1px solid var(--line-soft);
+    }
+    .why-cine-on .why-cinematic-scene:first-child{border-top:0; padding-top:0}
     .why-cine-on .why-cinematic-progress{display:none}
   }
 
@@ -1274,104 +1383,12 @@
 
   .pricing-cinematic-progress{display:none}
 
-  /* ---- (b) cinematic mode ---- */
-  .price-cine-on .pricing-cinematic{height:480vh; position:relative; padding:0}
-  .price-cine-on .pricing-cinematic-stage{
-    position:relative; height:100vh; overflow:hidden; background:var(--paper);
-    /* GSAP does the pinning; no CSS sticky, so the two cannot fight */
-  }
-  .price-cine-on .pricing-scene{
-    position:absolute; inset:0; z-index:2; opacity:0;
-    display:flex; align-items:center;
-    padding:clamp(84px,11vh,116px) 0 clamp(64px,9vh,96px);
-    pointer-events:none;              /* only the live scene takes clicks */
-  }
-  .price-cine-on .pricing-scene.is-live{pointer-events:auto}
-  .price-cine-on .pricing-line{max-width:17ch}
-  .price-cine-on .pricing-intro h2{max-width:13ch}
-  .price-cine-on .pricing-intro .sub{max-width:46ch}
-
-  /* the table loses its card shell on the stage and reads as an editorial
-     price list: hairline rows, generous leading, no box */
-  .price-cine-on .pricing-scene .pricecard{
-    background:none; border:0; border-radius:0; box-shadow:none;
-    padding:0; overflow:visible;
-  }
-  .price-cine-on .pricing-scene table.price{width:100%; border-collapse:collapse}
-  .price-cine-on .pricing-scene table.price th{
-    font-size:.78rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--ink-mute); text-align:left; padding:0 0 14px;
-    border-bottom:1px solid var(--line); background:none;
-  }
-  .price-cine-on .pricing-scene table.price td{
-    padding:clamp(14px,2vh,22px) 0; border-bottom:1px solid var(--line-soft);
-    font-size:clamp(1rem,1.9vw,1.35rem); font-weight:300; color:var(--ink);
-    background:none;
-  }
-  .price-cine-on .pricing-scene table.price td.amt{
-    color:var(--ink-soft); font-size:clamp(.92rem,1.4vw,1.05rem);
-  }
-  .price-cine-on .pricing-scene table.price tr:last-child td{border-bottom:0}
-  .price-cine-on .pricing-scene .pricenote{
-    margin:clamp(16px,2.2vw,24px) 0 0; color:var(--ink-mute);
-    font-size:.95rem; line-height:1.6; max-width:52ch;
-  }
-
-  /* a single hairline that draws across the foot of the frame */
-  .price-cine-on .pricing-cinematic-progress{
-    display:flex; align-items:center; gap:14px;
-    position:absolute; z-index:4; left:0; right:0;
-    bottom:clamp(24px,4vh,42px); opacity:0;
-    max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter);
-    font-size:.76rem; font-weight:700; letter-spacing:.14em; color:var(--ink-mute);
-  }
-  .price-cine-on .pricing-cinematic-progress-num{color:var(--accent-ink); min-width:2.2ch}
-  .price-cine-on .pricing-cinematic-rule{
-    position:relative; flex:1; height:1px; background:var(--line); overflow:hidden;
-  }
-  .price-cine-on .pricing-cinematic-rule i{
-    position:absolute; inset:0; display:block; background:var(--accent);
-    transform:scaleX(0); transform-origin:left center;
-  }
-
-  /* tablet: same story, a shorter runway */
-  @media (max-width:1024px){
-    .price-cine-on .pricing-cinematic{height:440vh}
-  }
-  /* phones: stacked and calmer, with the table allowed to breathe */
-  @media (max-width:760px){
-    .price-cine-on .pricing-cinematic{height:340vh}
-    .price-cine-on .pricing-scene{
-      padding:clamp(76px,10vh,96px) 0 clamp(72px,10vh,96px);
-    }
-    .price-cine-on .pricing-line{font-size:clamp(1.55rem,6.8vw,2rem); max-width:none}
-    .price-cine-on .pricing-intro h2{font-size:clamp(1.7rem,7.4vw,2.2rem); max-width:none}
-    .price-cine-on .pricing-intro .sub{font-size:1rem; max-width:none}
-    .price-cine-on .pricing-support{font-size:1rem; max-width:none}
-    .price-cine-on .pricing-scene table.price td{
-      font-size:.98rem; padding:11px 0;
-    }
-    .price-cine-on .pricing-scene table.price td.amt{font-size:.86rem}
-    /* the blank comparison column earns no room on a phone */
-    .price-cine-on .pricing-scene table.price th:last-child,
-    .price-cine-on .pricing-scene table.price td:last-child{display:none}
-    .price-cine-on .pricing-cta{flex-direction:column; align-items:stretch}
-    .price-cine-on .pricing-cta .btn{width:100%}
-  }
-
-  /* Reduced motion never reaches .price-cine-on (the script bails out
-     first). This is a second belt in case the class is ever applied some
-     other way. */
-  @media (prefers-reduced-motion:reduce){
-    .price-cine-on .pricing-cinematic{height:auto; padding:var(--s-sec) 0}
-    .price-cine-on .pricing-cinematic-stage{height:auto; overflow:visible}
-    .price-cine-on .pricing-scene{
-      position:static; opacity:1; display:block; pointer-events:auto;
-      padding:clamp(40px,5.5vw,68px) 0;
-    }
-    .price-cine-on .pricing-cinematic-progress{display:none}
-  }
-
+  /* Pricing is no longer a scroll story: it is a table, and a table wants
+     to be read, not revealed a row at a time. What is left is the entrance
+     the rest of the page uses, behind .price-on so no JS, no GSAP and
+     reduced motion all leave every block visible. */
+  .price-on .pricing-scene{opacity:0}
+  @media (prefers-reduced-motion:reduce){ .price-on .pricing-scene{opacity:1} }
   /* ================= CINEMATIC EMERGENCY ============================
      Namespaced under .emergency-* so nothing here can reach the hero,
      services, why-us, pricing, providers, reviews, FAQ, location, the
@@ -1393,12 +1410,26 @@
     max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter); width:100%;
   }
   .emergency-scene{padding:clamp(34px,4.5vw,56px) 0}
+  /* Unpinned, this photograph is no longer a dimmed backdrop behind the
+     copy: it is an ordinary image in the flow. Left at 3:2 and full
+     section width it rendered 1440x960 and pushed the emergency message
+     itself below the fold, so it is held to the page's own column and to
+     a band rather than a screenful. */
   .emergency-cinematic-media{
-    overflow:hidden; border-radius:var(--radius-lg);
-    margin:0 0 clamp(20px,3vw,30px); background:var(--paper-2);
+    overflow:hidden; border-radius:var(--radius-lg); background:var(--paper-2);
+    max-width:var(--maxw); width:calc(100% - var(--gutter) * 2);
+    margin:0 auto clamp(24px,3.4vw,40px);
   }
+  /* The picture here is a portrait, so the band is deeper than it would
+     be for a room scene: at 1440 it lands near 2.7:1, which keeps the
+     whole smile and both hands rather than slicing a strip out of the
+     middle. Phones get a shallower band nearer the picture's own shape. */
   .emergency-cinematic-media img{
-    display:block; width:100%; height:auto; aspect-ratio:3/2; object-fit:cover;
+    display:block; width:100%; aspect-ratio:auto;
+    height:clamp(300px,46vh,430px); object-fit:cover; object-position:50% 32%;
+  }
+  @media (max-width:760px){
+    .emergency-cinematic-media img{height:clamp(215px,34vh,260px)}
   }
   .emergency-cinematic-veil{display:none}
 
@@ -1465,86 +1496,10 @@
 
   .emergency-cinematic-progress{display:none}
 
-  /* ---- (b) cinematic mode ---- */
-  .emg-cine-on .emergency-cinematic{height:300vh; position:relative; padding:0}
-  .emg-cine-on .emergency-cinematic-stage{
-    position:relative; height:100vh; overflow:hidden; background:var(--paper);
-  }
-  .emg-cine-on .emergency-cinematic-media{
-    position:absolute; inset:0; z-index:0; margin:0; border-radius:0;
-    will-change:transform;
-  }
-  .emg-cine-on .emergency-cinematic-media img{
-    width:100%; height:100%; aspect-ratio:auto; object-fit:cover;
-  }
-  .emg-cine-on .emergency-cinematic-veil{
-    display:block; position:absolute; inset:0; z-index:1;
-    background:var(--paper); opacity:.66; pointer-events:none;
-  }
-  .emg-cine-on .emergency-scene{
-    position:absolute; inset:0; z-index:2; opacity:0;
-    display:flex; align-items:center;
-    padding:clamp(84px,11vh,116px) 0 clamp(64px,9vh,96px);
-    pointer-events:none;              /* only the live scene takes clicks */
-  }
-  .emg-cine-on .emergency-scene.is-live{pointer-events:auto}
-  .emg-cine-on .emergency-intro h2{max-width:11ch}
-  .emg-cine-on .emergency-list{max-width:26ch}
-
-  .emg-cine-on .emergency-cinematic-progress{
-    display:flex; align-items:center; gap:14px;
-    position:absolute; z-index:4; left:0; right:0;
-    bottom:clamp(24px,4vh,42px); opacity:0;
-    max-width:var(--maxw); margin:0 auto; padding:0 var(--gutter);
-    font-size:.76rem; font-weight:700; letter-spacing:.14em; color:var(--ink-mute);
-  }
-  .emg-cine-on .emergency-cinematic-progress-num{color:var(--accent-ink); min-width:2.2ch}
-  .emg-cine-on .emergency-cinematic-rule{
-    position:relative; flex:1; height:1px; background:var(--line); overflow:hidden;
-  }
-  .emg-cine-on .emergency-cinematic-rule i{
-    position:absolute; inset:0; display:block; background:var(--accent);
-    transform:scaleX(0); transform-origin:left center;
-  }
-
-  @media (max-width:1024px){
-    .emg-cine-on .emergency-cinematic{height:280vh}
-  }
-  /* phones: shorter again, and the frame keeps clear of the call bar that is
-     already fixed to the bottom of the viewport */
-  @media (max-width:760px){
-    .emg-cine-on .emergency-cinematic{height:240vh}
-    .emg-cine-on .emergency-scene{
-      padding:clamp(76px,10vh,96px) 0 clamp(104px,15vh,130px);
-    }
-    .emg-cine-on .emergency-cinematic-progress{bottom:clamp(88px,13vh,108px)}
-    .emg-cine-on .emergency-intro h2{font-size:clamp(1.8rem,8vw,2.3rem); max-width:none}
-    .emg-cine-on .emergency-lead{font-size:1.06rem; max-width:none}
-    .emg-cine-on .emergency-line{font-size:clamp(1.4rem,6.4vw,1.9rem)}
-    .emg-cine-on .emergency-list{max-width:none}
-    .emg-cine-on .emergency-list li{font-size:clamp(1.05rem,4.8vw,1.35rem)}
-    .emg-cine-on .emergency-cta{flex-direction:column; align-items:stretch}
-    .emg-cine-on .emergency-cta .btn{width:100%}
-  }
-
-  /* Reduced motion never reaches .emg-cine-on (the script bails out first).
-     This is a second belt in case the class is ever applied some other way. */
-  @media (prefers-reduced-motion:reduce){
-    .emg-cine-on .emergency-cinematic{height:auto; padding:var(--s-sec) 0}
-    .emg-cine-on .emergency-cinematic-stage{height:auto; overflow:visible}
-    .emg-cine-on .emergency-scene{
-      position:static; opacity:1; display:block; pointer-events:auto;
-      padding:clamp(34px,4.5vw,56px) 0;
-    }
-    .emg-cine-on .emergency-cinematic-media{
-      position:relative; inset:auto; margin:0 0 clamp(20px,3vw,30px);
-      border-radius:var(--radius-lg);
-    }
-    .emg-cine-on .emergency-cinematic-media img{aspect-ratio:3/2; height:auto}
-    .emg-cine-on .emergency-cinematic-veil{display:none}
-    .emg-cine-on .emergency-cinematic-progress{display:none}
-  }
-
+  /* Emergency is no longer a scroll story either: someone who needs it is
+     not in the mood to scrub through one. Same entrance, behind .emg-on. */
+  .emg-on .emergency-scene{opacity:0}
+  @media (prefers-reduced-motion:reduce){ .emg-on .emergency-scene{opacity:1} }
   /* ================= MEET THE PROVIDERS =============================
      Namespaced under .providers-* so nothing here can reach the hero,
      services, why-us, pricing, emergency, reviews, FAQ, location or the
@@ -2401,6 +2356,255 @@
     .tech-on .tech-card{opacity:1}
     .tech-play-btn{transition:none}
   }
+
+  /* ================= BEFORE & AFTER GALLERY =========================
+     Eight cases in ordinary document flow. No pin, no runway, nothing
+     absolutely positioned outside the lightbox.
+
+     The photographs were padded to 4:3 against black before they were
+     saved, so every before lines up with its after and object-fit has
+     nothing to crop. The frame is black for the same reason: the label
+     bars the practice burned into the photographs are black already, so
+     the padding disappears into them.
+     =================================================================== */
+  .ba-intro{margin:0 0 clamp(30px,4vw,54px); max-width:60ch}
+  .ba-intro h2{
+    margin:0 0 clamp(12px,1.6vw,18px); font-weight:300; color:var(--ink);
+    font-size:clamp(2rem,4vw,3rem); line-height:1.08; letter-spacing:-.03em;
+    text-wrap:balance;
+  }
+  .ba-intro .sub{
+    margin:0; color:var(--ink-soft); font-size:clamp(1.02rem,1.5vw,1.16rem);
+    line-height:1.6;
+  }
+
+  .ba-grid{
+    list-style:none; margin:0; padding:0;
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:clamp(28px,3.6vw,56px);
+  }
+  .ba-case{min-width:0}
+  .ba-label{
+    margin:0 0 clamp(10px,1.2vw,14px); color:var(--ink);
+    font-size:.82rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase;
+  }
+  .ba-pair{display:grid; grid-template-columns:1fr 1fr; gap:clamp(8px,0.9vw,14px)}
+
+  /* a real button: the keyboard and screen readers get it for free */
+  .ba-shot{
+    display:block; margin:0; padding:0; border:1px solid var(--line);
+    border-radius:var(--radius); overflow:hidden; background:#000;
+    aspect-ratio:4/3; cursor:zoom-in; width:100%;
+    transition:transform .22s var(--ease), box-shadow .22s var(--ease);
+  }
+  .ba-shot img{width:100%; height:100%; object-fit:cover; display:block}
+  .ba-shot:hover{
+    transform:translateY(-2px);
+    box-shadow:0 2px 6px rgba(15,42,51,.10), 0 16px 34px -20px rgba(15,42,51,.45);
+  }
+  .ba-shot:focus-visible{outline:2.5px solid var(--accent); outline-offset:3px}
+
+  /* ---- hover: the photograph comes forward ----------------------------
+     Enough to read the detail without opening the lightbox, which a click
+     still does. Keyboard focus gets the same thing, so tabbing through the
+     gallery shows what hovering shows.
+
+     It grows away from the page edge rather than from its own centre: the
+     left shot of a pair keeps its left edge, the right one keeps its right.
+     Scaling from the centre pushes the outermost photographs past the
+     viewport and sets the whole page scrolling sideways.
+
+     The scale is smaller on the widths where the grid drops to one column,
+     because the shots are already large there and the files are 640x480.
+     Past that the photograph would just go soft. */
+  @media (hover:hover) and (pointer:fine) and (min-width:761px){
+    .ba-shot{position:relative; z-index:0}
+    .ba-shot:hover,
+    .ba-shot:focus-visible{
+      transform:scale(1.25); z-index:5;
+      box-shadow:0 4px 10px rgba(15,42,51,.14), 0 30px 60px -28px rgba(15,42,51,.5);
+    }
+    .ba-pair > .ba-shot:first-child{transform-origin:left center}
+    .ba-pair > .ba-shot:last-child{transform-origin:right center}
+  }
+  @media (hover:hover) and (pointer:fine) and (min-width:1025px){
+    .ba-shot:hover,
+    .ba-shot:focus-visible{transform:scale(1.5)}
+  }
+  /* a shot that jumps to half again its size with no transition is worse
+     than one that does not move at all */
+  @media (prefers-reduced-motion:reduce){
+    .ba-shot:hover,
+    .ba-shot:focus-visible{transform:none; z-index:0}
+  }
+
+  .ba-cta{
+    margin:clamp(34px,4.4vw,60px) 0 0;
+    display:flex; flex-wrap:wrap; align-items:center; gap:clamp(14px,1.8vw,22px);
+  }
+  .ba-cta-line{margin:0; color:var(--ink-soft); font-size:clamp(1rem,1.4vw,1.1rem)}
+  /* the base .btn rules are scoped to .hero, so this needs its own copy */
+  .ba-cta .btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-height:52px; padding:0 clamp(22px,3vw,30px); border-radius:14px;
+    text-decoration:none; font-weight:400; font-size:1.01rem; letter-spacing:-.008em;
+    transition:transform .22s var(--ease), box-shadow .22s var(--ease), background-color .22s;
+  }
+  .ba-cta .btn.primary{
+    background:var(--accent); color:var(--on-accent);
+    box-shadow:0 1px 2px rgba(15,42,51,.10),
+               0 10px 26px -10px color-mix(in srgb,var(--accent) 78%,transparent);
+  }
+  .ba-cta .btn.primary:hover{
+    transform:translateY(-2px); background:color-mix(in srgb,var(--accent) 88%,#000 12%);
+  }
+  .ba-cta .btn:active{transform:translateY(0)}
+
+  /* one case per row before the pair gets too small to read */
+  @media (max-width:1024px){
+    .ba-grid{grid-template-columns:minmax(0,1fr); gap:clamp(30px,5vw,44px)}
+  }
+  /* and then the pair stacks, so each photograph is full width */
+  @media (max-width:560px){
+    .ba-pair{grid-template-columns:minmax(0,1fr); gap:10px}
+    .ba-intro h2{font-size:clamp(1.8rem,7.2vw,2.2rem)}
+    .ba-cta .btn{width:100%}
+  }
+
+  /* ---- lightbox ---- */
+  .ba-lightbox{
+    position:fixed; inset:0; z-index:90;
+    display:flex; align-items:center; justify-content:center;
+    padding:clamp(16px,4vw,48px);
+    background:color-mix(in srgb,#06141a 86%,transparent);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    opacity:0; transition:opacity .2s var(--ease);
+  }
+  .ba-lightbox[hidden]{display:none}
+  .ba-lightbox.is-open{opacity:1}
+  .ba-lightbox-fig{
+    margin:0; max-width:min(1100px,100%); max-height:100%;
+    display:flex; flex-direction:column; gap:12px; align-items:center;
+  }
+  .ba-lightbox-fig img{
+    display:block; max-width:100%; max-height:calc(100vh - clamp(110px,18vh,180px));
+    width:auto; height:auto; object-fit:contain;
+    border-radius:var(--radius); background:#000;
+  }
+  .ba-lightbox-cap{
+    margin:0; color:#e9f1f3; font-size:.92rem; letter-spacing:.01em; text-align:center;
+  }
+  .ba-lightbox-close{
+    position:absolute; top:clamp(12px,2.4vw,24px); right:clamp(12px,2.4vw,24px);
+    width:44px; height:44px; padding:0; border-radius:50%; cursor:pointer;
+    display:grid; place-items:center;
+    background:color-mix(in srgb,#e9f1f3 16%,transparent);
+    border:1px solid color-mix(in srgb,#e9f1f3 26%,transparent);
+    color:#e9f1f3; transition:background-color .2s var(--ease);
+  }
+  .ba-lightbox-close svg{width:18px; height:18px; display:block}
+  .ba-lightbox-close:hover{background:color-mix(in srgb,#e9f1f3 28%,transparent)}
+  .ba-lightbox-close:focus-visible{outline:2.5px solid #e9f1f3; outline-offset:3px}
+
+  /* The reveal's hidden state is scoped to .ba-on, a class the script only
+     adds once its triggers are built, so no JS, no GSAP or reduced motion
+     all leave every case visible in plain flow. */
+  .ba-on .ba-case, .ba-on .ba-intro > *{opacity:0}
+  @media (prefers-reduced-motion:reduce){
+    .ba-on .ba-case, .ba-on .ba-intro > *{opacity:1}
+    .ba-shot, .ba-lightbox, .ba-lightbox-close{transition:none}
+  }
+
+  /* ================= PHONES: SWIPE TRACKS ===========================
+     Before & After, Technology, Pricing, Providers and Reviews lay their
+     cards in a row a phone drags sideways instead of stacking them.
+
+     Native scroll snapping only: the finger moves the row one to one,
+     momentum and easing come from the platform, and nothing advances on
+     its own. Dragging either way at any speed is just scrolling.
+
+     The track bleeds to both screen edges and wears a mask there, so a
+     card fades in as it arrives and out as it leaves rather than being
+     cut off by the edge.
+     =================================================================== */
+  @media (max-width:760px){
+    .ba-grid,
+    .tech-grid,
+    .reviews-list,
+    .providers-grid,
+    .pricing-track{
+      /* row is stated because the reviews list stacks in a column
+         everywhere else and would otherwise keep doing so here */
+      display:flex; flex-direction:row; flex-wrap:nowrap; align-items:stretch;
+      gap:clamp(12px,3.4vw,18px);
+      overflow-x:auto; overflow-y:hidden;
+      scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior-x:contain;
+      /* full bleed, so a card can sit under the fade at either end */
+      margin-inline:calc(-1 * var(--gutter));
+      /* the cards drop a soft shadow and overflow-y is hidden, so the
+         row keeps a little room above and below for it */
+      padding:8px var(--gutter) 22px;
+      scroll-padding-inline:var(--gutter);
+      scrollbar-width:none;
+      /* The fade is as wide as the gap either side of the centred card,
+         so the card in view is never dimmed while the one arriving and
+         the one leaving both pass through it. */
+      --edge:clamp(26px,8vw,52px);
+      -webkit-mask-image:linear-gradient(90deg,
+        transparent 0, #000 var(--edge),
+        #000 calc(100% - var(--edge)), transparent 100%);
+      mask-image:linear-gradient(90deg,
+        transparent 0, #000 var(--edge),
+        #000 calc(100% - var(--edge)), transparent 100%);
+    }
+    .ba-grid::-webkit-scrollbar,
+    .tech-grid::-webkit-scrollbar,
+    .reviews-list::-webkit-scrollbar,
+    .providers-grid::-webkit-scrollbar,
+    .pricing-track::-webkit-scrollbar{display:none}
+
+    /* 84% leaves the next card peeking, which is what tells a thumb the
+       row moves at all */
+    .ba-case,
+    .tech-card,
+    .reviews-card,
+    .providers-card,
+    .pricing-track > .pricing-scene{
+      flex:0 0 84%; min-width:0; scroll-snap-align:center;
+    }
+    /* Pricing is the exception on both counts: its stage already runs to
+       both screen edges, so pulling the track out again would push it off
+       the page, and each block carries its own gutter inside, which the
+       track now provides. */
+    .pricing-track{margin-inline:0}
+    .pricing-track .pricing-cinematic-inner{max-width:none; padding:0}
+    /* the vertical rhythm of a stacked block is wrong inside a card, and
+       every card is as tall as the price table, so the shorter ones sit
+       in the middle of their frame rather than above a void */
+    .pricing-track > .pricing-scene{
+      padding:0; border-top:0;
+      display:flex; flex-direction:column; justify-content:center;
+    }
+    .providers-grid{padding-top:0}
+    .reviews-wall .reviews-card{margin-left:0}
+
+    /* the track scrolls, so it has to be reachable without a pointer */
+    .ba-grid:focus-visible,
+    .tech-grid:focus-visible,
+    .reviews-list:focus-visible,
+    .providers-grid:focus-visible,
+    .pricing-track:focus-visible{
+      outline:2.5px solid var(--accent); outline-offset:4px; border-radius:var(--radius);
+    }
+  }
+  @media (max-width:760px) and (prefers-reduced-motion:reduce){
+    /* snapping is still fine, but do not let the platform animate it */
+    .ba-grid, .tech-grid, .reviews-list, .providers-grid, .pricing-track{
+      scroll-behavior:auto;
+    }
+  }
 </style>
 <script>
 /* The FAQ search box is useless without JavaScript, and the stylesheet
@@ -2463,7 +2667,7 @@ document.documentElement.classList.remove("no-js");
   .navmenu a span{display:none}
   .navmenu-all{border-top:0}
   /* eight links laid inline will not fit a phone bar, so let it wrap */
-  @media(max-width:879px){
+  @media(max-width:1024px){
     .bar{flex-wrap:wrap}
     .nav{width:100%; margin-left:0; gap:0}
     .navmenu a,.nav > a{padding:8px 10px; font-size:.92rem}
@@ -2485,11 +2689,14 @@ document.documentElement.classList.remove("no-js");
         <a href="idea-dental-invisalign.html"><b>Invisalign</b><span>Straighten teeth with clear, removable aligners.</span></a>
         <a href="idea-dental-braces.html"><b>Braces</b><span>Metal and clear braces for kids, teens and adults.</span></a>
         <a href="idea-dental-veneers.html"><b>Veneers</b><span>Custom porcelain shells for a brighter, even smile.</span></a>
+        <a href="idea-dental-emergency.html"><b>Emergency Dentist</b><span>Same-day care for pain, breaks and knocked-out teeth.</span></a>
         <a class="navmenu-all" href="#services">All services</a>
         </div>
       </div>
-      <a href="idea-dental-emergency.html">Emergency</a>
-      <a href="idea-dental-faq.html">FAQ</a>
+      <a href="#technology">Technology</a>
+      <a href="#before-after">Results</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#faq">FAQ</a>
       <a href="#location">Contact</a>
     </nav>
     <div class="actions">
@@ -2576,11 +2783,24 @@ document.documentElement.classList.remove("no-js");
 
 <!-- 2 · Trust bar -->
 <div class="trust">
-  <div class="wrap">
-    <div class="item"><span class="stars">★★★★★</span> <b>4.9</b> from <b>119</b> Google reviews</div>
-    <div class="item"><b>Hablamos Español</b> · bilingual team</div>
-    <div class="item"><b>Payment plans</b> for all patients</div>
-    <div class="item"><b>Emergency &amp; same-day</b> care</div>
+  <div class="trust-marquee">
+    <div class="trust-track">
+      <div class="trust-set">
+        <div class="item"><span class="stars">★★★★★</span> <b>4.9</b> from <b>119</b> Google reviews</div>
+        <div class="item"><b>Hablamos Español</b> · bilingual team</div>
+        <div class="item"><b>Payment plans</b> for all patients</div>
+        <div class="item"><b>Emergency &amp; same-day</b> care</div>
+      </div>
+      <!-- the same four again, so the loop closes with no gap. This copy is
+           hidden from screen readers, which would otherwise hear all four
+           claims twice. -->
+      <div class="trust-set" aria-hidden="true">
+        <div class="item"><span class="stars">★★★★★</span> <b>4.9</b> from <b>119</b> Google reviews</div>
+        <div class="item"><b>Hablamos Español</b> · bilingual team</div>
+        <div class="item"><b>Payment plans</b> for all patients</div>
+        <div class="item"><b>Emergency &amp; same-day</b> care</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2600,13 +2820,20 @@ document.documentElement.classList.remove("no-js");
 <div class="cinematic-services" id="cinematic-services">
   <div class="cinematic-services-stage">
 
-    <!-- INTRO -->
-    <div class="cinematic-services-scene cinematic-services-intro" data-svc-scene="0">
+    <!-- The opening statement is no longer a title card that gets replaced.
+         It stands over the whole sequence, and the six services move
+         underneath it. -->
+    <div class="cinematic-services-head">
       <div class="cinematic-services-inner">
         <p class="cinematic-services-lead">One office.</p>
         <p class="cinematic-services-lead cinematic-services-lead--soft">Every stage of your smile.</p>
       </div>
     </div>
+
+    <!-- The six sit in a track of their own so the stage can be a simple
+         column: heading on top at its natural height, track taking what is
+         left. Nothing has to guess how tall the heading is. -->
+    <div class="cinematic-services-track">
 
     <!-- 01 -->
     <article class="cinematic-services-scene cinematic-service" data-svc-scene="1">
@@ -2700,6 +2927,8 @@ document.documentElement.classList.remove("no-js");
       </div>
     </article>
 
+    </div>
+
     <!-- progress rail: six segments that fill as the sequence advances.
          Decorative only, the number is spelled out in each scene's copy. -->
     <div class="cinematic-services-progress" aria-hidden="true">
@@ -2713,89 +2942,218 @@ document.documentElement.classList.remove("no-js");
 </div>
 </section>
 
-<!-- 4 · Why us: a scroll-driven cinematic sequence.
-     Plain document flow by default, so with no JS, no GSAP or reduced motion
-     this reads as seven stacked editorial blocks with every photograph,
-     heading and description visible. Only when the script confirms its
-     timeline built does .why-cine-on turn the stage into a pinned 100vh frame
-     with the scenes as overlays. The existing <h2> leads the sequence rather
-     than sitting above it, so the heading is not said twice. -->
-<section class="block why-cinematic" id="why-cinematic">
-  <div class="why-cinematic-stage">
+<!-- 4 · Why patients choose Idea Dental: one family photograph, six reasons.
 
-    <!-- INTRO -->
-    <div class="why-cinematic-scene why-cinematic-intro" data-why-scene="0">
-      <div class="why-cinematic-inner">
-        <h2>Why patients choose Idea Dental</h2>
-        <p class="sub">Real reasons, not slogans.</p>
+     The photograph is the anchor and never moves. Above 760px the section
+     pins briefly and the six reasons cross fade in the right hand column,
+     one at a time. On phones there is no pin at all: the photograph sits
+     on top and the six reasons read as an ordinary list, each with a
+     short reveal.
+
+     All six reasons, their numbers and their supporting copy are exactly
+     as they were. Six per reason photographs were dropped in favour of
+     the single family image; the iTero reason keeps its words but no
+     longer carries a scanner photograph, which now belongs only to the
+     Advanced Dental Technology section.
+
+     SOURCE: family photograph supplied by the practice. -->
+<section class="block why-cinematic" id="why-cinematic">
+  <div class="why-cinematic-runway">
+    <div class="why-cinematic-stage">
+      <div class="wrap why-cinematic-grid">
+
+        <figure class="why-cinematic-media">
+          <picture>
+            <source srcset="why-family.webp" type="image/webp">
+            <img src="why-family.jpg" alt="" width="1200" height="800" loading="lazy" decoding="async">
+          </picture>
+        </figure>
+
+        <div class="why-cinematic-col">
+          <div class="why-cinematic-intro">
+            <h2>Why patients choose Idea Dental</h2>
+            <p class="sub">Real reasons, not slogans.</p>
+          </div>
+
+          <div class="why-cinematic-reasons">
+
+            <article class="why-cinematic-scene" data-why-scene="1">
+              <p class="why-cinematic-num"><b>01</b> / 06</p>
+              <h3>About half the cost</h3>
+              <p class="why-cinematic-desc">We're known for affordable pricing on the treatments Houston families need most.</p>
+            </article>
+
+            <article class="why-cinematic-scene" data-why-scene="2">
+              <p class="why-cinematic-num"><b>02</b> / 06</p>
+              <h3>Bilingual team</h3>
+              <p class="why-cinematic-desc">Discuss your care comfortably in English or Spanish. Se habla español.</p>
+            </article>
+
+            <article class="why-cinematic-scene" data-why-scene="3">
+              <p class="why-cinematic-num"><b>03</b> / 06</p>
+              <h3>Modern iTero® 3D scanner</h3>
+              <p class="why-cinematic-desc">No goopy impressions, and you can preview your Invisalign results before you start.</p>
+            </article>
+
+            <article class="why-cinematic-scene" data-why-scene="4">
+              <p class="why-cinematic-num"><b>04</b> / 06</p>
+              <h3>Payment plans available</h3>
+              <p class="why-cinematic-desc">Same-day treatment is paid in full; care spread over multiple visits can be arranged on a payment plan.</p>
+            </article>
+
+            <article class="why-cinematic-scene" data-why-scene="5">
+              <p class="why-cinematic-num"><b>05</b> / 06</p>
+              <h3>Emergency &amp; walk-ins</h3>
+              <p class="why-cinematic-desc">Same-day care and walk-ins welcome on Tuesdays and Wednesdays.</p>
+            </article>
+
+            <article class="why-cinematic-scene" data-why-scene="6">
+              <p class="why-cinematic-num"><b>06</b> / 06</p>
+              <h3>Whole-family care</h3>
+              <p class="why-cinematic-desc">Children, teens and adults are all seen under one roof.</p>
+            </article>
+
+          </div>
+
+          <div class="why-cinematic-progress" aria-hidden="true">
+            <span class="why-cinematic-progress-num">01</span>
+            <span class="why-cinematic-rule"><i></i></span>
+          </div>
+        </div>
+
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- 01 -->
-    <article class="why-cinematic-scene" data-why-scene="1">
-      <div class="why-cinematic-media"><picture><source srcset="why-half-the-cost.webp" type="image/webp"><img src="why-half-the-cost.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture></div>
-      <div class="why-cinematic-inner">
-        <p class="why-cinematic-num"><b>01</b> / 06</p>
-        <h3>About half the cost</h3>
-        <p class="why-cinematic-desc">We're known for affordable pricing on the treatments Houston families need most.</p>
-      </div>
-    </article>
+<!-- 4b · Before & After gallery: the practice's own case photographs.
 
-    <!-- 02 -->
-    <article class="why-cinematic-scene" data-why-scene="2">
-      <div class="why-cinematic-media"><picture><source srcset="why-bilingual-team.webp" type="image/webp"><img src="why-bilingual-team.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture></div>
-      <div class="why-cinematic-inner">
-        <p class="why-cinematic-num"><b>02</b> / 06</p>
-        <h3>Bilingual team</h3>
-        <p class="why-cinematic-desc">Discuss your care comfortably in English or Spanish. Se habla español.</p>
-      </div>
-    </article>
+     Eight cases, each a before and its matching later frame. The labels
+     ("Traditional Braces", "Before", "9 months later") are burned into the
+     photographs themselves by the practice, so nothing here restates or
+     reinterprets them: the caption carries only the treatment name that
+     the photograph already shows.
 
-    <!-- 03 -->
-    <article class="why-cinematic-scene" data-why-scene="3">
-      <div class="why-cinematic-media"><picture><source srcset="why-itero-scanner.webp" type="image/webp"><img src="why-itero-scanner.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture></div>
-      <div class="why-cinematic-inner">
-        <p class="why-cinematic-num"><b>03</b> / 06</p>
-        <h3>Modern iTero® 3D scanner</h3>
-        <p class="why-cinematic-desc">No goopy impressions, and you can preview your Invisalign results before you start.</p>
-      </div>
-    </article>
+     Nothing is cropped. Each frame was padded to 4:3 against black, which
+     the black label bars already in the photographs absorb, so every
+     before lines up with its after and no burned-in text is cut.
 
-    <!-- 04 -->
-    <article class="why-cinematic-scene" data-why-scene="4">
-      <div class="why-cinematic-media"><picture><source srcset="why-payment-plans.webp" type="image/webp"><img src="why-payment-plans.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture></div>
-      <div class="why-cinematic-inner">
-        <p class="why-cinematic-num"><b>04</b> / 06</p>
-        <h3>Payment plans available</h3>
-        <p class="why-cinematic-desc">Same-day treatment is paid in full; care spread over multiple visits can be arranged on a payment plan.</p>
-      </div>
-    </article>
+     No pin, no runway: an ordinary section with a short reveal.
 
-    <!-- 05 -->
-    <article class="why-cinematic-scene" data-why-scene="5">
-      <div class="why-cinematic-media"><picture><source srcset="why-emergency-walkins.webp" type="image/webp"><img src="why-emergency-walkins.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture></div>
-      <div class="why-cinematic-inner">
-        <p class="why-cinematic-num"><b>05</b> / 06</p>
-        <h3>Emergency &amp; walk-ins</h3>
-        <p class="why-cinematic-desc">Same-day care and walk-ins welcome on Tuesdays and Wednesdays.</p>
-      </div>
-    </article>
+     SOURCE: case photographs supplied by the practice, from its own
+     before and after gallery. No outcome, duration or claim is stated
+     anywhere except where the practice wrote it into the image. -->
+<section class="block ba" id="before-after">
+  <div class="wrap">
 
-    <!-- 06 -->
-    <article class="why-cinematic-scene" data-why-scene="6">
-      <div class="why-cinematic-media"><picture><source srcset="why-family-care.webp" type="image/webp"><img src="why-family-care.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture></div>
-      <div class="why-cinematic-inner">
-        <p class="why-cinematic-num"><b>06</b> / 06</p>
-        <h3>Whole-family care</h3>
-        <p class="why-cinematic-desc">Children, teens and adults are all seen under one roof.</p>
-      </div>
-    </article>
+    <div class="ba-intro">
+      <h2>Before &amp; After Gallery</h2>
+      <p class="sub">See selected treatment results from Idea Dental.</p>
+    </div>
 
-    <!-- a hairline that fills as the sequence advances. Decorative: each
-         scene states its own number in the copy. -->
-    <div class="why-cinematic-progress" aria-hidden="true">
-      <span class="why-cinematic-progress-num">01</span>
-      <span class="why-cinematic-track"><i></i></span>
+    <ul class="ba-grid">
+
+      <li class="ba-case">
+        <p class="ba-label">Traditional Braces</p>
+        <div class="ba-pair">
+          <button class="ba-shot" type="button" data-full="ba-braces-1-before.jpg" data-cap="Traditional Braces, before treatment" aria-label="Enlarge: traditional braces, before treatment">
+            <picture><source srcset="ba-braces-1-before.webp" type="image/webp"><img src="ba-braces-1-before.jpg" alt="Traditional braces, before treatment" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+          <button class="ba-shot" type="button" data-full="ba-braces-1-after.jpg" data-cap="Traditional Braces, nine months later" aria-label="Enlarge: traditional braces, nine months later">
+            <picture><source srcset="ba-braces-1-after.webp" type="image/webp"><img src="ba-braces-1-after.jpg" alt="Traditional braces, nine months later" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+        </div>
+      </li>
+
+      <li class="ba-case">
+        <p class="ba-label">Traditional Braces</p>
+        <div class="ba-pair">
+          <button class="ba-shot" type="button" data-full="ba-braces-2-before.jpg" data-cap="Traditional Braces, before treatment" aria-label="Enlarge: traditional braces, before treatment">
+            <picture><source srcset="ba-braces-2-before.webp" type="image/webp"><img src="ba-braces-2-before.jpg" alt="Traditional braces, before treatment" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+          <button class="ba-shot" type="button" data-full="ba-braces-2-after.jpg" data-cap="Traditional Braces, one week later" aria-label="Enlarge: traditional braces, one week later">
+            <picture><source srcset="ba-braces-2-after.webp" type="image/webp"><img src="ba-braces-2-after.jpg" alt="Traditional braces, one week later" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+        </div>
+      </li>
+
+      <li class="ba-case">
+        <p class="ba-label">Traditional Braces</p>
+        <div class="ba-pair">
+          <button class="ba-shot" type="button" data-full="ba-braces-3-before.jpg" data-cap="Traditional Braces, before treatment" aria-label="Enlarge: traditional braces, before treatment">
+            <picture><source srcset="ba-braces-3-before.webp" type="image/webp"><img src="ba-braces-3-before.jpg" alt="Traditional braces, before treatment" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+          <button class="ba-shot" type="button" data-full="ba-braces-3-after.jpg" data-cap="Traditional Braces, four months later" aria-label="Enlarge: traditional braces, four months later">
+            <picture><source srcset="ba-braces-3-after.webp" type="image/webp"><img src="ba-braces-3-after.jpg" alt="Traditional braces, four months later" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+        </div>
+      </li>
+
+      <li class="ba-case">
+        <p class="ba-label">Teeth Cleaning</p>
+        <div class="ba-pair">
+          <button class="ba-shot" type="button" data-full="ba-cleaning-before.jpg" data-cap="Teeth Cleaning, before" aria-label="Enlarge: teeth cleaning, before">
+            <picture><source srcset="ba-cleaning-before.webp" type="image/webp"><img src="ba-cleaning-before.jpg" alt="Teeth cleaning, before" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+          <button class="ba-shot" type="button" data-full="ba-cleaning-after.jpg" data-cap="Teeth Cleaning, after" aria-label="Enlarge: teeth cleaning, after">
+            <picture><source srcset="ba-cleaning-after.webp" type="image/webp"><img src="ba-cleaning-after.jpg" alt="Teeth cleaning, after" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+        </div>
+      </li>
+
+      <li class="ba-case">
+        <p class="ba-label">Cosmetic Bonding</p>
+        <div class="ba-pair">
+          <button class="ba-shot" type="button" data-full="ba-bonding-before.jpg" data-cap="Cosmetic Bonding, before" aria-label="Enlarge: cosmetic bonding, before">
+            <picture><source srcset="ba-bonding-before.webp" type="image/webp"><img src="ba-bonding-before.jpg" alt="Cosmetic bonding, before" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+          <button class="ba-shot" type="button" data-full="ba-bonding-after.jpg" data-cap="Cosmetic Bonding, after" aria-label="Enlarge: cosmetic bonding, after">
+            <picture><source srcset="ba-bonding-after.webp" type="image/webp"><img src="ba-bonding-after.jpg" alt="Cosmetic bonding, after" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+        </div>
+      </li>
+
+      <li class="ba-case">
+        <p class="ba-label">Dentures</p>
+        <div class="ba-pair">
+          <button class="ba-shot" type="button" data-full="ba-dentures-before.jpg" data-cap="Dentures, before" aria-label="Enlarge: dentures, before">
+            <picture><source srcset="ba-dentures-before.webp" type="image/webp"><img src="ba-dentures-before.jpg" alt="Dentures, before" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+          <button class="ba-shot" type="button" data-full="ba-dentures-after.jpg" data-cap="Dentures, after" aria-label="Enlarge: dentures, after">
+            <picture><source srcset="ba-dentures-after.webp" type="image/webp"><img src="ba-dentures-after.jpg" alt="Dentures, after" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+        </div>
+      </li>
+
+      <li class="ba-case">
+        <p class="ba-label">Implants</p>
+        <div class="ba-pair">
+          <button class="ba-shot" type="button" data-full="ba-implants-before.jpg" data-cap="Implants, before" aria-label="Enlarge: implants, before">
+            <picture><source srcset="ba-implants-before.webp" type="image/webp"><img src="ba-implants-before.jpg" alt="Implants, before" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+          <button class="ba-shot" type="button" data-full="ba-implants-after.jpg" data-cap="Implants, after" aria-label="Enlarge: implants, after">
+            <picture><source srcset="ba-implants-after.webp" type="image/webp"><img src="ba-implants-after.jpg" alt="Implants, after" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+        </div>
+      </li>
+
+      <li class="ba-case">
+        <p class="ba-label">Fillings</p>
+        <div class="ba-pair">
+          <button class="ba-shot" type="button" data-full="ba-fillings-before.jpg" data-cap="Fillings, before" aria-label="Enlarge: fillings, before">
+            <picture><source srcset="ba-fillings-before.webp" type="image/webp"><img src="ba-fillings-before.jpg" alt="Fillings, before" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+          <button class="ba-shot" type="button" data-full="ba-fillings-after.jpg" data-cap="Fillings, after" aria-label="Enlarge: fillings, after">
+            <picture><source srcset="ba-fillings-after.webp" type="image/webp"><img src="ba-fillings-after.jpg" alt="Fillings, after" width="640" height="480" loading="lazy" decoding="async"></picture>
+          </button>
+        </div>
+      </li>
+
+    </ul>
+
+    <div class="ba-cta">
+      <p class="ba-cta-line">Ready to explore your options?</p>
+      <a class="btn primary" href="idea-dental-appointments.html">Book an Appointment</a>
     </div>
 
   </div>
@@ -2893,6 +3251,8 @@ document.documentElement.classList.remove("no-js");
       </div>
     </div>
 
+    <div class="pricing-track">
+
     <!-- 01 · what we quote on -->
     <article class="pricing-scene" data-price-scene="1">
       <div class="pricing-cinematic-inner">
@@ -2925,7 +3285,11 @@ document.documentElement.classList.remove("no-js");
       </div>
     </article>
 
-    <!-- 04 · the existing calls to action, nothing new -->
+    </div>
+
+    <!-- 04 · the existing calls to action, nothing new. This one sits
+         OUTSIDE the track on purpose: the closing invitation stays put
+         while the three blocks above it are swiped through. -->
     <article class="pricing-scene" data-price-scene="4">
       <div class="pricing-cinematic-inner">
         <p class="pricing-line pricing-line--final">Ready to get started?</p>
@@ -2961,7 +3325,7 @@ document.documentElement.classList.remove("no-js");
   <div class="emergency-cinematic-stage">
 
     <div class="emergency-cinematic-media" aria-hidden="true">
-      <picture><source srcset="why-emergency-walkins.webp" type="image/webp"><img src="why-emergency-walkins.jpg" alt="" width="800" height="533" loading="lazy" decoding="async"></picture>
+      <picture><source srcset="emergency-patient.webp" type="image/webp"><img src="emergency-patient.jpg" alt="" width="1164" height="801" loading="lazy" decoding="async"></picture>
     </div>
     <!-- deepens as the sequence moves from urgency to reassurance, which is
          also what keeps the later scenes on clean paper rather than on a
@@ -3260,6 +3624,13 @@ document.documentElement.classList.remove("no-js");
 
 <!-- 11 · Footer -->
 <footer class="site">
+  <!-- The mark, large and faint, behind the columns. Decoration only:
+       hidden from assistive technology, takes no pointer, and sits on
+       its own layer so nothing above it loses contrast. -->
+  <picture class="footer-mark" aria-hidden="true">
+    <source srcset="idea-dental-logo-white.webp" type="image/webp">
+    <img src="idea-dental-logo-white.png" alt="" width="1428" height="528" loading="lazy" decoding="async">
+  </picture>
   <div class="wrap">
     <div class="col">
       <h4>Idea Dental</h4>
@@ -3725,7 +4096,8 @@ document.documentElement.classList.remove("no-js");
 </script>
 <script defer>
 /* =====================================================================
-   CINEMATIC SERVICES - one scrubbed master timeline, seven scenes.
+   CINEMATIC SERVICES - one scrubbed master timeline, six scenes under a
+   heading that does not move.
 
    Reuses the GSAP and ScrollTrigger already loaded above for the hero.
    No second library import, and a separate timeline and ScrollTrigger so
@@ -3734,8 +4106,8 @@ document.documentElement.classList.remove("no-js");
    Progressive enhancement, same contract as the hero: the .svc-cine-on
    class that turns the stage into a pinned 100vh frame is added HERE, and
    only after the timeline has been built without throwing. No JS, no GSAP
-   or reduced motion leaves all seven scenes in plain flow with every
-   image, description and link visible.
+   or reduced motion leaves the heading and all six scenes in plain flow
+   with every image, description and link visible.
    ===================================================================== */
 (function () {
   "use strict";
@@ -3744,7 +4116,6 @@ document.documentElement.classList.remove("no-js");
   if (!root) return;
 
   var stage = root.querySelector(".cinematic-services-stage");
-  var intro = root.querySelector('[data-svc-scene="0"]');
   var bar   = root.querySelector(".cinematic-services-progress");
   var num   = root.querySelector(".cinematic-services-progress-num");
   var segs  = root.querySelectorAll(".cinematic-services-rail i b");
@@ -3759,14 +4130,15 @@ document.documentElement.classList.remove("no-js");
       img:  el.querySelector(".cinematic-service-image img")
     };
   }
-  if (!stage || !intro) return;
+  if (!stage) return;
 
   /* ---- timeline shape -------------------------------------------------
-     The intro holds, then hands over to service 01. Each service then owns
-     a SLOT of the timeline and crossfades with its neighbour over FADE, so
-     one is always arriving as the last one leaves and the sequence reads as
-     a continuous move rather than six separate slides. */
-  var T0 = 16, SLOT = 15, FADE = 6, TOTAL = T0 + 6 * SLOT + FADE;   // 112
+     The heading is already on screen and stays there, so the sequence opens
+     on service 01 after a short beat rather than holding on a title card.
+     Each service owns a SLOT of the timeline and crossfades with its
+     neighbour over FADE, so one is always arriving as the last one leaves
+     and the sequence reads as a continuous move rather than six slides. */
+  var T0 = 0, SLOT = 15, FADE = 6, TOTAL = T0 + 6 * SLOT + FADE;   // 96
 
   function start() {
     if (!window.gsap || !window.ScrollTrigger) return;
@@ -3807,13 +4179,9 @@ document.documentElement.classList.remove("no-js");
           }
         });
 
-        /* ---- INTRO · one office, every stage -------------------------
-           Holds at rest, then lifts away as service 01 arrives, so the
-           statement becomes the opening of the sequence rather than a
-           title card that gets replaced. */
-        tl.fromTo(intro, { opacity: 1, y: 0 },
-                         { opacity: 0, y: -dy, duration: 8, ease: "none" }, 8);
-        if (bar) tl.fromTo(bar, { opacity: 0 }, { opacity: 1, duration: 6 }, 10);
+        /* The statement over the stage does not move and is never animated,
+           so there is nothing to tween before the first service arrives. */
+        if (bar) tl.fromTo(bar, { opacity: 0 }, { opacity: 1, duration: 6 }, 1);
 
         for (var n = 1; n <= 6; n++) {
           var s     = scenes[n];
@@ -3828,15 +4196,27 @@ document.documentElement.classList.remove("no-js");
           tl.fromTo(s.img,
             { scale: zFrom, xPercent: drift, transformOrigin: "50% 50%" },
             { scale: zTo, xPercent: -drift, duration: span, ease: "none" }, enter);
-          // masked reveal, top and bottom, only on the way in
-          tl.fromTo(s.img,
-            { clipPath: "inset(" + clip + "% 0% " + clip + "% 0%)" },
-            { clipPath: "inset(0% 0% 0% 0%)", duration: FADE + 2 }, enter);
+          // masked reveal, top and bottom, only on the way in. 01 skips it:
+          // it is on screen the moment the section arrives, and a clip held
+          // at rest is a hard horizontal cut across the photograph.
+          if (n > 1) {
+            tl.fromTo(s.img,
+              { clipPath: "inset(" + clip + "% 0% " + clip + "% 0%)" },
+              { clipPath: "inset(0% 0% 0% 0%)", duration: FADE + 2 }, enter);
+          }
 
-          /* ---- copy: enters under the image, drifts the other way ---- */
-          tl.fromTo(s.el, { opacity: 0 },
-            { opacity: 1, duration: FADE * 0.6, ease: "none" }, enter + FADE * 0.5);
-          tl.fromTo(s.copy, { y: dy }, { y: 0, duration: FADE }, enter);
+          /* ---- copy: enters under the image, drifts the other way ----
+             Service 01 is the exception. The heading above the stage is
+             already on screen when the section arrives, so 01 is simply
+             there with it; fading it in would open the sequence on an
+             empty frame under a heading. */
+          if (n === 1) {
+            gsap.set(s.el, { opacity: 1 });
+          } else {
+            tl.fromTo(s.el, { opacity: 0 },
+              { opacity: 1, duration: FADE * 0.6, ease: "none" }, enter + FADE * 0.5);
+            tl.fromTo(s.copy, { y: dy }, { y: 0, duration: FADE }, enter);
+          }
           tl.fromTo(s.copy, { x: 0 }, { x: dx, duration: span, ease: "none" }, enter);
 
           /* ---- progress rail ---- */
@@ -3876,7 +4256,7 @@ document.documentElement.classList.remove("no-js");
         return function () {          // matchMedia cleanup on breakpoint change
           tl.scrollTrigger && tl.scrollTrigger.kill();
           tl.kill();
-          var all = [intro, bar];
+          var all = [bar];
           for (var k = 1; k <= 6; k++) { all.push(scenes[k].el, scenes[k].copy, scenes[k].img); }
           for (var j = 0; j < segs.length; j++) { all.push(segs[j]); }
           gsap.set(all, { clearProps: "all" });
@@ -3900,16 +4280,25 @@ document.documentElement.classList.remove("no-js");
 </script>
 <script defer>
 /* =====================================================================
-   CINEMATIC WHY US - one scrubbed master timeline, seven scenes.
+   WHY PATIENTS CHOOSE IDEA DENTAL
 
-   Reuses the GSAP and ScrollTrigger already loaded for the hero. No extra
-   library, and its own timeline and ScrollTrigger so the three pinned
-   sections never share state.
+   Two behaviours, chosen by width, both driven by the real scroll bar.
 
-   Progressive enhancement, same contract as the other two: .why-cine-on is
-   added HERE, and only once the timeline has been built without throwing.
-   No JS, no GSAP or reduced motion leaves all seven scenes in plain flow
-   with every photograph, heading and description readable.
+   761px and up: the section pins for 300vh and the six reasons cross
+   fade one at a time in the column beside the photograph. The photograph
+   itself is never animated: it is the fixed point the copy moves past.
+
+   760px and down: no pin at all. The six read as an ordinary list and
+   each one fades up as it arrives, then locks. A pinned cross fade on a
+   phone costs more than it gives, and the brief asks for a clean
+   vertical sequence there.
+
+   scrub is true everywhere, so nothing moves unless the wheel does.
+
+   Progressive enhancement, same contract as the rest: the classes are
+   added HERE and only once a timeline has been built without throwing.
+   No JS, no GSAP or reduced motion leaves the photograph and all six
+   reasons in plain readable flow.
    ===================================================================== */
 (function () {
   "use strict";
@@ -3917,48 +4306,26 @@ document.documentElement.classList.remove("no-js");
   var whyRoot = document.getElementById("why-cinematic");
   if (!whyRoot) return;
 
-  var whyStage = whyRoot.querySelector(".why-cinematic-stage");
-  var whyIntro = whyRoot.querySelector('[data-why-scene="0"]');
-  var whyBar   = whyRoot.querySelector(".why-cinematic-progress");
-  var whyNum   = whyRoot.querySelector(".why-cinematic-progress-num");
-  var whyFill  = whyRoot.querySelector(".why-cinematic-track i");
+  var whyRunway = whyRoot.querySelector(".why-cinematic-runway");
+  var whyStage  = whyRoot.querySelector(".why-cinematic-stage");
+  var whyBar    = whyRoot.querySelector(".why-cinematic-progress");
+  var whyNum    = whyRoot.querySelector(".why-cinematic-progress-num");
+  var whyFill   = whyRoot.querySelector(".why-cinematic-rule i");
 
   var whyScenes = [];
   for (var wi = 1; wi <= 6; wi++) {
     var wel = whyRoot.querySelector('[data-why-scene="' + wi + '"]');
-    if (!wel) return;                      // markup incomplete: leave plain flow
-    whyScenes[wi] = {
-      el:    wel,
-      copy:  wel.querySelector(".why-cinematic-inner"),
-      media: wel.querySelector(".why-cinematic-media"),
-      img:   wel.querySelector(".why-cinematic-media img")
-    };
+    if (!wel) return;                    // markup incomplete: leave plain flow
+    whyScenes[wi] = wel;
   }
-  if (!whyStage || !whyIntro) return;
+  if (!whyRunway || !whyStage) return;
 
-  /* Each scene gets its own entrance so the sequence never feels like the
-     same move repeated six times. Signs are multipliers on the responsive
-     travel distances below, so the variation scales with the screen.
-       tx/ty  direction the copy travels in from
-       zFrom/zTo  where the photograph's push starts and ends
-       ix/iy  image drift, in percent
-       clip   1 = add a masked reveal on the way in
-       rot    degrees of rotation to settle out of                      */
-  var WHY_STYLE = [
-    null,
-    { tx: -1,  ty: 0,   zFrom: 1.10, zTo: 1.00, ix: 0,  iy: 0,  clip: 0, rot: 0 },
-    { tx:  1,  ty: 0,   zFrom: 1.00, zTo: 1.08, ix: 0,  iy: 0,  clip: 0, rot: 0 },
-    { tx:  0,  ty: 1,   zFrom: 1.08, zTo: 1.00, ix: 0,  iy: 0,  clip: 1, rot: 0 },
-    { tx: -1,  ty: 0,   zFrom: 1.06, zTo: 1.00, ix: 0,  iy: -2, clip: 0, rot: 0 },
-    { tx: 0.6, ty: 0.6, zFrom: 1.09, zTo: 1.01, ix: 3,  iy: 0,  clip: 0, rot: 0.6 },
-    { tx:  0,  ty: 0.5, zFrom: 1.05, zTo: 1.00, ix: 0,  iy: 0,  clip: 0, rot: 0 }
-  ];
-
-  /* The intro owns the first 16 of 106 units, just over the 15% asked for.
-     Each benefit then holds a SLOT and crossfades with its neighbour over
-     FADE, so one is always arriving as the last one leaves. */
-  var WHY_T0 = 16, WHY_SLOT = 14, WHY_FADE = 6;
-  var WHY_TOTAL = WHY_T0 + 6 * WHY_SLOT + WHY_FADE;               // 106
+  /* one slot per reason: 3 of 18 entering, 12 holding, 3 leaving, so a
+     reason is stationary and readable for two thirds of its time */
+  var WY_SLOT  = 18;
+  var WY_ENTER = 3;
+  var WY_EXIT  = 3;
+  var WY_TOTAL = 6 * WY_SLOT;                                   // 108
 
   function whyStart() {
     if (!window.gsap || !window.ScrollTrigger) return;
@@ -3966,27 +4333,25 @@ document.documentElement.classList.remove("no-js");
     if (mq && mq.matches) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    document.documentElement.classList.add("why-cine-on");
+    var root = document.documentElement;
 
     try {
       var whyMM = gsap.matchMedia();
 
-      whyMM.add({
-        desktop: "(min-width:1025px)",
-        tablet:  "(min-width:761px) and (max-width:1024px)",
-        phone:   "(max-width:760px)"
-      }, function (ctx) {
-        var c = ctx.conditions;
-        var dx = c.desktop ? 56 : c.tablet ? 40 : 22;   // px copy travel, x
-        var dy = c.desktop ? 34 : c.tablet ? 28 : 20;   // px copy travel, y
+      /* ---- tablets and up: the pinned cross fade ---------------------- */
+      /* one branch, every width: the phone gets the same pinned cross
+         fade, only restacked by the stylesheet */
+      whyMM.add({ wide: "(min-width:761px)", phone: "(max-width:760px)" }, function (ctx) {
+        root.classList.add("why-cine-on");
+        var dy = ctx.conditions.phone ? 14 : 18;
 
-        var whyTL = gsap.timeline({
+        var tl = gsap.timeline({
           defaults: { ease: "power2.out" },
           scrollTrigger: {
-            trigger: whyRoot,
+            trigger: whyRunway,
             start: "top top",
             end: "bottom bottom",
-            scrub: true,               // the real scroll position, with no easing
+            scrub: true,
             pin: whyStage,
             anticipatePin: 1,
             invalidateOnRefresh: true,
@@ -3994,98 +4359,65 @@ document.documentElement.classList.remove("no-js");
           }
         });
 
-        /* ---- INTRO · the section's own heading, made the opening shot ----
-           It stays opaque the whole time it is on screen. The stage is
-           already partly visible before the pin engages, so a scene that
-           faded up from nothing would show as an empty white frame rising
-           into view. The rise and the settle carry the focus instead. */
-        var introInner = whyIntro.querySelector(".why-cinematic-inner");
-        gsap.set(whyIntro, { opacity: 1 });
-        whyTL.fromTo(introInner, { y: dy * 1.2, scale: 0.985 },
-                                 { y: 0, scale: 1, duration: 10, ease: "none" }, 0);
-        whyTL.to(whyIntro, { opacity: 0, duration: 6, ease: "none" }, 10);
-        whyTL.to(introInner, { y: -dy, duration: 6 }, 10);
-        if (whyBar) whyTL.fromTo(whyBar, { opacity: 0 }, { opacity: 1, duration: 6 }, 10);
+        /* the timeline has to reach WY_TOTAL: reason 06 never exits, so
+           without this the last tween would end short and the counter
+           would map onto a shorter timeline than it assumes */
+        tl.to({ v: 0 }, { v: 1, duration: WY_TOTAL, ease: "none" }, 0);
+
+        if (whyBar) tl.fromTo(whyBar, { opacity: 0 },
+                                      { opacity: 1, duration: 4 }, 1);
 
         for (var n = 1; n <= 6; n++) {
-          var s  = whyScenes[n];
-          var st = WHY_STYLE[n];
-          var enter = WHY_T0 + (n - 1) * WHY_SLOT;
-          var exit  = WHY_T0 + n * WHY_SLOT;
-          var last  = (n === 6);
-          // the photograph keeps moving the whole time the scene is up,
-          // through both crossfades, so nothing ever sits perfectly still
-          var span  = (last ? WHY_TOTAL : exit + WHY_FADE) - enter;
+          var el = whyScenes[n];
+          var enter = (n - 1) * WY_SLOT;
+          var exit  = n * WY_SLOT - WY_EXIT;
 
-          /* ---- the photograph ---- */
-          whyTL.fromTo(s.img,
-            { scale: st.zFrom, xPercent: st.ix, yPercent: 0, rotation: st.rot },
-            { scale: st.zTo, xPercent: 0, yPercent: st.iy, rotation: 0,
-              duration: span, ease: "none" }, enter);
-          if (st.clip) {
-            whyTL.fromTo(s.media,
-              { clipPath: "inset(0% 0% 18% 0%)" },
-              { clipPath: "inset(0% 0% 0% 0%)", duration: WHY_FADE + 2 }, enter);
+          if (n === 1) {
+            gsap.set(el, { opacity: 1 });
+            tl.fromTo(el, { y: dy }, { y: 0, duration: WY_ENTER * 2 }, 0);
+          } else {
+            tl.fromTo(el, { opacity: 0 },
+              { opacity: 1, duration: WY_ENTER, ease: "none" }, enter);
+            tl.fromTo(el, { y: dy }, { y: 0, duration: WY_ENTER * 1.6 }, enter);
           }
-
-          /* ---- the copy, travelling against the image ---- */
-          whyTL.fromTo(s.el, { opacity: 0 },
-                             { opacity: 1, duration: WHY_FADE * 0.6, ease: "none" },
-                             enter + WHY_FADE * 0.5);
-          whyTL.fromTo(s.copy, { x: st.tx * dx, y: st.ty * dy },
-                               { x: 0, y: 0, duration: WHY_FADE + 2 }, enter);
-
-          if (!last) {
-            /* Sequential handoff, not a dissolve: the outgoing scene is fully
-               gone at the instant the incoming one starts. Fading both at once
-               over the same window left two headlines stacked at half opacity
-               in the same spot, which is unreadable. */
-            whyTL.to(s.el,   { opacity: 0, duration: WHY_FADE * 0.5, ease: "none" }, exit);
-            whyTL.to(s.copy, { x: st.tx * dx * -0.35, y: -dy * 0.6,
-                               duration: WHY_FADE }, exit);
+          if (n < 6) {
+            tl.to(el, { opacity: 0, duration: WY_EXIT * 0.8, ease: "none" }, exit);
+            tl.to(el, { y: -dy, duration: WY_EXIT }, exit);
           }
         }
 
-        /* ---- the rail: one tween across the whole run of benefits.
-               It runs down the left gutter on wide screens and along the
-               bottom on phones, so the axis changes with the breakpoint. ---- */
         if (whyFill) {
-          var railDur = WHY_TOTAL - WHY_T0;
-          gsap.set(whyFill, { transformOrigin: c.phone ? "left center" : "top center" });
-          whyTL.fromTo(whyFill,
-            c.phone ? { scaleX: 0 } : { scaleY: 0 },
-            c.phone ? { scaleX: 1, duration: railDur, ease: "none" }
-                    : { scaleY: 1, duration: railDur, ease: "none" },
-            WHY_T0);
+          gsap.set(whyFill, { transformOrigin: "left center" });
+          tl.fromTo(whyFill, { scaleX: 0 },
+            { scaleX: 1, duration: WY_TOTAL, ease: "none" }, 0);
         }
 
-        var whyLive = -1;
+        var live = -1;
         function whyPaint(self) {
-          var t = (self ? self.progress : 0) * WHY_TOTAL;
-          var idx = t < WHY_T0 - WHY_FADE / 2
-            ? 0
-            : Math.min(6, Math.max(1, Math.floor((t - WHY_T0 - WHY_FADE / 2) / WHY_SLOT) + 1));
-          if (idx === whyLive) return;
-          whyLive = idx;
-          if (whyNum) whyNum.textContent = idx ? ("0" + idx) : "01";
+          var dur = (self && self.animation) ? self.animation.duration() : WY_TOTAL;
+          var t = (self ? self.progress : 0) * dur;
+          var idx = Math.min(6, Math.max(1, Math.floor(t / WY_SLOT) + 1));
+          if (idx === live) return;
+          live = idx;
+          if (whyNum) whyNum.textContent = "0" + idx;
         }
-        whyPaint(whyTL.scrollTrigger);
+        whyPaint(tl.scrollTrigger);
 
-        return function () {        // matchMedia cleanup on breakpoint change
-          whyTL.scrollTrigger && whyTL.scrollTrigger.kill();
-          whyTL.kill();
-          var all = [whyIntro, introInner, whyBar, whyFill];
-          for (var k = 1; k <= 6; k++) {
-            all.push(whyScenes[k].el, whyScenes[k].copy, whyScenes[k].media, whyScenes[k].img);
-          }
-          gsap.set(all, { clearProps: "all" });
+        return function () {
+          root.classList.remove("why-cine-on");
+          tl.scrollTrigger && tl.scrollTrigger.kill();
+          tl.kill();
+          var all = [whyBar, whyFill];
+          for (var k = 1; k <= 6; k++) { all.push(whyScenes[k]); }
+          gsap.set(all.filter(Boolean), { clearProps: "all" });
         };
       });
 
+
     } catch (err) {
-      // never strand the page mid-build: drop back to the stacked layout
-      document.documentElement.classList.remove("why-cine-on");
-      if (window.console) console.warn("Cinematic why-us disabled:", err);
+      // never strand the section mid-build: drop back to plain flow
+      root.classList.remove("why-cine-on");
+      if (window.console) console.warn("Why us sequence disabled:", err);
     }
   }
 
@@ -4098,362 +4430,74 @@ document.documentElement.classList.remove("no-js");
 </script>
 <script defer>
 /* =====================================================================
-   CINEMATIC PRICING - one scrubbed master timeline, five scenes.
+   PRICING and EMERGENCY - an entrance, not a scroll story.
 
-   Reuses the GSAP and ScrollTrigger already loaded for the hero. No extra
-   library, and its own timeline and ScrollTrigger so the four pinned
-   sections never share state.
+   Both used to be pinned sequences. Neither earned it: a price table and
+   an emergency notice both want to be read at whatever speed the visitor
+   chooses. They now sit in ordinary document flow, and this is the only
+   thing left, shared between them rather than two timelines apiece.
 
-   Progressive enhancement, same contract as the other three: .price-cine-on
-   is added HERE, and only once the timeline has been built without
-   throwing. No JS, no GSAP or reduced motion leaves the whole price table,
-   the payment terms and both calls to action in plain readable flow.
+   scrub is true, so nothing moves unless the wheel does, and each trigger
+   kills itself once past and writes the finished state in place, so
+   scrolling back up cannot undo a reveal.
    ===================================================================== */
 (function () {
   "use strict";
 
-  var prRoot = document.getElementById("pricing");
-  if (!prRoot || !prRoot.classList.contains("pricing-cinematic")) return;
-
-  var prStage = prRoot.querySelector(".pricing-cinematic-stage");
-  var prIntro = prRoot.querySelector('[data-price-scene="0"]');
-  var prBar   = prRoot.querySelector(".pricing-cinematic-progress");
-  var prNum   = prRoot.querySelector(".pricing-cinematic-progress-num");
-  var prFill  = prRoot.querySelector(".pricing-cinematic-rule i");
-
-  var prScenes = [];
-  for (var pi = 1; pi <= 4; pi++) {
-    var pel = prRoot.querySelector('[data-price-scene="' + pi + '"]');
-    if (!pel) return;                     // markup incomplete: leave plain flow
-    prScenes[pi] = { el: pel, inner: pel.querySelector(".pricing-cinematic-inner") };
-  }
-  if (!prStage || !prIntro) return;
-
-  /* Rows of the price table get a small stagger of their own, so the list
-     assembles rather than appearing as one slab. */
-  var prRows = prRoot.querySelectorAll('[data-price-scene="1"] table.price tr');
-
-  /* No two scenes arrive the same way: signs are multipliers on the
-     responsive travel below.  tx = from the side, ty = from below/above,
-     ts = a scale to settle out of. */
-  var PR_STYLE = [
-    null,
-    { tx:  0, ty:  1, ts: 1     },   // 01 the table rises
-    { tx: -1, ty:  0, ts: 1     },   // 02 payment enters from the left
-    { tx:  1, ty:  0, ts: 1     },   // 03 transparency from the right
-    { tx:  0, ty: 0.5, ts: 0.985 }   // 04 the close settles
+  var JOBS = [
+    { sec: "pricing",             items: ".pricing-scene",   cls: "price-on" },
+    { sec: "emergency-cinematic", items: ".emergency-scene", cls: "emg-on"   }
   ];
 
-  var PR_T0 = 14, PR_SLOT = 16, PR_FADE = 6;
-  var PR_TOTAL = PR_T0 + 4 * PR_SLOT + PR_FADE;                     // 84
-
-  function prStart() {
+  function start() {
     if (!window.gsap || !window.ScrollTrigger) return;
     var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq && mq.matches) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    document.documentElement.classList.add("price-cine-on");
+    var root = document.documentElement;
 
-    try {
-      var prMM = gsap.matchMedia();
-
-      prMM.add({
-        desktop: "(min-width:1025px)",
-        tablet:  "(min-width:761px) and (max-width:1024px)",
-        phone:   "(max-width:760px)"
-      }, function (ctx) {
-        var c = ctx.conditions;
-        var dx = c.desktop ? 52 : c.tablet ? 38 : 20;   // px travel, x
-        var dy = c.desktop ? 32 : c.tablet ? 26 : 18;   // px travel, y
-
-        var prTL = gsap.timeline({
-          defaults: { ease: "power2.out" },
-          scrollTrigger: {
-            trigger: prRoot,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: true,               // the real scroll position, with no easing
-            pin: prStage,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: prPaint
+    JOBS.forEach(function (job) {
+      var sec = document.getElementById(job.sec);
+      if (!sec) return;
+      var items = [].slice.call(sec.querySelectorAll(job.items));
+      if (!items.length) return;
+      root.classList.add(job.cls);
+      try {
+        items.forEach(function (el) {
+          var done = false;
+          function lock(self) {
+            if (done) return;
+            done = true;
+            self.kill();
+            gsap.set(el, { opacity: 1, clearProps: "transform" });
           }
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: el, start: "top 90%", end: "top 66%", scrub: true,
+              invalidateOnRefresh: true,
+              onUpdate: function (self) { if (self.progress >= 1) lock(self); },
+              onLeave: lock,
+              onRefresh: function (self) { if (self.progress >= 1) lock(self); }
+            },
+            defaults: { ease: "power2.out" }
+          }).fromTo(el, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, 0);
         });
-
-        /* ---- INTRO · the section's own heading, opening the sequence ----
-           Opaque throughout: the stage is already partly in view before the
-           pin engages, so a scene fading up from nothing would show as an
-           empty frame rising. The compression settling out carries it. */
-        var introInner = prIntro.querySelector(".pricing-cinematic-inner");
-        gsap.set(prIntro, { opacity: 1 });
-        prTL.fromTo(introInner, { y: dy, scale: 0.985, letterSpacing: "-0.04em" },
-                                { y: 0, scale: 1, letterSpacing: "-0.03em",
-                                  duration: 9, ease: "none" }, 0);
-        prTL.to(prIntro, { opacity: 0, duration: 5, ease: "none" }, 9);
-        prTL.to(introInner, { y: -dy, duration: 5 }, 9);
-        if (prBar) prTL.fromTo(prBar, { opacity: 0 }, { opacity: 1, duration: 5 }, 9);
-
-        for (var n = 1; n <= 4; n++) {
-          var s  = prScenes[n];
-          var st = PR_STYLE[n];
-          var enter = PR_T0 + (n - 1) * PR_SLOT;
-          var exit  = PR_T0 + n * PR_SLOT;
-          var last  = (n === 4);
-
-          prTL.fromTo(s.el, { opacity: 0 },
-                            { opacity: 1, duration: PR_FADE * 0.6, ease: "none" },
-                            enter + PR_FADE * 0.5);
-          prTL.fromTo(s.inner,
-            { x: st.tx * dx, y: st.ty * dy, scale: st.ts },
-            { x: 0, y: 0, scale: 1, duration: PR_FADE + 2 }, enter);
-
-          /* the price rows assemble one after another */
-          if (n === 1 && prRows.length) {
-            prTL.fromTo(prRows, { opacity: 0, y: dy * 0.5 },
-              { opacity: 1, y: 0, duration: PR_FADE,
-                stagger: 1.1, ease: "power2.out" }, enter + 1);
-          }
-
-          if (!last) {
-            /* Sequential handoff, not a dissolve: the outgoing scene is fully
-               gone at the instant the incoming one starts. Fading both at once
-               over the same window left two headlines stacked at half opacity
-               in the same spot, which is unreadable. */
-            prTL.to(s.el,    { opacity: 0, duration: PR_FADE * 0.5, ease: "none" }, exit);
-            prTL.to(s.inner, { x: st.tx * dx * -0.3, y: -dy * 0.6,
-                               duration: PR_FADE }, exit);
-          }
-        }
-
-        /* ---- the hairline, drawn across the run of scenes ---- */
-        if (prFill) {
-          gsap.set(prFill, { transformOrigin: "left center" });
-          prTL.fromTo(prFill, { scaleX: 0 },
-            { scaleX: 1, duration: PR_TOTAL - PR_T0, ease: "none" }, PR_T0);
-        }
-
-        var prLive = -1;
-        function prPaint(self) {
-          var t = (self ? self.progress : 0) * PR_TOTAL;
-          var idx = t < PR_T0 - PR_FADE / 2
-            ? 0
-            : Math.min(4, Math.max(1, Math.floor((t - PR_T0 - PR_FADE / 2) / PR_SLOT) + 1));
-          if (idx === prLive) return;
-          prLive = idx;
-          for (var k = 1; k <= 4; k++) {
-            prScenes[k].el.classList.toggle("is-live", k === idx);
-          }
-          if (prNum) prNum.textContent = idx ? ("0" + idx) : "01";
-        }
-        prPaint(prTL.scrollTrigger);
-
-        return function () {        // matchMedia cleanup on breakpoint change
-          prTL.scrollTrigger && prTL.scrollTrigger.kill();
-          prTL.kill();
-          var all = [prIntro, introInner, prBar, prFill];
-          for (var k = 1; k <= 4; k++) { all.push(prScenes[k].el, prScenes[k].inner); }
-          for (var j = 0; j < prRows.length; j++) { all.push(prRows[j]); }
-          gsap.set(all, { clearProps: "all" });
-          for (var m = 1; m <= 4; m++) { prScenes[m].el.classList.remove("is-live"); }
-        };
-      });
-
-    } catch (err) {
-      // never strand the page mid-build: drop back to the stacked layout
-      document.documentElement.classList.remove("price-cine-on");
-      if (window.console) console.warn("Cinematic pricing disabled:", err);
-    }
+      } catch (err) {
+        root.classList.remove(job.cls);
+        if (window.console) console.warn("Reveal disabled for " + job.sec + ":", err);
+      }
+    });
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", prStart);
+    document.addEventListener("DOMContentLoaded", start);
   } else {
-    prStart();
+    start();
   }
 })();
 </script>
 <script defer>
-/* =====================================================================
-   CINEMATIC EMERGENCY - one scrubbed master timeline, four scenes.
-
-   Reuses the GSAP and ScrollTrigger already loaded for the hero. No extra
-   library, and its own timeline and ScrollTrigger so the five pinned
-   sections never share state.
-
-   Progressive enhancement, same contract as the other four: .emg-cine-on
-   is added HERE, and only once the timeline has been built without
-   throwing. No JS, no GSAP or reduced motion leaves the conditions, the
-   hours, the phone number and both links in plain readable flow.
-   ===================================================================== */
-(function () {
-  "use strict";
-
-  var emRoot = document.getElementById("emergency-cinematic");
-  if (!emRoot) return;
-
-  var emStage = emRoot.querySelector(".emergency-cinematic-stage");
-  var emMedia = emRoot.querySelector(".emergency-cinematic-media img");
-  var emVeil  = emRoot.querySelector(".emergency-cinematic-veil");
-  var emBar   = emRoot.querySelector(".emergency-cinematic-progress");
-  var emNum   = emRoot.querySelector(".emergency-cinematic-progress-num");
-  var emFill  = emRoot.querySelector(".emergency-cinematic-rule i");
-  var emItems = emRoot.querySelectorAll('[data-emg-scene="2"] .emergency-list li');
-
-  var emScenes = [];
-  for (var ei = 1; ei <= 4; ei++) {
-    var eel = emRoot.querySelector('[data-emg-scene="' + ei + '"]');
-    if (!eel) return;                     // markup incomplete: leave plain flow
-    emScenes[ei] = { el: eel, inner: eel.querySelector(".emergency-cinematic-inner") };
-  }
-  if (!emStage) return;
-
-  /* Four scenes, each arriving differently. Scene 1 is already opaque when
-     the stage scrolls into view, so the frame is never blank before the pin
-     engages. */
-  var EM_STYLE = [
-    null,
-    { tx:  0,   ty: 0.8, ts: 1     },   // 01 the moment, rises
-    { tx: -1,   ty: 0,   ts: 1     },   // 02 conditions, from the left
-    { tx:  0.7, ty: 0,   ts: 1     },   // 03 reassurance, from the right
-    { tx:  0,   ty: 0.6, ts: 0.985 }    // 04 the action, settles
-  ];
-
-  var EM_SLOT = 16, EM_FADE = 6;
-  var EM_TOTAL = 4 * EM_SLOT + EM_FADE;                      // 70
-
-  function emStart() {
-    if (!window.gsap || !window.ScrollTrigger) return;
-    var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq && mq.matches) return;
-
-    gsap.registerPlugin(ScrollTrigger);
-    document.documentElement.classList.add("emg-cine-on");
-
-    try {
-      var emMM = gsap.matchMedia();
-
-      emMM.add({
-        desktop: "(min-width:1025px)",
-        tablet:  "(min-width:761px) and (max-width:1024px)",
-        phone:   "(max-width:760px)"
-      }, function (ctx) {
-        var c = ctx.conditions;
-        var dx = c.desktop ? 48 : c.tablet ? 36 : 20;
-        var dy = c.desktop ? 30 : c.tablet ? 24 : 18;
-
-        var emTL = gsap.timeline({
-          defaults: { ease: "power2.out" },
-          scrollTrigger: {
-            trigger: emRoot,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: true,               // the real scroll position, with no easing
-            pin: emStage,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onUpdate: emPaint
-          }
-        });
-
-        /* ---- the photograph: one slow settle, with a little parallax ---- */
-        if (emMedia) {
-          emTL.fromTo(emMedia, { scale: 1.08, yPercent: 0 },
-                               { scale: 1, yPercent: c.phone ? -1 : -2,
-                                 duration: EM_TOTAL, ease: "none" }, 0);
-        }
-        /* the veil deepens as the section turns from urgency to reassurance,
-           which is what moves the later scenes onto clean paper */
-        if (emVeil) {
-          /* Reaches full strength by the time the conditions are up, so the
-             list reads on near-clean paper instead of across a face. Measured:
-             --ink clears 4.5:1 from a 0.6 veil upward on this photograph. */
-          emTL.fromTo(emVeil, { opacity: 0.66 },
-                              { opacity: 0.95, duration: EM_SLOT * 0.75,
-                                ease: "none" }, EM_SLOT * 0.5);
-        }
-        if (emBar) emTL.fromTo(emBar, { opacity: 0 },
-                                      { opacity: 1, duration: 5 }, 6);
-
-        for (var n = 1; n <= 4; n++) {
-          var s     = emScenes[n];
-          var st    = EM_STYLE[n];
-          var enter = (n - 1) * EM_SLOT;
-          var exit  = n * EM_SLOT;
-          var last  = (n === 4);
-
-          if (n === 1) {
-            // opaque from the first frame, so nothing blank rises into view
-            gsap.set(s.el, { opacity: 1 });
-            emTL.fromTo(s.inner, { y: dy * st.ty, scale: st.ts },
-                                 { y: 0, scale: 1, duration: 9, ease: "none" }, 0);
-          } else {
-            /* Sequential handoff, not a dissolve: the outgoing scene is fully
-               gone at the instant the incoming one starts. */
-            emTL.fromTo(s.el, { opacity: 0 },
-              { opacity: 1, duration: EM_FADE * 0.6, ease: "none" },
-              enter + EM_FADE * 0.5);
-            emTL.fromTo(s.inner, { x: st.tx * dx, y: st.ty * dy, scale: st.ts },
-                                 { x: 0, y: 0, scale: 1, duration: EM_FADE + 2 }, enter);
-          }
-
-          /* the conditions arrive one line at a time */
-          if (n === 2 && emItems.length) {
-            emTL.fromTo(emItems, { opacity: 0, y: dy * 0.6 },
-              { opacity: 1, y: 0, duration: EM_FADE,
-                stagger: 1.2, ease: "power2.out" }, enter + EM_FADE * 0.6);
-          }
-
-          if (!last) {
-            emTL.to(s.el,    { opacity: 0, duration: EM_FADE * 0.5, ease: "none" }, exit);
-            emTL.to(s.inner, { x: st.tx * dx * -0.3, y: -dy * 0.6,
-                               duration: EM_FADE }, exit);
-          }
-        }
-
-        if (emFill) {
-          gsap.set(emFill, { transformOrigin: "left center" });
-          emTL.fromTo(emFill, { scaleX: 0 },
-            { scaleX: 1, duration: EM_TOTAL, ease: "none" }, 0);
-        }
-
-        var emLive = -1;
-        function emPaint(self) {
-          var t = (self ? self.progress : 0) * EM_TOTAL;
-          var idx = Math.min(4, Math.max(1, Math.floor((t - EM_FADE / 2) / EM_SLOT) + 1));
-          if (idx === emLive) return;
-          emLive = idx;
-          for (var k = 1; k <= 4; k++) {
-            emScenes[k].el.classList.toggle("is-live", k === idx);
-          }
-          if (emNum) emNum.textContent = "0" + idx;
-        }
-        emPaint(emTL.scrollTrigger);
-
-        return function () {        // matchMedia cleanup on breakpoint change
-          emTL.scrollTrigger && emTL.scrollTrigger.kill();
-          emTL.kill();
-          var all = [emMedia, emVeil, emBar, emFill];
-          for (var k = 1; k <= 4; k++) { all.push(emScenes[k].el, emScenes[k].inner); }
-          for (var j = 0; j < emItems.length; j++) { all.push(emItems[j]); }
-          gsap.set(all.filter(Boolean), { clearProps: "all" });
-          for (var m = 1; m <= 4; m++) { emScenes[m].el.classList.remove("is-live"); }
-        };
-      });
-
-    } catch (err) {
-      // never strand the page mid-build: drop back to the stacked layout
-      document.documentElement.classList.remove("emg-cine-on");
-      if (window.console) console.warn("Cinematic emergency disabled:", err);
-    }
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", emStart);
-  } else {
-    emStart();
-  }
-})();
 </script>
 <script defer>
 /* =====================================================================
@@ -4840,7 +4884,7 @@ document.documentElement.classList.remove("no-js");
    cinematic timelines. It only ever toggles two classes and two
    aria-expanded attributes on elements inside <header class="site">.
 
-   One control set drives both layouts. Above 880px .navitem.open is a
+   One control set drives both layouts. Above 1025px .navitem.open is a
    dropdown, below it the same class is an inline expander; the script
    does not care which, so there is no breakpoint branching except for
    hover, which is a desktop-only addition ON TOP of click, never a
@@ -4863,7 +4907,7 @@ document.documentElement.classList.remove("no-js");
   if (!toggle || !item || !btn || !menu || !nav) return;
 
   var links = [].slice.call(menu.querySelectorAll("a"));
-  var wide  = window.matchMedia("(min-width:880px)");
+  var wide  = window.matchMedia("(min-width:1025px)");
 
   function setMenu(open) {
     item.classList.toggle("open", open);
@@ -5133,6 +5177,199 @@ document.documentElement.classList.remove("no-js");
   } else {
     tcStart();
   }
+})();
+</script>
+
+<div class="ba-lightbox" id="ba-lightbox" role="dialog" aria-modal="true"
+     aria-label="Enlarged case photograph" hidden>
+  <button class="ba-lightbox-close" id="ba-lightbox-close" type="button" aria-label="Close the enlarged photograph">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+  </button>
+  <figure class="ba-lightbox-fig">
+    <img id="ba-lightbox-img" src="" alt="">
+    <figcaption class="ba-lightbox-cap" id="ba-lightbox-cap"></figcaption>
+  </figure>
+</div>
+
+<script>
+/* =====================================================================
+   BEFORE & AFTER lightbox.
+
+   No library and no carousel: one dialog, reused. Escape and the backdrop
+   both close it, the background cannot scroll while it is open, and focus
+   goes to the close button and comes back to the photograph that was
+   clicked. Tab is kept inside, which is easy here because the dialog has
+   exactly one focusable control.
+   ===================================================================== */
+(function () {
+  "use strict";
+
+  var box   = document.getElementById("ba-lightbox");
+  var img   = document.getElementById("ba-lightbox-img");
+  var cap   = document.getElementById("ba-lightbox-cap");
+  var shut  = document.getElementById("ba-lightbox-close");
+  var shots = [].slice.call(document.querySelectorAll(".ba-shot"));
+  if (!box || !img || !cap || !shut || !shots.length) return;
+
+  var opener = null;
+
+  function lockScroll(on) {
+    if (on) {
+      var pad = window.innerWidth - document.documentElement.clientWidth;
+      document.body.dataset.baPad = document.body.style.paddingRight || "";
+      document.body.style.overflow = "hidden";
+      if (pad > 0) document.body.style.paddingRight = pad + "px";
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.paddingRight = document.body.dataset.baPad || "";
+      delete document.body.dataset.baPad;
+    }
+  }
+
+  function open(btn) {
+    opener = btn;
+    var full = btn.getAttribute("data-full");
+    var text = btn.getAttribute("data-cap") || "";
+    if (!full) return;
+    img.setAttribute("src", full);
+    img.setAttribute("alt", text);
+    cap.textContent = text;
+    box.hidden = false;
+    lockScroll(true);
+    void box.offsetHeight;          /* the class must land on a painted node */
+    box.classList.add("is-open");
+    shut.focus();
+  }
+
+  function close() {
+    if (box.hidden) return;
+    box.classList.remove("is-open");
+    box.hidden = true;
+    lockScroll(false);
+    img.setAttribute("src", "");
+    if (opener) { opener.focus(); opener = null; }
+  }
+
+  shots.forEach(function (b) {
+    b.addEventListener("click", function () { open(b); });
+  });
+  shut.addEventListener("click", close);
+  box.addEventListener("click", function (e) {
+    if (e.target === box) close();          /* the backdrop, not the picture */
+  });
+  document.addEventListener("keydown", function (e) {
+    if (box.hidden) return;
+    if (e.key === "Escape" || e.key === "Esc") { e.preventDefault(); close(); }
+    else if (e.key === "Tab") { e.preventDefault(); shut.focus(); }
+  });
+})();
+</script>
+<script defer>
+/* =====================================================================
+   The same short scroll reveal the rest of the page uses: scrub:true, so
+   it is the scroll bar and freezes the instant the wheel does, and each
+   trigger kills itself once past, writing the finished state in place.
+   No pin, no runway.
+   ===================================================================== */
+(function () {
+  "use strict";
+
+  var sec = document.getElementById("before-after");
+  if (!sec) return;
+  var intro = sec.querySelector(".ba-intro");
+  var cases = [].slice.call(sec.querySelectorAll(".ba-case"));
+  if (!intro || !cases.length) return;
+
+  function baStart() {
+    if (!window.gsap || !window.ScrollTrigger) return;
+    var mq = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq && mq.matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    var root = document.documentElement;
+    root.classList.add("ba-on");
+
+    try {
+      function build(trigger, targets, stagger) {
+        var done = false;
+        function lock(self) {
+          if (done) return;
+          done = true;
+          self.kill();
+          gsap.set(targets, { opacity: 1, clearProps: "transform" });
+        }
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: trigger, start: "top 90%", end: "top 66%", scrub: true,
+            invalidateOnRefresh: true,
+            onUpdate: function (self) { if (self.progress >= 1) lock(self); },
+            onLeave: lock,
+            onRefresh: function (self) { if (self.progress >= 1) lock(self); }
+          },
+          defaults: { ease: "power2.out" }
+        }).fromTo(targets, { opacity: 0, y: 18 },
+                           { opacity: 1, y: 0, duration: 1, stagger: stagger }, 0);
+      }
+
+      build(intro, [].slice.call(intro.children), 0.16);
+      /* pairs of cases share a trigger, so the two in a row arrive together
+         with only a breath between them */
+      for (var i = 0; i < cases.length; i += 2) {
+        var group = cases.slice(i, i + 2);
+        build(group[0], group, 0.12);
+      }
+
+    } catch (err) {
+      root.classList.remove("ba-on");
+      if (window.console) console.warn("Gallery reveal disabled:", err);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", baStart);
+  } else {
+    baStart();
+  }
+})();
+</script>
+
+<script defer>
+/* =====================================================================
+   A scrollable region has to be reachable without a pointer, so on the
+   widths where these rows actually scroll they become focusable and are
+   announced for what they are. Above that width they are ordinary grids
+   and gain nothing, so the attributes are taken back off.
+   ===================================================================== */
+(function () {
+  "use strict";
+  var TRACKS = [
+    [".ba-grid",        "Before and after cases, scroll sideways"],
+    [".tech-grid",      "Technology, scroll sideways"],
+    [".pricing-track",  "Pricing details, scroll sideways"],
+    [".providers-grid", "Providers, scroll sideways"],
+    [".reviews-list",   "Patient reviews, scroll sideways"]
+  ];
+  var mq = window.matchMedia && window.matchMedia("(max-width:760px)");
+  if (!mq) return;
+
+  function sync() {
+    TRACKS.forEach(function (t) {
+      var el = document.querySelector(t[0]);
+      if (!el) return;
+      if (mq.matches) {
+        el.setAttribute("tabindex", "0");
+        el.setAttribute("role", "group");
+        el.setAttribute("aria-label", t[1]);
+      } else {
+        el.removeAttribute("tabindex");
+        el.removeAttribute("role");
+        el.removeAttribute("aria-label");
+      }
+    });
+  }
+  sync();
+  if (mq.addEventListener) mq.addEventListener("change", sync);
+  else if (mq.addListener) mq.addListener(sync);
 })();
 </script>
 </body>
