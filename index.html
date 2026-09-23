@@ -116,7 +116,15 @@
 
   /* ---------- Base ---------- */
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth; scroll-padding-top:calc(88px + env(safe-area-inset-top,0px)); -webkit-text-size-adjust:100%}
+  /* overflow-x is clip, not hidden: hidden would make the root a scroll
+     container and take the sticky header and the three pinned sections
+     with it. This is a guard against anything ever being wider than the
+     screen again, not the fix; the header rule below is the fix. */
+  html{
+    scroll-behavior:smooth; overflow-x:clip;
+    scroll-padding-top:calc(88px + env(safe-area-inset-top,0px));
+    -webkit-text-size-adjust:100%;
+  }
   body{
     margin:0; background:var(--paper); color:var(--ink);
     font-family:"Lato",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
@@ -281,7 +289,20 @@
     box-shadow:0 2px 4px rgba(15,42,51,.12), 0 12px 24px -10px color-mix(in srgb,var(--accent) 80%,transparent);
   }
   .bar .book:active{transform:translateY(0)}
-  @media(max-width:420px){ .bar .call{display:none} }
+  /* The number waits until the bar can actually hold it. Measured: mark,
+     number, button and toggle need 495px between them, so bringing the
+     number back at 421px left the bar 74px wider than the screen, and a
+     bar wider than the screen makes the whole page draggable sideways with
+     a strip of background down the right of everything below it. */
+  @media(max-width:519px){ .bar .call{display:none} }
+  /* the last 10px the narrowest phones are short, taken off the mark and
+     the button rather than off the gutters */
+  @media(max-width:399px){
+    .bar{gap:10px}
+    .bar .actions{gap:8px}
+    .brand img{height:36px}
+    .bar .book{padding:9px 13px; font-size:.88rem}
+  }
 
   /* ---------- Hero: light, airy, no imagery ---------- */
   .hero{
@@ -663,13 +684,7 @@
   }
   .footer-mark img{display:block; width:100%; height:auto}
   footer.site .wrap{position:relative; z-index:1}
-  @media (max-width:760px){
-    /* centred on a phone, where there is no spare corner to sit in */
-    .footer-mark{
-      left:50%; right:auto; transform:translateX(-50%);
-      bottom:clamp(54px,9vw,86px); width:min(78vw,400px); opacity:.07;
-    }
-  }
+
   @media (prefers-contrast:more){
     .footer-mark{display:none}
   }
@@ -711,15 +726,43 @@
     margin-top:clamp(18px,2.4vw,26px); padding-top:20px; font-size:.86rem; opacity:.68; line-height:1.6;
   }
 
-  /* On phones the stacked footer links were ~20px tall, under the 44px
-     comfortable-tap size. Padding gives each one a full-height target
-     without changing how the list looks. */
+  /* Phones. Two things here.
+
+     The two link lists are short, so they sit side by side under the
+     address block instead of running down the screen one after the other.
+     Stacked, every row used the left third of the screen and left the
+     other two thirds empty, and the footer came to 894px on an 844px
+     screen by itself.
+
+     And the links were ~20px tall, under the 44px comfortable-tap size,
+     so padding gives each one a full-height target. */
   @media(max-width:760px){
-    footer.site .col a{
+    footer.site .wrap{
+      display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:clamp(20px,5vw,30px) clamp(16px,4vw,24px);
+      justify-content:stretch;
+    }
+    footer.site .col{min-width:0}
+    footer.site .col:first-child{grid-column:1 / -1}   /* the address, full width */
+    footer.site .fine{grid-column:1 / -1}
+    /* :not(.s) so none of this reaches the three social buttons, which are
+       42px squares and are sized by their own rule at the same specificity */
+    footer.site .col a:not(.s){
       min-height:44px; display:flex; align-items:center;
       padding:10px 0; margin:0;
+      /* the base rule is fit-content, which keeps a long label like
+         "Request an appointment" on one line and lets it run past its
+         column; here it takes the column and wraps inside it */
+      width:auto;
     }
     footer.site .col h4{margin-bottom:6px}
+    .social{margin-top:12px}
+    /* centred and fully inside: bled off either edge it reads as a mistake
+       rather than as a watermark */
+    .footer-mark{
+      left:50%; right:auto; transform:translateX(-50%);
+      bottom:clamp(40px,7vw,66px); width:min(72vw,360px); opacity:.07;
+    }
   }
 
   /* ---------- Sticky mobile call bar ---------- */
@@ -2131,14 +2174,25 @@
      spans the gutters. The call bar below is 73px of fixed footer, so the
      panel is capped well short of it and stays tappable. */
   @media(max-width:760px){
-    .kriss-assistant, .kriss-launcher{--kriss-top:84px}
+    /* On a phone it floats at the bottom right, above the fixed call bar,
+       rather than under the header where it sat over whatever was being
+       read. 73px of call bar plus 14px of air. */
+    .kriss-assistant, .kriss-launcher{
+      --kriss-top:auto;
+      --kriss-bottom:calc(87px + env(safe-area-inset-bottom,0px));
+      top:auto; bottom:var(--kriss-bottom);
+    }
     .kriss-launcher{--kriss-side:16px; width:62px; height:62px}
     .kriss-launcher img{width:48px}
     .kriss-assistant{
       left:12px; right:12px; width:auto; padding:14px;
       height:auto;
-      max-height:calc(100dvh - var(--kriss-top) - 98px - env(safe-area-inset-bottom,0px));
+      /* it grows upward from the launcher now, so it opens from that corner */
+      transform-origin:100% 100%;
+      transform:translateY(8px) scale(.96);
+      max-height:calc(100dvh - 70px - var(--kriss-bottom) - 16px);
     }
+    .kriss-assistant.is-open{transform:none}
     .kriss-logo{width:92px; height:92px; margin:2px auto 12px}
     .kriss-logo img{width:68px}
     .kriss-panel{padding:18px 16px 13px}
@@ -2875,7 +2929,7 @@ document.documentElement.classList.remove("no-js");
           <a class="cinematic-service-link" href="idea-dental-braces.html">Learn more →</a>
         </div>
         <div class="cinematic-service-image">
-          <picture><source srcset="braces-clinic.webp" type="image/webp"><img src="braces-clinic.jpg" alt="Inside the Idea Dental office" width="800" height="533" loading="lazy" decoding="async"></picture>
+          <picture><source srcset="svc-braces.webp" type="image/webp"><img src="svc-braces.jpg" alt="A young patient smiling, wearing metal braces" width="800" height="533" loading="lazy" decoding="async"></picture>
         </div>
       </div>
     </article>
