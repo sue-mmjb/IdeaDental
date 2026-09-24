@@ -834,12 +834,12 @@
 
      Two states:
        (a) DEFAULT - no JS, GSAP failed to load, or reduced motion.
-           Plain document flow. The hero looks exactly as it did, and
-           scenes 2-5 read as ordinary editorial blocks below it. Nothing
-           is hidden, so no content can ever be stranded invisible.
+           Plain document flow. The hero looks exactly as it did, and the
+           closing frame reads as an ordinary editorial block below it.
+           Nothing is hidden, so no content can ever be stranded invisible.
        (b) .cine-on - added by script ONLY after the GSAP timeline is
            successfully built. Stage becomes a 100vh frame that GSAP pins,
-           and scenes 2-5 become overlays on it.
+           and the closing frame becomes an overlay on it.
      =================================================================== */
 
   /* ---- (a) default / fallback ---- */
@@ -882,7 +882,9 @@
      path and the no-GSAP fallback all keep smooth anchor scrolling. */
   html.cine-on, html.svc-cine-on, html.why-cine-on,
   html.prov-on, html.rev-on{scroll-behavior:auto}
-  .cine-on .cinematic-hero{height:400vh}
+  /* Two screens of scroll at every width: one to hold the headline, one
+     to bring in the close. The stage is pinned for the first of them. */
+  .cine-on .cinematic-hero{height:200vh}
   .cine-on .cinematic-stage{
     position:relative; height:100vh; overflow:hidden;
     /* GSAP does the pinning; no CSS sticky, so the two cannot fight */
@@ -918,13 +920,9 @@
   .cine-on .cinematic-line{max-width:17ch}
   .cine-on .cinematic-support{max-width:46ch}
 
-  /* tablet: same story, shorter runway */
-  @media (max-width:1024px){
-    .cine-on .cinematic-hero{height:340vh}
-  }
-  /* phones: keep the storytelling, cut the runway and the travel */
+  /* the runway is the same two screens on every size now, so only the
+     measure changes on a phone */
   @media (max-width:760px){
-    .cine-on .cinematic-hero{height:300vh}
     .cine-on .cinematic-line{max-width:none}
     .cine-on .cinematic-support{max-width:none}
   }
@@ -2623,36 +2621,11 @@ document.documentElement.classList.remove("no-js");
       </div>
     </section>
 
-    <!-- wash that deepens under scenes 2-5 so the statements stay legible
-         over the moving footage; opacity is driven by the timeline -->
+    <!-- wash that deepens as the closing frame takes over, so it stays
+         legible over the moving footage; opacity is driven by the timeline -->
     <div class="cinematic-overlay" aria-hidden="true"></div>
 
-    <!-- SCENE 2 · THE PROBLEM -->
-    <div class="cinematic-copy" data-cine-scene="2">
-      <div class="cinematic-inner">
-        <p class="cinematic-kicker">When a tooth is missing</p>
-        <p class="cinematic-line">Your smile should not have to adapt.</p>
-      </div>
-    </div>
-
-    <!-- SCENE 3 · THE SOLUTION -->
-    <div class="cinematic-copy" data-cine-scene="3">
-      <div class="cinematic-inner">
-        <p class="cinematic-kicker">Dental implants</p>
-        <p class="cinematic-line">Replace.<br>Restore.<br>Smile again.</p>
-      </div>
-    </div>
-
-    <!-- SCENE 4 · TRUST -->
-    <div class="cinematic-copy" data-cine-scene="4">
-      <div class="cinematic-inner">
-        <p class="cinematic-kicker">Idea Dental · Houston</p>
-        <p class="cinematic-line">Care designed around you.</p>
-        <p class="cinematic-support">From everyday dentistry to advanced restorative care, our team helps you understand your options and move forward with confidence.</p>
-      </div>
-    </div>
-
-    <!-- SCENE 5 · FINAL CTA -->
+    <!-- CLOSING FRAME · the second of the hero's two frames -->
     <div class="cinematic-copy" data-cine-scene="5">
       <div class="cinematic-inner">
         <p class="cinematic-line cinematic-line--final">Your smile.<br>Your confidence.<br>Your life.</p>
@@ -3681,14 +3654,14 @@ document.documentElement.classList.remove("no-js");
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script defer>
 /* =====================================================================
-   CINEMATIC HERO - one scrubbed master timeline, five scenes.
+   CINEMATIC HERO - one scrubbed master timeline, two frames.
 
    Progressive enhancement: the .cine-on class that turns the stage into a
    100vh pinned frame is added HERE, and only after the timeline has been
    built without throwing. If GSAP does not load, if JS is off, or if the
    visitor prefers reduced motion, the class is never added and the hero
-   renders in plain flow exactly as it did before - with scenes 2-5 reading
-   as ordinary editorial blocks underneath. Nothing is ever left invisible.
+   renders in plain flow exactly as it did before - with the closing frame
+   reading as an ordinary block underneath. Nothing is ever left invisible.
    ===================================================================== */
 (function () {
   "use strict";
@@ -3699,10 +3672,9 @@ document.documentElement.classList.remove("no-js");
   var stage = hero.querySelector(".cinematic-stage");
   var video = hero.querySelector(".hero-video");
   var copy1 = hero.querySelector(".herocopy");
-  var scene = function (n) { return hero.querySelector('[data-cine-scene="' + n + '"]'); };
-  var s2 = scene(2), s3 = scene(3), s4 = scene(4), s5 = scene(5);
+  var s5 = hero.querySelector('[data-cine-scene="5"]');
   var veil = hero.querySelector(".cinematic-overlay");
-  if (!stage || !copy1 || !s2 || !s3 || !s4 || !s5) return;
+  if (!stage || !copy1 || !s5) return;
 
   function start() {
     // GSAP absent (CDN blocked, offline, CSP) -> leave the static hero alone
@@ -3723,9 +3695,12 @@ document.documentElement.classList.remove("no-js");
         phone:   "(max-width:760px)"
       }, function (ctx) {
         var c = ctx.conditions;
-        // travel and zoom scale down as the screen does
-        var zoom = c.desktop ? 1.18 : c.tablet ? 1.12 : 1.08;  // cinematic push-in
-        var pan  = c.desktop ? 4    : c.tablet ? 3    : 2;     // % horizontal camera move
+        /* Travel and zoom scale down as the screen does, and both are
+           halved against the old five scene version: the runway halved
+           too, and the same push-in over half the scroll is twice as fast
+           across the frame. These keep the drift looking as it looked. */
+        var zoom = c.desktop ? 1.09 : c.tablet ? 1.06 : 1.04;  // cinematic push-in
+        var pan  = c.desktop ? 2    : c.tablet ? 1.5  : 1;     // % horizontal camera move
         var dx   = c.desktop ? 64   : c.tablet ? 44   : 22;    // px text travel, x
         var dy   = c.desktop ? 42   : c.tablet ? 32   : 20;    // px text travel, y
 
@@ -3742,54 +3717,36 @@ document.documentElement.classList.remove("no-js");
           }
         });
 
-        /* ---- the camera: one continuous move under every scene ---------
-           Runs the whole length so the five scenes read as one shot rather
-           than five slides. */
+        /* ---- the camera: one continuous move under both frames ---------
+           Runs the whole length, so the two frames read as one shot rather
+           than as two slides. */
         tl.fromTo(video, { scale: 1, xPercent: 0, yPercent: 0 },
                          { scale: zoom, ease: "none", duration: 100 }, 0);
-        tl.to(video, { xPercent: -pan, ease: "sine.inOut", duration: 34 }, 40);
-        tl.to(video, { yPercent: -pan * 0.6, ease: "sine.inOut", duration: 34 }, 62);
+        tl.to(video, { xPercent: -pan, ease: "sine.inOut", duration: 44 }, 34);
+        tl.to(video, { yPercent: -pan * 0.6, ease: "sine.inOut", duration: 34 }, 60);
 
-        /* the wash deepens once the editorial statements take over, so they
-           stay readable against the moving footage */
-        tl.to(veil, { opacity: 1, ease: "none", duration: 14 }, 16);
-        tl.to(veil, { opacity: 0.55, ease: "none", duration: 10 }, 90);
+        /* the wash deepens as the closing frame takes over, so it stays
+           readable against the moving footage */
+        tl.to(veil, { opacity: 1, ease: "none", duration: 16 }, 34);
 
-        /* ================= SCENE 1 · INTRODUCTION =====================
+        /* ================= FRAME 1 · THE HEADLINE ====================
            The existing headline, supporting line and both CTAs. Holds at
-           rest, then lifts away as the push-in begins. */
-        tl.to(copy1, { opacity: 0, y: -dy, filter: "blur(2px)", duration: 12 }, 14);
+           rest for the first third, then lifts away. */
+        tl.to(copy1, { opacity: 0, y: -dy, filter: "blur(2px)", duration: 16 }, 36);
 
-        /* ================= SCENE 2 · THE PROBLEM =====================
-           "When a tooth is missing" - enters from the left. */
-        tl.fromTo(s2, { opacity: 0, x: -dx },
-                      { opacity: 1, x: 0, duration: 12 }, 22);
-        tl.to(s2, { opacity: 0, x: dx * 0.35, y: -dy * 0.5, duration: 10 }, 40);
-
-        /* ================= SCENE 3 · THE SOLUTION ====================
-           "Dental implants" - enters from the opposite side to Scene 2. */
-        tl.fromTo(s3, { opacity: 0, x: dx },
-                      { opacity: 1, x: 0, duration: 12 }, 46);
-        tl.to(s3, { opacity: 0, x: -dx * 0.35, y: -dy * 0.5, duration: 10 }, 64);
-
-        /* ================= SCENE 4 · TRUST ===========================
-           "Idea Dental · Houston" - rises in from below. */
-        tl.fromTo(s4, { opacity: 0, y: dy },
-                      { opacity: 1, y: 0, duration: 12 }, 70);
-        tl.to(s4, { opacity: 0, y: -dy * 0.6, duration: 8 }, 86);
-
-        /* ================= SCENE 5 · FINAL CTA =======================
-           Settles rather than travels, so the close feels like an arrival. */
+        /* ================= FRAME 2 · THE CLOSE =======================
+           Settles rather than travels, so the close feels like an arrival,
+           and then holds for the rest of the runway. */
         tl.fromTo(s5, { opacity: 0, y: dy * 0.55, scale: 0.985 },
-                      { opacity: 1, y: 0, scale: 1, duration: 12 }, 90);
+                      { opacity: 1, y: 0, scale: 1, duration: 16 }, 46);
         // only clickable once it is actually on screen; GSAP restores the
         // original class when the timeline scrubs back
-        tl.set(s5, { className: "cinematic-copy is-live" }, 93);
+        tl.set(s5, { className: "cinematic-copy is-live" }, 58);
 
         return function () {            // matchMedia cleanup on breakpoint change
           tl.scrollTrigger && tl.scrollTrigger.kill();
           tl.kill();
-          gsap.set([video, copy1, s2, s3, s4, s5, veil], { clearProps: "all" });
+          gsap.set([video, copy1, s5, veil], { clearProps: "all" });
         };
       });
 
