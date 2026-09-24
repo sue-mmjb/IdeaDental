@@ -2021,193 +2021,6 @@
   footer.site a:focus-visible,
   footer.site .social a:focus-visible{outline:2px solid #fff; outline-offset:3px; border-radius:4px}
 
-  /* ================= FLOATING AI ASSISTANT =======================
-     Two fixed elements at the end of <body>: a launcher disc and the
-     panel it opens. Neither is in document flow, so neither takes any
-     part in a ScrollTrigger timeline and neither can be pinned by the
-     cinematic hero. Nothing here is animated by GSAP; opening and
-     closing are two CSS transitions driven by one class.
-
-     Layering: the sticky header is 80 and the mobile call bar is 60.
-     The assistant sits at 70, so it covers the page and the call bar
-     but never the header, and the header mobile sheet still opens
-     over it.
-
-     The reference introduces one colour the site does not have, a dusty
-     lavender. It is scoped to this component and desaturated so it sits
-     beside the site teal rather than competing with it; everything else
-     (radii, shadows, easing, ink, card, accent) comes from the existing
-     tokens. Nothing in here is a live conversation: see the markup.
-     ================================================================= */
-  .kriss-assistant, .kriss-launcher{
-    /* the header measures 77px, and 70px once the bar narrows on phones,
-       so the assistant clears it by 23px and by 14px respectively */
-    --kriss-top:100px;
-    --kriss-side:24px;
-  }
-
-  /* ---- closed state: nothing but the logo disc --------------------- */
-  .kriss-launcher{
-    position:fixed; top:var(--kriss-top); right:var(--kriss-side); z-index:70;
-    width:72px; height:72px; padding:0; border-radius:50%; cursor:pointer;
-    display:grid; place-items:center;
-    background:#fff;
-    border:1px solid color-mix(in srgb,var(--ink) 9%,transparent);
-    box-shadow:0 2px 6px rgba(15,42,51,.10), 0 14px 30px -16px rgba(15,42,51,.45);
-    transition:opacity .22s var(--ease), transform .22s var(--ease),
-               box-shadow .22s var(--ease);
-  }
-  /* the mark is dark on light, so the disc stays white in both themes */
-  .kriss-launcher img{
-    width:56px; height:auto; aspect-ratio:476/176;
-    object-fit:contain; display:block; pointer-events:none;
-  }
-  .kriss-launcher:hover{
-    box-shadow:0 2px 6px rgba(15,42,51,.12), 0 18px 38px -16px rgba(15,42,51,.50);
-  }
-  .kriss-launcher:focus-visible{outline:2.5px solid var(--accent-deep); outline-offset:3px}
-  /* visibility, not display, so the disc can fade out; it also takes the
-     button out of the tab order, which opacity alone would not do */
-  .kriss-launcher.is-gone{
-    opacity:0; visibility:hidden; pointer-events:none; transform:scale(.94);
-    /* visibility is transitioned only on the way out, so the disc stays
-       painted while it fades. Transitioning it on the way in would leave
-       it computed hidden for the first frame, and focus() would no-op. */
-    transition:opacity .22s var(--ease), transform .22s var(--ease), visibility .22s;
-  }
-
-  /* ---- open state: the panel --------------------------------------- */
-  .kriss-assistant{
-    --kriss-veil:#9a90a8;
-    position:fixed; top:var(--kriss-top); right:var(--kriss-side); z-index:70;
-    width:min(400px, calc(100vw - 32px));
-    height:clamp(470px, 58vh, 510px);
-    display:flex; flex-direction:column; padding:18px; overflow:hidden;
-    background:color-mix(in srgb,var(--kriss-veil) 64%,transparent);
-    -webkit-backdrop-filter:blur(18px) saturate(1.3);
-    backdrop-filter:blur(18px) saturate(1.3);
-    border:1px solid color-mix(in srgb,#fff 44%,transparent);
-    border-radius:var(--radius-xl);
-    box-shadow:var(--sh-3), 0 30px 64px -30px rgba(15,42,51,.5);
-    opacity:0; visibility:hidden; pointer-events:none;
-    transform:translateY(-8px) scale(.96); transform-origin:100% 0;
-    transition:opacity .2s var(--ease), transform .2s var(--ease), visibility .2s;
-  }
-  .kriss-assistant.is-open{
-    opacity:1; visibility:visible; pointer-events:auto; transform:none;
-    /* no visibility here: it must become visible on this very frame so the
-       close button can take focus immediately. Closing reverts to the rule
-       above, which does transition it, so the panel fades rather than cuts. */
-    transition:opacity .2s var(--ease), transform .2s var(--ease);
-  }
-  /* without JavaScript the launcher cannot do anything, so the panel is
-     shown outright, the way it stood before this phase */
-  .no-js .kriss-launcher, .no-js .kriss-close{display:none}
-  .no-js .kriss-assistant{
-    opacity:1; visibility:visible; pointer-events:auto; transform:none;
-  }
-
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]) .kriss-assistant{--kriss-veil:#4b4458}
-  }
-  :root[data-theme="dark"] .kriss-assistant{--kriss-veil:#4b4458}
-
-  /* the chip reads on either veil because both of its colours are tokens */
-  .kriss-close{
-    position:absolute; top:12px; right:12px; z-index:2;
-    width:34px; height:34px; padding:0; border-radius:50%; cursor:pointer;
-    display:grid; place-items:center;
-    color:var(--ink); background:color-mix(in srgb,var(--card) 74%,transparent);
-    border:1px solid color-mix(in srgb,var(--card) 60%,transparent);
-    transition:background-color .2s var(--ease), color .2s var(--ease);
-  }
-  .kriss-close svg{width:15px; height:15px; display:block}
-  .kriss-close:hover{background:var(--card); color:var(--accent-ink)}
-  .kriss-close:focus-visible{outline:2.5px solid var(--ink); outline-offset:3px}
-
-  /* the logo disc stays white in both themes: the mark is dark on light */
-  .kriss-logo{
-    flex:none; width:118px; height:118px; border-radius:50%; background:#fff;
-    margin:6px auto 16px; display:grid; place-items:center;
-    box-shadow:0 2px 6px rgba(15,42,51,.10), 0 10px 26px -12px rgba(15,42,51,.34);
-  }
-  .kriss-logo img{width:86px; height:auto; aspect-ratio:476/176; object-fit:contain; display:block}
-
-  /* the conversational area, significantly lighter than the card around it */
-  .kriss-panel{
-    flex:1; min-height:0; display:flex; flex-direction:column;
-    background:color-mix(in srgb,var(--card) 96%,transparent);
-    border-radius:var(--radius-lg); padding:22px 20px 15px;
-    box-shadow:0 1px 2px rgba(15,42,51,.05), 0 12px 30px -20px rgba(15,42,51,.42);
-  }
-  .kriss-open{display:block; flex:1; min-height:0; overflow:auto; color:inherit; text-decoration:none}
-  .kriss-msg{
-    margin:0; color:var(--ink);
-    font-size:clamp(.98rem,1.4vw,1.04rem); line-height:1.62; letter-spacing:-.005em;
-  }
-  .kriss-open:hover .kriss-msg{color:var(--accent-ink)}
-
-  .kriss-tools{flex:none; display:flex; align-items:center; gap:8px; margin-top:14px}
-  /* the reference leaves this side of the row empty; the note that the
-     controls leave the site goes here rather than as a banner */
-  .kriss-note{flex:1; margin:0; font-size:.72rem; line-height:1.35; color:var(--ink-mute)}
-  .kriss-btn{
-    flex:none; width:40px; height:40px; border-radius:11px;
-    display:inline-grid; place-items:center; text-decoration:none;
-    color:var(--accent-ink); background:transparent;
-    transition:background-color .2s var(--ease), color .2s var(--ease);
-  }
-  .kriss-btn svg{width:20px; height:20px; display:block}
-  .kriss-btn:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
-  .kriss-btn.send{background:var(--accent); color:var(--on-accent)}
-  .kriss-btn.send:hover{background:var(--accent-deep)}
-  /* focus is a ring, never a colour change on its own */
-  .kriss-assistant a:focus-visible{
-    outline:2.5px solid var(--accent-deep); outline-offset:3px; border-radius:12px;
-  }
-  .kriss-btn.send:focus-visible{outline-color:var(--ink)}
-
-  /* phones: the launcher tucks under the narrower header, and the panel
-     spans the gutters. The call bar below is 73px of fixed footer, so the
-     panel is capped well short of it and stays tappable. */
-  @media(max-width:760px){
-    /* On a phone it floats at the bottom right, above the fixed call bar,
-       rather than under the header where it sat over whatever was being
-       read. 73px of call bar plus 14px of air. */
-    .kriss-assistant, .kriss-launcher{
-      --kriss-top:auto;
-      --kriss-bottom:calc(87px + env(safe-area-inset-bottom,0px));
-      top:auto; bottom:var(--kriss-bottom);
-    }
-    .kriss-launcher{--kriss-side:16px; width:62px; height:62px}
-    .kriss-launcher img{width:48px}
-    .kriss-assistant{
-      left:12px; right:12px; width:auto; padding:14px;
-      height:auto;
-      /* it grows upward from the launcher now, so it opens from that corner */
-      transform-origin:100% 100%;
-      transform:translateY(8px) scale(.96);
-      max-height:calc(100dvh - 70px - var(--kriss-bottom) - 16px);
-    }
-    .kriss-assistant.is-open{transform:none}
-    .kriss-logo{width:92px; height:92px; margin:2px auto 12px}
-    .kriss-logo img{width:68px}
-    .kriss-panel{padding:18px 16px 13px}
-    .kriss-tools{gap:6px}
-    /* comfortable targets on touch */
-    .kriss-btn{width:44px; height:44px}
-    .kriss-close{width:38px; height:38px; top:10px; right:10px}
-    .kriss-note{font-size:.7rem}
-  }
-  @media(max-width:380px){
-    .kriss-note{display:none}
-    .kriss-tools{justify-content:flex-end}
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    .kriss-assistant, .kriss-launcher, .kriss-btn, .kriss-close{transition:none}
-  }
-
   /* ================= TOOTH CURSOR ===================================
      Desktop only, behind (hover:hover) and (pointer:fine), so a phone or
      a tablet never sees any of this and touch is untouched.
@@ -2619,6 +2432,65 @@
       scroll-behavior:auto;
     }
   }
+
+  /* ================= ASK IDEA DENTAL ================================
+     The frame around the CustomGPT embed, and nothing else: every value
+     here comes from the tokens the rest of the page already uses, so the
+     section reads as part of the site rather than as a widget dropped
+     onto it.
+
+     It is an ordinary section in normal flow. Nothing is positioned, so
+     nothing can be pinned, scrubbed or hijacked, and there is no
+     entrance animation to go wrong.
+     =================================================================== */
+  .ai-chat-section{
+    padding:var(--s-sec) 0;
+    background:var(--paper);
+    border-block:1px solid var(--line);
+  }
+  .ai-chat-inner{
+    max-width:860px; margin:0 auto; padding:0 var(--gutter);
+    width:100%; text-align:center;
+  }
+  .ai-chat-eyebrow{
+    margin:0 0 clamp(12px,1.4vw,16px); color:var(--accent-ink);
+    font-size:.74rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  }
+  .ai-chat-section h2{
+    margin:0 0 clamp(12px,1.4vw,16px); font-weight:300; color:var(--ink);
+    font-size:clamp(1.85rem,3.6vw,2.55rem); line-height:1.13; letter-spacing:-.028em;
+    text-wrap:balance;
+  }
+  .ai-chat-intro{
+    margin:0 auto clamp(26px,3.4vw,40px); color:var(--ink-soft);
+    font-size:clamp(1.02rem,1.5vw,1.16rem); line-height:1.6;
+    max-width:52ch; text-wrap:pretty;
+  }
+  /* the card the conversation sits in */
+  .ai-chat-frame{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--sh-2);
+    padding:clamp(10px,1.4vw,18px);
+    overflow:hidden;               /* the radius holds at the corners */
+    text-align:left;
+    min-height:clamp(440px,58vh,560px);
+  }
+  /* The embed builds its own interface inside #customgpt_chat. These two
+     lines do not style it; they stop whatever it builds from running past
+     the frame on a narrow screen, which is the one thing a card around an
+     embed has to guarantee. */
+  #customgpt_chat{width:100%; height:100%; min-height:inherit}
+  .ai-chat-frame :is(iframe,div,canvas){max-width:100%}
+
+  @media (max-width:760px){
+    .ai-chat-inner{padding:0 clamp(16px,4.4vw,20px)}
+    .ai-chat-frame{
+      padding:8px; border-radius:var(--radius);
+      min-height:clamp(420px,62dvh,520px);
+    }
+  }
 </style>
 <script>
 /* The FAQ search box is useless without JavaScript, and the stylesheet
@@ -2792,6 +2664,39 @@ document.documentElement.classList.remove("no-js");
 
   </div>
 </div>
+
+<!-- 1b · Ask Idea Dental: the real CustomGPT embed.
+
+     Ordinary document flow, between the complete hero and the trust bar.
+     Nothing here is fixed, sticky or floating, it is not inside the hero
+     or any of its scenes, and no GSAP timeline or ScrollTrigger touches
+     it. The script below is CustomGPT's own, exactly as supplied; there
+     is no iframe of ours, no scripted reply and no second assistant. -->
+<section class="ai-chat-section" aria-labelledby="ai-chat-heading">
+  <div class="ai-chat-inner">
+
+    <p class="ai-chat-eyebrow">HAVE A QUESTION?</p>
+
+    <h2 id="ai-chat-heading">Ask Idea Dental</h2>
+
+    <p class="ai-chat-intro">
+      Get quick answers about our services, appointments, pricing, insurance, and dental care.
+    </p>
+
+    <div class="ai-chat-frame">
+      <div id="customgpt_chat"></div>
+
+      <script
+        src="https://cdn.customgpt.ai/js/embed.js"
+        defer
+        div_id="customgpt_chat"
+        p_id="8618"
+        p_key="f283d26df2bbb2ebd89c714ef5a70579">
+      </script>
+    </div>
+
+  </div>
+</section>
 
 <!-- 2 · Trust bar -->
 <div class="trust">
@@ -3568,93 +3473,6 @@ document.documentElement.classList.remove("no-js");
   <a class="c" href="tel:+18326648640">Call now</a>
   <a class="b" href="idea-dental-appointments.html">Book appointment</a>
 </div>
-
-<!-- ====================================================================
-     FLOATING AI ASSISTANT (temporary)
-
-     Closed, the visitor sees one thing: the Idea Dental mark in a white
-     disc under the header. Activating it swaps the disc for the panel;
-     the close button, Escape, or a click outside swaps it back.
-
-     There is no kriss.ai embed yet, so nothing here pretends to be a live
-     conversation. Every control is an ordinary link that opens kriss.ai in
-     a new tab, each one says so in its accessible name, and the row carries
-     a visible note to the same effect. No API, no widget id, no iframe, no
-     scripted replies. When the real embed arrives, put it inside
-     .kriss-panel and delete these links.
-
-     Both elements are fixed and sit at the end of <body>, outside
-     #cinematic-hero, so they add nothing to document flow and no
-     ScrollTrigger can reach them.
-     ==================================================================== -->
-<button class="kriss-launcher" id="kriss-launcher" type="button"
-        aria-label="Open Idea Dental AI assistant"
-        aria-haspopup="dialog" aria-expanded="false" aria-controls="kriss-chat">
-  <img src="idea-dental-logo.png" alt="" width="476" height="176" decoding="async">
-</button>
-
-<aside class="kriss-assistant" id="kriss-chat" role="dialog" aria-label="Idea Dental assistant">
-  <button class="kriss-close" id="kriss-close" type="button" aria-label="Close Idea Dental AI assistant">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
-  </button>
-  <div class="kriss-logo">
-    <img src="idea-dental-logo.png" alt="Idea Dental" width="476" height="176" decoding="async">
-  </div>
-  <div class="kriss-panel">
-    <a class="kriss-open" href="https://kriss.ai/" target="_blank" rel="noopener noreferrer" aria-label="Open the Kriss.ai assistant in a new tab">
-      <p class="kriss-msg">Welcome to Idea Dental, how may I help you? Our services include cleanings, implants, braces, and veneers. Ask me anything!</p>
-    </a>
-    <div class="kriss-tools">
-      <p class="kriss-note">Opens Kriss.ai in a new tab</p>
-      <a class="kriss-btn" href="https://kriss.ai/" target="_blank" rel="noopener noreferrer" aria-label="Voice message, opens Kriss.ai in a new tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><path d="M12 18v4"/></svg></a>
-      <a class="kriss-btn" href="https://kriss.ai/" target="_blank" rel="noopener noreferrer" aria-label="Attach a file, opens Kriss.ai in a new tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21.44 11.05l-8.49 8.49a5 5 0 0 1-7.07-7.07l8.49-8.49a3.5 3.5 0 0 1 4.95 4.95l-8.49 8.49a2 2 0 0 1-2.83-2.83l7.78-7.78"/></svg></a>
-      <a class="kriss-btn send" href="https://kriss.ai/" target="_blank" rel="noopener noreferrer" aria-label="Send message, opens Kriss.ai in a new tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></a>
-    </div>
-  </div>
-</aside>
-
-<script>
-/* Assistant launcher. Deliberately standalone: no GSAP, no ScrollTrigger,
-   no scroll listener. Two fixed elements and one class each. */
-(function () {
-  var launcher = document.getElementById("kriss-launcher");
-  var chat = document.getElementById("kriss-chat");
-  if (!launcher || !chat) return;
-  var closer = document.getElementById("kriss-close");
-  var open = false;
-
-  function setOpen(next, refocus) {
-    if (next === open) return;
-    open = next;
-    chat.classList.toggle("is-open", next);
-    launcher.classList.toggle("is-gone", next);
-    launcher.setAttribute("aria-expanded", next ? "true" : "false");
-    /* .focus() on a still-hidden element does nothing, so let the
-       visibility change land before asking for focus */
-    if (next) {
-      void chat.offsetHeight;
-      if (closer) closer.focus();
-    } else if (refocus) {
-      void launcher.offsetHeight;
-      launcher.focus();
-    }
-  }
-
-  launcher.addEventListener("click", function () { setOpen(true, false); });
-  if (closer) closer.addEventListener("click", function () { setOpen(false, true); });
-
-  document.addEventListener("keydown", function (e) {
-    if (!open) return;
-    if (e.key === "Escape" || e.key === "Esc") { e.preventDefault(); setOpen(false, true); }
-  });
-
-  /* clicking away closes it, but focus is left where the visitor put it */
-  document.addEventListener("click", function (e) {
-    if (!open || chat.contains(e.target) || launcher.contains(e.target)) return;
-    setOpen(false, false);
-  });
-})();
-</script>
 
 <script>
 /* =====================================================================
@@ -4918,7 +4736,7 @@ document.documentElement.classList.remove("no-js");
   var HOT_Y = 0;
 
   var HOT = "a, button, summary, label, [role=button], [role=link], " +
-            "[onclick], .btn, .navtoggle, .kriss-launcher, .kriss-close";
+            "[onclick], .btn, .navtoggle";
   var TEXT = "input, textarea, select, [contenteditable]";
 
   function start() {
