@@ -88,7 +88,14 @@
   header.hero a{color:#fff;font-weight:700}
   main{padding:34px 0}
   .note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:10px;padding:16px 18px;color:var(--ink-soft);font-size:.95rem;margin-bottom:26px}
-  form{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .book-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .book-card h2{margin:0 0 10px}
+  .book-cta{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0 8px}
+  .book-cta a{display:inline-block;padding:14px 22px;border-radius:999px;font-weight:700;text-decoration:none;line-height:1}
+  .book-cta .primary{background:var(--accent);color:#fff}
+  .book-cta .primary:hover{filter:brightness(.95)}
+  .book-cta .ghost{border:1.5px solid var(--accent);color:var(--accent-ink,var(--accent))}
+  .book-cta .ghost:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
   label{display:block;font-weight:700;margin:0 0 6px;font-size:.96rem}
   .req{color:#c0453b}
   input,select,textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);font:inherit;margin-bottom:18px}
@@ -121,38 +128,20 @@
     <a class="backlink" href="index.html" aria-label="Go back to the previous page" title="Back" onclick="if(history.length&gt;1){history.back();return false}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg></a><a class="sitelogo" href="index.html"><img src="idea-dental-logo.png" alt="IDEA! Dental" width="476" height="176" decoding="async"></a>
     <p class="eyebrow">Idea Dental · Houston, TX · Se habla español</p>
     <h1>Request an appointment</h1>
-    <p>Fill out the form and a member of our team will confirm your appointment by phone. For urgent problems or same-day care, calling <a href="tel:+18326648640">(832) 664-8640</a> is fastest.</p>
+    <p>The fastest and most reliable way to book is to <b>text or call the office at <a href="tel:+18326648640">(832) 664-8640</a></b>. A team member will confirm your appointment directly.</p>
   </div>
 </header>
 
 <main class="wrap">
-  <p class="note">Please use this form for general information purposes only. Do <b>not</b> send personal health information through this form. Specific patient care will be addressed during your appointment. Availability varies by request; your appointment will be confirmed by phone.</p>
-
-  <!-- NOTE: form fields mirror the existing site. Connect to the practice's form handler / Gravity Forms endpoint on the live site; action is a placeholder here. -->
-  <form action="#" method="post" onsubmit="return false;">
-    <label for="name">Name</label>
-    <input id="name" name="name" type="text" autocomplete="name">
-
-    <label for="phone">Phone <span class="req">*</span></label>
-    <input id="phone" name="phone" type="tel" placeholder="(999) 999-9999" required autocomplete="tel">
-
-    <label for="email">Email <span class="req">*</span></label>
-    <input id="email" name="email" type="email" required autocomplete="email">
-
-    <label for="date">Preferred date <span class="req">*</span></label>
-    <input id="date" name="date" type="date" required>
-
-    <label for="time">Preferred time</label>
-    <select id="time" name="time">
-      <option>Morning</option>
-      <option>Afternoon</option>
-    </select>
-
-    <label for="nature">Nature of visit</label>
-    <textarea id="nature" name="nature" placeholder="Briefly, what would you like to be seen for? (Please don't include sensitive health details.)"></textarea>
-
-    <button type="submit">Submit request</button>
-  </form>
+  <div class="book-card">
+    <h2>Book your visit</h2>
+    <p><b>Texting or calling the office is the fastest and most reliable way to reach us.</b> Send a text and a team member will reply to set up your appointment. Please don't include personal health details in your message — we'll go over those at your visit.</p>
+    <p class="book-cta">
+      <a class="primary" href="sms:+18326648640">Text (832) 664-8640</a>
+      <a class="ghost" href="tel:+18326648640">Call (832) 664-8640</a>
+    </p>
+    <p class="note">We speak English and Spanish. Calling is best if you need to be seen soon.</p>
+  </div>
 
   <p class="alt">Prefer to talk to someone? Call us at <a href="tel:+18326648640">(832) 664-8640</a>. We speak English and Spanish.</p>
   <p class="alt"><a href="index.html">← Back to home</a> · <a href="idea-dental-faq.html">Read FAQs</a> ·</p>
