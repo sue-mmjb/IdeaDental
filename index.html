@@ -882,9 +882,13 @@
      path and the no-GSAP fallback all keep smooth anchor scrolling. */
   html.cine-on, html.svc-cine-on, html.why-cine-on,
   html.prov-on, html.rev-on{scroll-behavior:auto}
-  /* Two screens of scroll at every width: one to hold the headline, one
-     to bring in the close. The stage is pinned for the first of them. */
-  .cine-on .cinematic-hero{height:200vh}
+  /* One and a half screens of scroll at every width. The frame stays a
+     full screen: a pinned stage shorter than the viewport would leave a
+     band of bare page under it for the whole pin. What is shortened is the
+     runway, which is the section's height and what decides how long the
+     hero holds the page. Half a screen of that is the pinned stretch, the
+     screen after it is the hero leaving. */
+  .cine-on .cinematic-hero{height:150vh}
   .cine-on .cinematic-stage{
     position:relative; height:100vh; overflow:hidden;
     /* GSAP does the pinning; no CSS sticky, so the two cannot fight */
@@ -3654,7 +3658,8 @@ document.documentElement.classList.remove("no-js");
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script defer>
 /* =====================================================================
-   CINEMATIC HERO - one scrubbed master timeline, two frames.
+   CINEMATIC HERO - one scrubbed master timeline, two frames, and three
+   landings a scroll settles onto.
 
    Progressive enhancement: the .cine-on class that turns the stage into a
    100vh pinned frame is added HERE, and only after the timeline has been
@@ -3695,14 +3700,15 @@ document.documentElement.classList.remove("no-js");
         phone:   "(max-width:760px)"
       }, function (ctx) {
         var c = ctx.conditions;
-        /* Travel and zoom scale down as the screen does, and both are
-           halved against the old five scene version: the runway halved
-           too, and the same push-in over half the scroll is twice as fast
-           across the frame. These keep the drift looking as it looked. */
-        var zoom = c.desktop ? 1.09 : c.tablet ? 1.06 : 1.04;  // cinematic push-in
-        var pan  = c.desktop ? 2    : c.tablet ? 1.5  : 1;     // % horizontal camera move
-        var dx   = c.desktop ? 64   : c.tablet ? 44   : 22;    // px text travel, x
-        var dy   = c.desktop ? 42   : c.tablet ? 32   : 20;    // px text travel, y
+        /* Travel and zoom scale down as the screen does, and both have been
+           halved twice: once when five scenes became two, again when the
+           runway came down to 150vh. The pinned stretch is now half a
+           screen, and the same push-in over half the scroll is twice as
+           fast across the frame. These keep the drift looking as it looks.
+           dx is unused now that neither frame enters from the side. */
+        var zoom = c.desktop ? 1.05 : c.tablet ? 1.03 : 1.02;  // cinematic push-in
+        var pan  = c.desktop ? 1    : c.tablet ? 0.75 : 0.5;   // % horizontal camera move
+        var dy   = c.desktop ? 30   : c.tablet ? 24   : 16;    // px text travel, y
 
         var tl = gsap.timeline({
           defaults: { ease: "power2.out" },
@@ -3743,7 +3749,114 @@ document.documentElement.classList.remove("no-js");
         // original class when the timeline scrubs back
         tl.set(s5, { className: "cinematic-copy is-live" }, 58);
 
+
+        /* ---- the three landings --------------------------------------
+           Measured from the page, never assumed from a grid of whole
+           screens: the header's height and the chat section's position
+           both move with the viewport, and a grid would drift from them.
+
+             1  scroll 0, the headline
+             2  the end of the pin, where the closing frame is settled
+             3  the chat section's top, under the sticky header
+
+           Nearest landing wins, after the scrolling has stopped. Past the
+           third, scrolling is free again and nothing here applies. */
+        function headerHeight() {
+          var h = document.querySelector("header.site");
+          return h ? h.getBoundingClientRect().height : 0;
+        }
+        function lastLanding() {
+          var chat = document.querySelector(".ai-chat-section");
+          if (!chat) return hero.getBoundingClientRect().bottom + window.scrollY;
+          return Math.max(0, chat.getBoundingClientRect().top + window.scrollY - headerHeight());
+        }
+        function landings() {
+          var st = tl.scrollTrigger;
+          return [0, st ? st.end : 0, lastLanding()];
+        }
+
+        /* One gesture moves one landing, never two and never none.
+
+           Snapping to whichever landing is nearest does not work here,
+           because the gaps are uneven: half a screen from the top to the
+           closing frame, then most of a screen from there to the chat
+           section. Nearest skipped the closing frame on a full screen
+           swipe, and worse, it trapped anyone scrolling in small steps at
+           the closing frame, since 300px of travel still left them nearer
+           the landing they were leaving.
+
+           So the direction of travel decides, not the distance: any
+           gesture past a small threshold moves exactly one landing the way
+           it was heading, and anything smaller holds. */
+        var restIdx  = 0;
+        var snapping = false;
+        function nearestIdx(px, pts) {
+          var near = 0, gap = Math.abs(px - pts[0]);
+          for (var i = 1; i < pts.length; i++) {
+            var d = Math.abs(px - pts[i]);
+            if (d < gap) { gap = d; near = i; }
+          }
+          return near;
+        }
+
+        var snapST = ScrollTrigger.create({
+          start: 0,
+          /* a little past the last landing, not exactly on it: a full screen
+             scroll from the closing frame overshoots it by the header's
+             height, and without the margin that overshoot falls outside the
+             trigger and is left where it lands, with the chat section's top
+             tucked under the header. Beyond this margin scrolling is free. */
+          end: function () { return lastLanding() + Math.round(window.innerHeight * 0.3); },
+          invalidateOnRefresh: true,
+          snap: {
+            snapTo: function (value, self) {
+              var span = self.end - self.start;
+              if (!span) return value;
+              var here = self.start + value * span;
+              var pts  = landings();
+              if (restIdx >= pts.length) restIdx = pts.length - 1;
+              var moved  = here - pts[restIdx];
+              // about an eighth of a screen: past a stray wheel notch, well
+              // under any deliberate gesture
+              var thresh = Math.max(60, window.innerHeight * 0.12);
+              var idx = restIdx;
+              if (moved > thresh)       idx = Math.min(pts.length - 1, restIdx + 1);
+              else if (moved < -thresh) idx = Math.max(0, restIdx - 1);
+              restIdx = idx;
+              snapping = true;
+              return (pts[idx] - self.start) / span;
+            },
+            /* the authoritative record of where the page came to rest: a
+               snap can be interrupted, and the tentative index above would
+               then be wrong for the next gesture */
+            onSnapComplete: function (self) {
+              snapping = false;
+              restIdx = nearestIdx(self.scroll(), landings());
+            },
+            onInterrupt: function () { snapping = false; },
+            /* short enough to feel like the page settling rather than the
+               page taking over, and eased at both ends so there is no jolt */
+            duration: { min: 0.18, max: 0.42 },
+            ease: "power2.inOut",
+            delay: 0.08
+          }
+        });
+
+        /* Where the page is resting when a gesture BEGINS is what decides
+           which landing is one step away. Reading it only when a snap
+           finishes is not enough: the page can also arrive somewhere by a
+           link, a restored position or the keyboard, and the next gesture
+           would then be measured from a stale landing. Ignored while a
+           snap is running, since that scrolls the page itself. */
+        function noteRest() {
+          if (snapping) return;
+          restIdx = nearestIdx(window.pageYOffset || window.scrollY || 0, landings());
+        }
+        ScrollTrigger.addEventListener("scrollStart", noteRest);
+
         return function () {            // matchMedia cleanup on breakpoint change
+          ScrollTrigger.removeEventListener("scrollStart", noteRest);
+          snapST.kill();
           tl.scrollTrigger && tl.scrollTrigger.kill();
           tl.kill();
           gsap.set([video, copy1, s5, veil], { clearProps: "all" });
