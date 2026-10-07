@@ -47,7 +47,7 @@ export default function Faq() {
   });
 
   return (
-    <section id="faq" ref={root} className="bg-white py-20 md:py-28">
+    <section id="faq" ref={root} className="bg-paper py-20 md:py-28">
       <div className="container-x">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div data-reveal>

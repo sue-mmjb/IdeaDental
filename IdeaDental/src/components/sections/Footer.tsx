@@ -1,9 +1,6 @@
 import Image from "next/image";
 import { business, hours } from "@/lib/content";
 import { Clock, Phone, Pin } from "../icons";
-import Wordmark from "./Wordmark";
-
-const WORDMARK = "Idea Dental";
 
 export default function Footer() {
   return (
@@ -13,14 +10,17 @@ export default function Footer() {
 
       {/* Final CTA + appointment request */}
       <div className="container-x pt-24 text-center md:pt-32">
+        <p data-reveal className="text-[13px] uppercase tracking-[0.14em] text-white/50">
+          {business.name} · Houston, TX
+        </p>
         <h2
           data-reveal
-          className="mx-auto max-w-[14ch] font-display text-[clamp(40px,5.6vw,90px)] font-semibold leading-[1.02] tracking-[-0.045em]"
+          className="mx-auto mt-5 max-w-[14ch] font-display text-[clamp(40px,5.6vw,90px)] font-semibold leading-[1.02] tracking-[-0.045em]"
         >
-          Ready for your next step?
+          Your smile starts here.
         </h2>
         <p data-reveal className="mx-auto mt-6 max-w-[60ch] text-[15px] leading-relaxed text-white/70">
-          Text the office to book. It’s the fastest and most reliable way to reach us, and a team member will reply to set up your visit. Please don’t include personal health details in your message.
+          Request an appointment, or call and speak to our bilingual team.
         </p>
         <div data-reveal className="mt-10 flex flex-wrap justify-center gap-3">
           <a
@@ -28,7 +28,7 @@ export default function Footer() {
             data-hover-scale
             className="inline-flex items-center gap-2 rounded-full bg-primary px-7 py-4 text-[15px] font-medium text-white transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
-            Text {business.phone}
+            Request an appointment
           </a>
           <a
             href={business.phoneHref}
@@ -60,6 +60,9 @@ export default function Footer() {
             >
               Get directions
             </a>
+            <p className="mt-3 max-w-[32ch] text-[14px] leading-relaxed text-white/60">
+              {business.locationNote}
+            </p>
           </div>
 
           <div data-reveal>
@@ -70,6 +73,7 @@ export default function Footer() {
               {business.phone}
             </a>
             <p className="mt-2 text-[14px] text-white/70">Hablamos Español</p>
+            <p className="mt-1 text-[14px] text-white/60">Languages: {business.languages}</p>
             <ul className="mt-5 flex gap-6 text-[15px] text-white/90">
               {business.social.map((s) => (
                 <li key={s.label}>
@@ -104,8 +108,17 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Screen-width wordmark — sizes itself to the row (see Wordmark.tsx) */}
-        <Wordmark text={WORDMARK} />
+        {/* Footer mark: the logo, capped at the height the lettered wordmark used to fill */}
+        <div className="mt-16 flex justify-center">
+          <Image
+            src="/images/logo-wordmark-white.png"
+            alt={business.name}
+            width={1428}
+            height={528}
+            sizes="(min-width: 768px) 720px, 100vw"
+            className="h-auto w-full max-w-[720px]"
+          />
+        </div>
 
         <div className="flex flex-col gap-4 border-t border-white/10 py-8 text-[14px] text-white/70 md:flex-row md:items-center md:justify-between">
           <p>© {business.name}. All Rights Reserved</p>

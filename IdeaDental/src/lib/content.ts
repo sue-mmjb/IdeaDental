@@ -12,6 +12,8 @@ export const business = {
   phoneHref: "tel:+18326648640",
   smsHref: "sms:+18326648640",
   address: { line1: "216 W Little York Road, Suite B", line2: "Houston, TX 77076" },
+  locationNote: "Conveniently located in north Houston, just off I-45.",
+  languages: "English & Spanish",
   mapsUrl: "https://goo.gl/maps/PBzLzgfFhGXrSZxf9",
   social: [
     { label: "Facebook", href: "https://www.facebook.com/Idea-Dental-at-West-Little-York-PLLC-137635463309853" },
@@ -26,9 +28,64 @@ export const hours = [
   { day: "Wednesday", time: "10:00 AM – 6:00 PM", note: "General dentistry" },
   { day: "Thursday", time: "8:30 AM – 2:00 PM", note: "Surgeries only" },
   { day: "Friday", time: "Closed", note: "" },
-  { day: "Saturday", time: "2nd & 4th Saturdays only", note: "" },
+  { day: "Saturday", time: "10:00 AM – 4:00 PM", note: "2nd & 4th Saturdays" },
   { day: "Sunday", time: "Closed", note: "" },
 ];
+
+// Section intros from the content file that had no equivalent on the page.
+export const intros = {
+  results: "See selected treatment results from Idea Dental.",
+  technology:
+    "Modern technology designed to make diagnosis, treatment planning, and care more precise and comfortable.",
+  doctors: "Care from a dedicated, bilingual team at Idea Dental.",
+};
+
+// "Why patients choose Idea Dental". Only the short labels were on the page, in the feature
+// marquee; these are the reasons behind them.
+export const whyUs = {
+  eyebrow: "Why patients choose Idea Dental",
+  heading: "Real reasons, not slogans.",
+  reasons: [
+    {
+      title: "About half the cost",
+      body: "We’re known for affordable pricing on the treatments Houston families need most.",
+    },
+    {
+      title: "Bilingual team",
+      body: "Discuss your care comfortably in English or Spanish. Se habla español.",
+    },
+    {
+      title: "Modern iTero® 3D scanner",
+      body: "No goopy impressions, just a precise digital model the dentist uses to plan your treatment.",
+    },
+    {
+      title: "Payment plans available",
+      body: "Same-day treatment is paid in full; care spread over multiple visits can be arranged on a payment plan.",
+    },
+    {
+      title: "Whole-family care",
+      body: "Children, teens and adults are all seen under one roof.",
+    },
+  ],
+};
+
+// The Google rating the content file carries above the reviews.
+export const reviewSummary = { rating: "4.9", count: "119 Google reviews" };
+
+// The two reassurance blocks and the footnote that sit under the price list.
+export const pricingNotes = [
+  {
+    title: "Need flexibility?",
+    body: "Payment plans for care spread over multiple visits. Spread out the cost of care instead of paying all at once.",
+  },
+  {
+    title: "No guesswork",
+    body: "Final pricing is confirmed after the dentist evaluates your teeth.",
+  },
+];
+
+export const pricingDisclaimer =
+  "Prices vary by case. Contact the office at (832) 664-8640 for current fees and to verify your insurance benefits.";
 
 export const nav = [
   { label: "Services", href: "#services" },
@@ -41,17 +98,18 @@ export const nav = [
 
 // Client-approved hero copy (web/ git history: "Update Hero copy to client-approved version").
 export const hero = {
-  headline: ["General dentistry", "in Houston, TX"],
-  body: "Comprehensive dental care for you and your family, from routine checkups to restorative and cosmetic treatments.",
+  headline: ["Quality dental care in Houston,", "for about half the cost."],
+  body: "From cleanings to implants and braces, Idea Dental gives Houston families honest, affordable care in English and Spanish.",
 };
 
 export const about = {
-  intro:
-    "Idea Dental provides general, restorative and cosmetic dentistry, dental implants and traditional metal braces from a clinic conveniently located in Houston, Texas, treating patients of all ages.",
+  // The content file's About block, word for word.
+  eyebrow: "Idea Dental · Houston",
+  intro: "Care designed around you.",
   philosophy:
-    "The team at Idea Dental approaches dentistry with a patient-first philosophy. The friendly staff creates a warm and welcoming environment that puts patients at ease from the moment they call to book their appointment until they leave the practice’s offices.",
+    "The team at Idea Dental approaches dentistry with a patient-first philosophy. The friendly staff creates a warm and welcoming environment that puts patients at ease from the moment they call to book their appointment until they leave the practice’s offices. Comprehensive dental care for you and your family, from routine checkups to restorative and cosmetic treatments. From everyday dentistry to advanced restorative care, our team helps you understand your options and move forward with confidence.",
   underOneRoof:
-    "We offer a full range of dental services, so all of your family’s needs are met under one roof.",
+    "One office for your whole family: general, preventive, restorative, braces and implant dentistry. We offer a full range of dental services, so all of your family’s needs are met under one roof.",
 };
 
 export type ServiceCategory = {
@@ -61,44 +119,49 @@ export type ServiceCategory = {
   treatments: string[];
   image: string;
   alt: string;
+  /** The card's own link, labelled as the previous site labelled it. */
+  cta: { label: string; href: string };
+  /** The question card is a signpost, not a treatment: its art is a cut-out, not a photo fill. */
+  cutout?: boolean;
 };
 
 export const services: ServiceCategory[] = [
   {
-    key: "general",
-    label: "General Dentistry",
-    description:
-      "Helping our patients maintain a healthy mouth and smile is the main goal of general dentistry. We prefer to provide more minor, preventive care than to see patients suffer with more intensive treatments from a problem that was not managed in time.",
-    treatments: ["Cleanings", "Deep Cleaning", "Fillings", "Extractions", "Root Canals", "Crowns"],
-    image: "/images/services/general-dentistry.jpg",
-    alt: "Patient receiving a general dental checkup",
-  },
-  {
-    key: "braces",
-    label: "Metal Braces",
-    description:
-      "We straighten teeth with traditional metal braces: stainless steel brackets and archwires that gently move teeth into place. They work for children, teens and adults, and the dentist plans treatment around your goals and budget.",
-    treatments: ["Braces for Kids", "Braces for Teens", "Adult Braces", "Retention", "iTero Scanner"],
-    image: "/images/services/braces.jpg",
-    alt: "A young patient smiling, wearing metal braces",
-  },
-  {
-    key: "cosmetic",
-    label: "Cosmetic Dentistry",
-    description:
-      "A beautiful smile is one of the most sought after cosmetic features in the world. Whether through minor adjustments or major treatment plans, our cosmetic dentistry practice aims to improve your smile and help you build confidence.",
-    treatments: ["Porcelain Veneers"],
-    image: "/images/services/cosmetic-dentistry.jpg",
-    alt: "Close-up of a bright, even smile",
-  },
-  {
     key: "restorative",
-    label: "Restorative Dentistry",
-    description:
-      "Idea Dental is committed to offering a full range of dentistry services. Whether you’ve had repairs or need a complete replacement, we recommend continual check-ups to assess your gums and bone density.",
+    label: "Dental Implants",
+    description: "Permanent, natural-looking replacements for missing teeth.",
     treatments: ["Dental Implants", "Implant Crowns", "Bone Grafts", "Dentures & Partials"],
     image: "/images/services/dental-implants.jpg",
     alt: "Dental implant model",
+    cta: { label: "Learn more", href: "#contact" },
+  },
+  {
+    key: "braces",
+    label: "Braces",
+    description: "Metal braces for kids, teens and adults.",
+    treatments: ["Braces for Kids", "Braces for Teens", "Adult Braces", "Early Treatment", "Retention", "iTero Scanner"],
+    image: "/images/services/braces.jpg",
+    alt: "A young patient smiling, wearing metal braces",
+    cta: { label: "Learn more", href: "#contact" },
+  },
+  {
+    key: "cosmetic",
+    label: "Veneers",
+    description: "Custom porcelain shells for a brighter, even smile.",
+    treatments: ["Porcelain Veneers"],
+    image: "/images/services/cosmetic-dentistry.jpg",
+    alt: "Close-up of a bright, even smile",
+    cta: { label: "Learn more", href: "#contact" },
+  },
+  {
+    key: "faq",
+    label: "Have a question?",
+    description: "Answers on treatments, insurance, payment and more.",
+    treatments: [],
+    image: "/images/services/have-a-question.png",
+    alt: "A tooth beside a speech bubble",
+    cta: { label: "Read FAQs", href: "#faq" },
+    cutout: true,
   },
 ];
 
@@ -124,7 +187,7 @@ export const doctors = [
     credentials: "DDS",
     photo: "/images/stephanie-vu.jpg",
     bio: [
-      "Stephanie Vu, DDS, is a dedicated and caring dentist who provides exceptional care to her patients at Idea Dental, conveniently located in Houston, Texas.",
+      "Dr. Vu is a dedicated dentist who provides exceptional care to patients at Idea Dental in Houston, offering general, restorative, braces and implant care to patients of all ages in both English and Spanish.",
       "Dr. Vu graduated with a bachelor’s degree in biology from the University of Texas at Austin. She discovered her passion for dentistry during her undergraduate years while volunteering at the San Jose Clinic in Houston, and decided to pursue her dental degree.",
       "Dr. Vu earned her Doctor of Dental Surgery from the University of Texas School of Dentistry at Houston. She graduated from her dental program with honors and won the prestigious Student Achievement Award of Endodontics.",
     ],
@@ -135,22 +198,31 @@ export const doctors = [
     credentials: "Implants & Full Mouth Rehabilitation",
     photo: "/images/nukul-rathi.jpg",
     bio: [
-      "Idea Dental is proud to have Dr. Nukul Rathi visiting as a provider. Dr. Rathi has specialized in implants and full mouth rehabilitation, pursuing his interest in dental implants at New York University, College of Dentistry.",
+      "Idea Dental is proud to have Dr. Nukul Rathi as a visiting provider. Dr. Rathi specializes in implants and full-mouth rehabilitation.",
       "He completed his Masters of Science and Advanced Prosthodontics Clinical Residency Program at The Ohio State University, working within a clinic that has completed over 25,000 implants.",
       "Dr. Rathi was selected as the ‘New and Emerging Speaker’ by the American Dental Association in Washington DC in 2015, and lectures internationally on implant dentistry and CAD-CAM in dentistry.",
     ],
   },
 ];
 
-export const technology = [
+export type TechItem = {
+  title: string;
+  description: string;
+  // The demonstration video the previous site linked from this card.
+  video: { id: string; title: string; start?: number };
+};
+
+export const technology: TechItem[] = [
   {
     title: "iTero Element Scanner",
     description:
-      "Precise 3D imaging of your smile in place of traditional impressions, used to plan braces and implant treatment.",
+      "Digital scanning technology that creates detailed 3D images of the teeth for modern treatment planning.",
+    video: { id: "cby3c8VHLgM", title: "Introducing the iTero Element 2 intraoral scanner" },
   },
   {
-    title: "Piezotome Cube Extraction",
-    description: "Modern equipment used to support gentler, more controlled extraction procedures.",
+    title: "Piezotome Cube",
+    description: "Advanced ultrasonic technology used in certain dental extraction procedures.",
+    video: { id: "dyivqeElRVg", title: "Piezotome CUBE vs Rotary Burr", start: 5 },
   },
 ];
 
@@ -160,30 +232,31 @@ export const features = [
   "Piezotome technology",
   "Hablamos Español",
   "75″ TV in every patient room",
-  "All insurance plans accepted",
+  "Many insurance plans accepted",
   "Flexible payment plans",
+  "Whole-family care",
 ];
 
 // Client price list, 2026-10-01 (Ihna → Jun) — replaces the live site's old comparison table.
 // The update has no "other dentist" figures, so the comparison column is gone.
 export const pricing = [
-  { item: "Adult Cleaning", price: "$75" },
-  { item: "Full Mouth Debridement", price: "$200" },
-  { item: "Deep Cleaning", price: "$500" },
-  { item: "Filling", price: "$250 and up" },
-  { item: "Simple Extraction", price: "$350" },
-  { item: "Surgical Extraction", price: "$450" },
-  { item: "Bone Graft and Membrane", price: "$600" },
+  { item: "Adult cleaning", price: "$75" },
+  { item: "Full-mouth debridement", price: "$200" },
+  { item: "Deep cleaning", price: "$500" },
+  { item: "Filling", price: "From $250" },
+  { item: "Simple extraction", price: "$350" },
+  { item: "Surgical extraction", price: "$450" },
+  { item: "Bone graft & membrane", price: "$600" },
+  { item: "Root canal", price: "$800" },
   { item: "Crown", price: "$1,200" },
-  { item: "Root Canal", price: "$800" },
-  { item: "Denture or Partial Denture", price: "$1,200 per arch" },
-  { item: "Implant", price: "$3,500" },
-  { item: "Implant Crown and Abutment", price: "$1,800" },
-  { item: "Braces", price: "$2,500 – $5,500" },
+  { item: "Denture or partial (per arch)", price: "$1,200" },
+  { item: "Dental implant", price: "$3,500" },
+  { item: "Implant crown & abutment", price: "$1,800" },
+  { item: "Braces", price: "$2,500–$5,500" },
 ];
 
 export const insurance =
-  "We accept all insurance plans. Treatment completed in a single visit is paid in full that day; dental work spread over several visits can be arranged on a payment plan, depending on the work needed. Final pricing is confirmed after the dentist evaluates your teeth.";
+  "Idea Dental is known for keeping treatment affordable. Final pricing is confirmed after the dentist evaluates your teeth. Treatment finished in a single visit is paid in full that day; care spread over multiple visits can be arranged on a payment plan.";
 
 // Real reviews, unedited. `headline` + `body` split the same review into a pull-quote and the
 // remaining sentences — no words added or changed.
@@ -214,7 +287,11 @@ export const testimonials = [
 export const faqs = [
   {
     q: "What are your office hours?",
-    a: "We see patients Tuesday and Wednesday, 10am–6pm, and on the 2nd and 4th Saturday of each month. Monday and Thursday, 8:30am–2pm, are for surgeries only. We're closed Friday and Sunday.",
+    a: "Idea Dental sees patients Tuesday and Wednesday from 10:00 AM to 6:00 PM, and on the 2nd and 4th Saturdays from 10:00 AM to 4:00 PM. Mondays and Thursdays from 8:30 AM to 2:00 PM are reserved for surgeries only. The office is closed Friday and Sunday. Please call to confirm availability.",
+  },
+  {
+    q: "Do you take walk-ins?",
+    a: "Yes, Idea Dental welcomes walk-ins on Tuesdays and Wednesdays from 10:00 AM to 6:00 PM. Calling ahead at (832) 664-8640 is still a good idea so the team can let you know about wait times and be ready for your visit.",
   },
   {
     q: "How do I book an appointment?",
@@ -226,11 +303,11 @@ export const faqs = [
   },
   {
     q: "Do you offer payment plans?",
-    a: "Yes, for care spread over more than one visit. Treatment completed in a single visit is paid in full that day; dental work spread over time can be arranged on a payment plan, depending on the work needed.",
+    a: "Yes, for treatment that’s spread over more than one visit. Treatment completed in a single visit is paid in full that day, and care planned across multiple visits can often be arranged on a payment plan, depending on the work needed. The team reviews the options with you when you visit or call the office.",
   },
   {
     q: "Do you accept my insurance?",
-    a: "We accept all insurance plans. Our team can review your benefits with you before treatment.",
+    a: "Idea Dental works with many dental insurance plans. Because coverage and your out-of-pocket responsibility vary by plan and treatment, our team verifies your benefits before treatment so you know what to expect. Call (832) 664-8640 or ask at your visit and we’ll help check your coverage.",
   },
   {
     q: "What kind of braces do you offer?",
@@ -250,10 +327,78 @@ export const faqs = [
   },
   {
     q: "What should I expect at my first visit?",
-    a: "We'll assess your oral health and build a dental plan based on your individual needs. We see your first visit as the start of a long-term relationship, not a one-off appointment.",
+    a: "At your first visit the dentist reviews your health history, examines your teeth and gums, takes any necessary imaging, and discusses your goals. You’ll receive a recommended treatment plan with the options available to you. It’s a good time to ask about scheduling, insurance and payment options.",
   },
   {
     q: "¿Hablan español?",
-    a: "Sí, hablamos español. Our team is glad to assist Spanish-speaking patients throughout their visit.",
+    a: "Yes. Idea Dental is a bilingual dental office and our team speaks both English and Spanish, so Spanish-speaking patients can discuss symptoms, treatment options and costs comfortably in their own language. Sí, hablamos español.",
+  },
+  {
+    q: "What is Idea Dental?",
+    a: "Idea Dental is a family and cosmetic dental practice in Houston, Texas, at 216 W Little York Road, Suite B. We provide general, preventive, restorative, braces, implant and cosmetic dentistry for children, teens and adults. Our team is bilingual and treats patients in both English and Spanish.",
+  },
+  {
+    q: "Where is Idea Dental located?",
+    a: "Idea Dental is located at 216 W Little York Road, Suite B, Houston, TX 77076, just off I-45 in north Houston. You can reach the office by phone at (832) 664-8640.",
+  },
+  {
+    q: "Are you accepting new patients?",
+    a: "Yes, Idea Dental welcomes new patients of all ages, including families who want children and adults seen at the same office. You can request an appointment online or call (832) 664-8640 to schedule your first visit.",
+  },
+  {
+    q: "Do you treat children and families?",
+    a: "Yes. Idea Dental provides family dentistry, so children, teens and adults can be seen under one roof. This includes preventive care, orthodontics for kids and teens, and general treatment for the whole family.",
+  },
+  {
+    q: "How does a dental implant work?",
+    a: "A dental implant is a small titanium post placed in the jawbone to replace the root of a missing tooth. Over about three to six months it fuses with the bone, a process called osseointegration, creating a stable foundation. A custom crown is then attached on top, giving you a replacement tooth that looks and functions like a natural one.",
+  },
+  {
+    q: "Can implants replace several teeth or a full arch?",
+    a: "Yes. A single implant with a crown can replace one tooth, while implant-supported bridges or dentures can replace several teeth or a full arch. The right option depends on how many teeth are missing and the condition of your jawbone, which the dentist evaluates at your consultation.",
+  },
+  {
+    q: "Am I a candidate for dental implants?",
+    a: "Most healthy adults with one or more missing teeth are candidates. Good candidates have enough jawbone to support the implant and healthy gums. Factors like smoking, uncontrolled diabetes or gum disease can affect healing, so the dentist reviews your health history and takes imaging before recommending implants.",
+  },
+  {
+    q: "Is dental implant surgery painful?",
+    a: "The procedure itself is done with local anesthesia, so you should not feel pain during placement. Afterward, most patients have mild swelling or soreness for a few days that is usually managed with over-the-counter pain relief and settles quickly.",
+  },
+  {
+    q: "What is the iTero scanner?",
+    a: "The iTero scanner is a digital 3D scanner Idea Dental uses to create precise images of your teeth without the messy, uncomfortable putty impressions of the past. It makes appointments more comfortable and gives the dentist a detailed digital model to plan your treatment.",
+  },
+  {
+    q: "At what age should my child’s bite be checked?",
+    a: "It’s widely recommended that a child’s bite be evaluated by around age seven. Treatment often isn’t needed that early, but a check lets the dentist watch how the teeth and jaw are developing and catch problems while they are simpler to correct.",
+  },
+  {
+    q: "What are porcelain veneers?",
+    a: "Porcelain veneers are thin, custom-made shells bonded to the front of your teeth to improve their color, shape, size or length. They are a cosmetic option for teeth that are discolored, chipped or uneven, and they give a natural-looking, lasting result.",
+  },
+  {
+    q: "What is a root canal and does it hurt?",
+    a: "A root canal treats an infected or badly damaged tooth by removing the inflamed inner tissue, cleaning the space and sealing it, which relieves pain and saves the tooth. Modern root canals are done under anesthesia and, for most patients, feel similar to getting a filling rather than the painful reputation they once had.",
+  },
+  {
+    q: "Do I really need to replace a missing tooth?",
+    a: "Yes, replacing a missing tooth is usually recommended. When a tooth is gone, nearby teeth can shift, the jawbone can shrink over time, and chewing and speech can be affected. Options such as implants, bridges and dentures restore function and help protect your remaining teeth.",
+  },
+  {
+    q: "What are dentures and are there different kinds?",
+    a: "Dentures are removable replacements for missing teeth. Full dentures replace all the teeth in an arch, while partial dentures fill in gaps when some natural teeth remain. Idea Dental fits dentures for proper function and comfort and provides guidance on at-home care and follow-up cleanings.",
+  },
+  {
+    q: "How often should I have a dental check-up and cleaning?",
+    a: "For most people a check-up and professional cleaning every six months is recommended. Regular visits let the dentist catch small problems early, before they need more involved treatment. Some patients with gum disease or other conditions may be advised to come more often.",
+  },
+  {
+    q: "How much will my treatment cost?",
+    a: "The cost depends on the examination findings, the specific treatment you need, your insurance benefits and the agreed treatment plan, so a final price is confirmed after the dentist evaluates your teeth. Idea Dental is known for affordable pricing and offers payment plans for care spread over multiple visits. Contact the office for current fees for your treatment.",
+  },
+  {
+    q: "Can I request an appointment online?",
+    a: "Yes. You can request an appointment through the form on our website and a member of the team will confirm your appointment by phone. For urgent problems or same-day care, calling (832) 664-8640 is the fastest way to be seen.",
   },
 ];

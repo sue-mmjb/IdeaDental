@@ -51,7 +51,13 @@ export function aboutMotion() {
     {
       clipPath: "inset(0% 0% 0% 0%)",
       ease: ease.linear,
-      scrollTrigger: { trigger: overlay.parentElement, start: "top 80%", end: "bottom 40%", scrub: true },
+      scrollTrigger: {
+        trigger: overlay.parentElement,
+        start: "top 85%",
+        end: "top 35%",
+        scrub: true,
+        invalidateOnRefresh: true,
+      },
     },
   );
 }

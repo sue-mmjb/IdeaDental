@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { business, features, technology } from "@/lib/content";
+import { business, features, intros, technology } from "@/lib/content";
+import VideoThumb from "./VideoThumb";
 import { ArrowPill, Eyebrow, Heading } from "../ui";
 import { ArrowUpRight } from "../icons";
 
@@ -13,18 +14,24 @@ const floats = [
 
 export default function Technology() {
   return (
-    <section id="technology" className="overflow-hidden bg-white pb-24 pt-20 md:pb-32 md:pt-28">
+    <section id="technology" className="overflow-hidden bg-paper pb-24 pt-20 md:pb-32 md:pt-28">
       <div className="container-x text-center">
         <Eyebrow data-reveal>Technology</Eyebrow>
         <Heading data-reveal className="mx-auto mt-5 max-w-[16ch]">
-          We Have the Newest Technology
+          Advanced Dental Technology
         </Heading>
+        <p data-reveal className="mx-auto mt-5 max-w-[58ch] text-[15px] leading-relaxed text-muted">
+          {intros.technology}
+        </p>
 
         <dl className="mx-auto mt-10 grid max-w-[900px] gap-8 text-left md:grid-cols-2 md:gap-12">
           {technology.map((t) => (
             <div key={t.title} data-reveal className="border-t border-line pt-5">
               <dt className="font-display text-[19px] font-semibold tracking-[-0.01em]">{t.title}</dt>
-              <dd className="mt-2 text-[15px] leading-relaxed text-muted">{t.description}</dd>
+              <dd className="mt-2 text-[15px] leading-relaxed text-muted">
+                {t.description}
+                <VideoThumb id={t.video.id} title={t.video.title} start={t.video.start} />
+              </dd>
             </div>
           ))}
         </dl>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { testimonials } from "@/lib/content";
+import { reviewSummary, testimonials } from "@/lib/content";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { delay, distance, duration, ease } from "@/lib/motion-tokens";
 import { Eyebrow, NavArrow } from "../ui";
@@ -52,7 +52,16 @@ export default function Testimonials() {
           <div data-reveal>
             <Eyebrow>Patient Reviews</Eyebrow>
             <p className="mt-4 max-w-[26ch] font-display text-[clamp(20px,1.9vw,28px)] font-medium leading-[1.3] tracking-[-0.02em] text-ink/75">
-              Here’s what our patients have to say about their visits to Idea Dental.
+              See why Houston patients choose Idea Dental for affordable, compassionate dental care.
+            </p>
+            <p data-reveal className="mt-6 flex items-baseline gap-3">
+              <span className="font-display text-[34px] font-semibold tracking-[-0.02em]">
+                {reviewSummary.rating}
+              </span>
+              <span aria-hidden className="text-[15px] tracking-[0.1em] text-primary">
+                ★★★★★
+              </span>
+              <span className="text-[14px] text-muted">{reviewSummary.count}</span>
             </p>
           </div>
           <div data-reveal className="flex items-center gap-3">
