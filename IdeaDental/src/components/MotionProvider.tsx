@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { gsap, ScrollSmoother, useGSAP, MOTION_OK, REDUCED_MOTION } from "@/lib/gsap";
+import { gsap, ScrollSmoother, ScrollTrigger, useGSAP, MOTION_OK, REDUCED_MOTION } from "@/lib/gsap";
 import {
   aboutMotion,
   carouselMotion,
@@ -30,12 +30,19 @@ export default function MotionProvider({ children }: { children: ReactNode }) {
           let removeHover: (() => void) | undefined;
 
           if (motion) {
+            // A phone's address bar hides and reappears as you scroll, which resizes the
+            // viewport. Treated as a real resize it re-measures every pin mid-scroll, and the
+            // page ends up with the gallery slipping its pin and dead space past the footer.
+            // Ignoring it, and letting GSAP own touch scrolling, keeps the measurements still.
+            ScrollTrigger.config({ ignoreMobileResize: true });
+
             ScrollSmoother.create({
               wrapper: "#smooth-wrapper",
               content: "#smooth-content",
               smooth: 1.1,
               smoothTouch: 0.1,
               effects: false,
+              normalizeScroll: true,
             });
             heroMotion();
             aboutMotion();
@@ -58,9 +65,17 @@ export default function MotionProvider({ children }: { children: ReactNode }) {
           };
           document.addEventListener("click", onAnchor);
 
+          // Fonts and lazy images land after the first measurement, so the page height the
+          // smoother caches is a guess until they do. Re-measure once they have settled.
+          const settle = () => ScrollTrigger.refresh();
+          document.fonts?.ready.then(settle);
+          if (document.readyState === "complete") settle();
+          else window.addEventListener("load", settle);
+
           return () => {
             removeHover?.();
             document.removeEventListener("click", onAnchor);
+            window.removeEventListener("load", settle);
           };
         },
       );
