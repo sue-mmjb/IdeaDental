@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/*
+ * Idea Dental on the StayGo layout system.
+ * Type: the dental brand pairing already used in ../../web (Manrope display, Inter body),
+ * self-hosted through next/font. Palette: the StayGo neutrals + one controlled accent.
+ */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif, sans-serif;
+
+  --color-primary: #0000ff;
+  --color-primary-hover: #0000d6;
+  --color-ink: #1a1a1a;
+  --color-muted: #6e6e73;
+  --color-soft: #b5b5ba;
+  --color-line: #e4e4e7;
+  --color-surface: #f5f5f6;
+  --color-night: #111111;
+
+  --radius-card: 20px;
+}
+
+html {
+  background: #ffffff;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* Shared horizontal rhythm: content sits ~5.5% in from the edges like the StayGo reference. */
+@utility container-x {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 5.5vw, 88px);
+}
+
+[data-reveal] {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    will-change: auto;
+  }
+}
