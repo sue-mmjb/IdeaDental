@@ -67,7 +67,7 @@ export default function Header() {
   return (
     <header className="container-x relative pt-6 md:pt-8">
       <div data-hero-nav className="flex items-center justify-between gap-6 border-b border-white/25 pb-5">
-        <a href="#top" aria-label="Idea Dental — home" className="shrink-0">
+        <a href="#top" aria-label="Idea Dental home" className="shrink-0">
           <Image src="/images/logo-white.png" alt="Idea Dental" width={476} height={176} className="h-10 w-auto md:h-11" preload />
         </a>
         <nav aria-label="Primary" className="hidden items-center gap-7 text-[15px] text-white/90 lg:flex">

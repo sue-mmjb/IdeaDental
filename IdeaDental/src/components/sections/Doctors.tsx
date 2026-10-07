@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { doctors } from "@/lib/content";
+import { doctors, intros } from "@/lib/content";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { delay, distance, duration, ease } from "@/lib/motion-tokens";
 import { Eyebrow, Heading } from "../ui";
@@ -97,6 +97,9 @@ export default function Doctors() {
             <br />
             Your Care
           </Heading>
+          <p data-reveal className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-muted">
+            {intros.doctors}
+          </p>
         </div>
         <div className="mt-12 grid gap-12 md:mt-16 md:grid-cols-2 md:gap-8">
           {doctors.map((d) => (

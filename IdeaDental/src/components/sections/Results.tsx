@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { results } from "@/lib/content";
+import { intros, results } from "@/lib/content";
 import { ScrollSmoother, ScrollTrigger } from "@/lib/gsap";
 import { CAROUSEL_EVENT, CAROUSEL_ID } from "@/lib/choreography";
 import { Eyebrow, Heading, NavArrow } from "../ui";
@@ -62,7 +62,7 @@ export default function Results() {
       id="before-after"
       aria-roledescription="carousel"
       aria-label="Before and after gallery"
-      className="flex min-h-[100svh] flex-col justify-center overflow-hidden bg-white py-[max(56px,8vh)]"
+      className="flex min-h-[100svh] flex-col justify-center overflow-hidden bg-paper py-[max(56px,8vh)]"
     >
       <div className="container-x flex items-end justify-between gap-6">
         <div>
@@ -72,6 +72,9 @@ export default function Results() {
             <br />
             Gallery
           </Heading>
+          <p data-reveal className="mt-5 max-w-[46ch] text-[15px] leading-relaxed text-muted">
+            {intros.results}
+          </p>
         </div>
         <div data-reveal className="flex shrink-0 gap-3 md:mb-2">
           <NavArrow dir="left" active={progress > 0.01} onClick={() => step(-1)} />
@@ -101,7 +104,7 @@ export default function Results() {
               <div className="relative aspect-[2/3] overflow-hidden rounded-card bg-surface">
                 <Image
                   src={`/images/results/${r.key}.jpg`}
-                  alt={`${r.treatment} before and after${r.timing ? ` — ${r.timing}` : ""}`}
+                  alt={`${r.treatment} before and after${r.timing ? `, ${r.timing}` : ""}`}
                   fill
                   sizes="(min-width: 768px) 22vw, 60vw"
                   className="object-cover"

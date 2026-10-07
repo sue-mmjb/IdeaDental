@@ -9,24 +9,28 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif, sans-serif;
 
-  --color-primary: #0000ff;
-  --color-primary-hover: #0000d6;
-  --color-ink: #1a1a1a;
-  --color-muted: #6e6e73;
-  --color-soft: #b5b5ba;
-  --color-line: #e4e4e7;
-  --color-surface: #f5f5f6;
-  --color-night: #111111;
+  /* Palette carried over from the previous Idea Dental design (index.html @ 228a725):
+     warm paper, deep teal ink, and the logo blue deepened so labels clear WCAG AA. */
+  --color-primary: #007bb0;        /* was --accent      */
+  --color-primary-hover: #00628c;  /* was --accent-ink  */
+  --color-ink: #0f2a33;            /* was --ink         */
+  --color-muted: #54707a;          /* was --ink-soft    */
+  --color-soft: #a9b2b1;           /* tint of --ink on paper, same weight as the grey it replaces */
+  --color-line: #e5e2d7;           /* was --line        */
+  --color-paper: #f9f8f3;          /* was --paper, the page background */
+  --color-surface: #f1efe6;        /* was --paper-2, the alternating band */
+  --color-night: #00405c;          /* was --accent-deep, the old dark/footer tone */
+  --color-brand: #009adb;          /* the literal logo blue: fills and tints only */
 
   --radius-card: 20px;
 }
 
 html {
-  background: #ffffff;
+  background: var(--color-paper);
 }
 
 body {
-  background: #ffffff;
+  background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;

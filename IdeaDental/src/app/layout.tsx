@@ -7,9 +7,9 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const manrope = Manrope({ variable: "--font-manrope", subsets: ["latin"], weight: ["500", "600", "700"] });
 
 export const metadata: Metadata = {
-  title: "Idea Dental — General Dentistry in Houston, TX",
+  title: "Dentist in Houston, TX | Idea Dental: Affordable, Bilingual Dental Care",
   description:
-    "Idea Dental is a bilingual family dentist in Houston, TX: cleanings, fillings, extractions, root canals, crowns, dental implants, veneers and traditional metal braces. Text (832) 664-8640 to book. Hablamos Español.",
+    "Idea Dental is a bilingual family dentist in Houston, TX. Metal braces, dental implants, veneers and general care. 4.9★ from 119 reviews. Payment plans for treatment spread over multiple visits. Call (832) 664-8640.",
 };
 
 // LocalBusiness/Dentist structured data built only from verified NAP + hours.
