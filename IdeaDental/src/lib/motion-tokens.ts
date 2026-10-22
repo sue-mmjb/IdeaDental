@@ -34,7 +34,7 @@ export const duration = {
   /** Icon transform in place (chevron flip). */
   iconMorph: 0.2,
   /** Section-scale reveal — same `out` curve, longer travel. */
-  reveal: 0.9,
+  reveal: 0.6,
   /** Hero load-in pieces. */
   intro: 1.2,
 } as const;

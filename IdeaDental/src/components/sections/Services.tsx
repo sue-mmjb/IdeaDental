@@ -54,7 +54,7 @@ function ServiceCard({ s, large, className = "" }: { s: ServiceCategory; large?:
       aria-label={`${s.label}: ${s.cta.label.toLowerCase()}`}
       data-reveal
       data-zoom-card
-      className={`group relative block min-h-[420px] overflow-hidden rounded-card bg-night text-white md:min-h-0 ${className}`}
+      className={`group relative block min-h-[260px] overflow-hidden rounded-card bg-night text-white md:min-h-0 ${className}`}
     >
       <Image
         data-zoom-img
@@ -78,7 +78,7 @@ function ServiceCard({ s, large, className = "" }: { s: ServiceCategory; large?:
             {s.description}
           </p>
           {s.treatments.length > 0 && (
-            <ul className="mt-4 flex flex-wrap gap-1.5" aria-label={`${s.label} treatments`}>
+            <ul className="mt-4 hidden flex-wrap gap-1.5 sm:flex" aria-label={`${s.label} treatments`}>
               {s.treatments.map((t) => (
                 <li key={t} className="rounded-full border border-white/30 px-3 py-1 text-[12px] text-white/90">
                   {t}
@@ -101,7 +101,7 @@ function ServiceCard({ s, large, className = "" }: { s: ServiceCategory; large?:
 export default function Services() {
   const [restorative, braces, cosmetic, faq] = services;
   return (
-    <section id="services" className="bg-surface py-20 md:py-28">
+    <section id="services" className="bg-surface py-14 md:py-20">
       <div className="container-x">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
@@ -121,12 +121,12 @@ export default function Services() {
         </div>
 
         {/* Uneven masonry, two rows with the wide card alternating sides (StayGo ratio 797 : 427). */}
-        <div className="mt-12 grid gap-5 md:mt-14">
-          <div className="grid gap-5 md:h-[clamp(420px,38vw,600px)] md:grid-cols-[1.866fr_1fr]">
+        <div className="mt-10 grid gap-5 md:mt-12">
+          <div className="grid gap-5 md:h-[clamp(340px,30vw,460px)] md:grid-cols-[1.866fr_1fr]">
             <ServiceCard s={restorative} large />
             <ServiceCard s={braces} />
           </div>
-          <div className="grid gap-5 md:h-[clamp(420px,38vw,600px)] md:grid-cols-[1fr_1.866fr]">
+          <div className="grid gap-5 md:h-[clamp(340px,30vw,460px)] md:grid-cols-[1fr_1.866fr]">
             <ServiceCard s={cosmetic} />
             <ServiceCard s={faq} large />
           </div>

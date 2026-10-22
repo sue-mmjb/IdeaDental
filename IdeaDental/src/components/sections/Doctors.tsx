@@ -88,7 +88,7 @@ function Doctor({ d }: { d: (typeof doctors)[number] }) {
 
 export default function Doctors() {
   return (
-    <section id="doctors" className="bg-surface py-20 md:py-28">
+    <section id="doctors" className="bg-surface py-14 md:py-20">
       <div className="container-x">
         <div className="grid gap-6 md:grid-cols-[0.37fr_0.63fr] md:gap-8">
           <Eyebrow data-reveal>Meet Our Doctors</Eyebrow>
@@ -101,7 +101,7 @@ export default function Doctors() {
             {intros.doctors}
           </p>
         </div>
-        <div className="mt-12 grid gap-12 md:mt-16 md:grid-cols-2 md:gap-8">
+        <div className="mt-10 grid gap-10 md:mt-12 md:grid-cols-2 md:gap-8">
           {doctors.map((d) => (
             <Doctor key={d.key} d={d} />
           ))}

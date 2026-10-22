@@ -1,6 +1,5 @@
 import MotionProvider from "@/components/MotionProvider";
 import Hero from "@/components/sections/Hero";
-import AskIdeaDental from "@/components/sections/AskIdeaDental";
 import About from "@/components/sections/About";
 import Services from "@/components/sections/Services";
 import WhyUs from "@/components/sections/WhyUs";
@@ -17,7 +16,6 @@ export default function Home() {
     <MotionProvider>
       <main>
         <Hero />
-        <AskIdeaDental />
         <About />
         <Services />
         <WhyUs />
@@ -26,7 +24,7 @@ export default function Home() {
         <Technology />
         <Pricing />
         <Testimonials />
-        <Faq />
+        <Faq compact />
       </main>
       <Footer />
     </MotionProvider>

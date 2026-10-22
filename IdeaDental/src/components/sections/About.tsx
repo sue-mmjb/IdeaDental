@@ -3,7 +3,7 @@ import { ArrowPill, Eyebrow } from "../ui";
 
 export default function About() {
   return (
-    <section id="about" className="bg-paper py-20 md:py-28">
+    <section id="about" className="bg-paper py-14 md:py-20">
       <div className="container-x grid gap-10 md:grid-cols-[0.37fr_0.63fr] md:gap-8">
         <div className="flex flex-col justify-between gap-8">
           <Eyebrow>{about.eyebrow}</Eyebrow>

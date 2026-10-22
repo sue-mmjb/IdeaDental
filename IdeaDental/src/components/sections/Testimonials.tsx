@@ -45,7 +45,7 @@ export default function Testimonials() {
       ref={root}
       aria-roledescription="carousel"
       aria-label="Patient reviews"
-      className="bg-surface py-20 md:py-28"
+      className="bg-surface py-14 md:py-20"
     >
       <div className="container-x grid gap-12 md:grid-cols-[1fr_auto_1.15fr] md:gap-10 lg:gap-16">
         <div className="flex flex-col justify-between gap-10">
