@@ -159,6 +159,27 @@ export default function Header() {
               </div>
             </div>
 
+            {/* Phone-only bottom bar: Call and Book stay one thumb away down the whole page. */}
+            <div
+              aria-hidden={!stuck}
+              className={`fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-night/95 p-3 pb-[max(12px,env(safe-area-inset-bottom))] backdrop-blur-md [transition:transform_.3s_cubic-bezier(.16,1,.3,1),visibility_.3s] lg:hidden ${
+                stuck ? "translate-y-0" : "invisible translate-y-full"
+              }`}
+            >
+              <div className="flex gap-2">
+                <a
+                  href={business.phoneHref}
+                  tabIndex={stuck ? 0 : -1}
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/40 py-3 text-[15px] font-medium text-white"
+                >
+                  <Phone className="size-4" /> Call or text
+                </a>
+                <PrimaryButton href="/#contact" tabIndex={stuck ? 0 : -1} className="flex-1 py-3">
+                  Request an Appointment
+                </PrimaryButton>
+              </div>
+            </div>
+
             <div
               ref={panel}
               id="mobile-menu"

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { business, hero } from "@/lib/content";
+import { business, hero, reviewSummary } from "@/lib/content";
 import { PrimaryButton } from "../ui";
 import { Phone } from "../icons";
 import Header from "./Header";
@@ -51,6 +51,12 @@ export default function Hero() {
             </h1>
             <p data-hero-line className="mt-5 max-w-[46ch] text-[16px] leading-relaxed text-white/80">
               {hero.body}
+            </p>
+            <p data-hero-line className="mt-4 flex items-center gap-2 text-[14px] text-white/85">
+              <span aria-hidden className="tracking-[0.1em] text-brand">★★★★★</span>
+              <span>
+                <strong className="font-semibold text-white">{reviewSummary.rating}</strong> · {reviewSummary.count}
+              </span>
             </p>
           </div>
 

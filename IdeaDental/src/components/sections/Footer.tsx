@@ -120,7 +120,7 @@ export default function Footer() {
           />
         </div>
 
-        <div className="flex flex-col gap-4 border-t border-white/10 py-8 text-[14px] text-white/70 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 border-t border-white/10 py-8 pb-24 text-[14px] text-white/70 md:flex-row md:items-center md:justify-between lg:pb-8">
           <p>© {business.name}. All Rights Reserved</p>
           <p>
             {business.address.line1}, {business.address.line2}
