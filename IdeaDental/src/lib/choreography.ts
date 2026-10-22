@@ -5,12 +5,12 @@ import { duration, ease, marqueePxPerSecond } from "./motion-tokens";
 
 /*
  * Scroll choreography for the whole page. Each function is called from <MotionProvider>
- * inside a gsap.matchMedia() handler, AFTER ScrollSmoother exists, so every ScrollTrigger
- * picks up the smoother's scroller proxy and transform-based pinning.
+ * inside a gsap.matchMedia() handler. Scrolling is native, so nothing here pins, scrubs the
+ * page or fights the user's scroll: entrances are short time-based fades (ease.out), and the
+ * only scroll-linked effects are two gentle scrubs (hero watermark, About text colour).
  *
- * Follows the house motion system (see motion-tokens.ts): scroll-scrubbed = linear with
- * `scrub: true`; time-based entrances = ease.out; exits = ease.in. Transforms / opacity /
- * clip-path only, so everything stays on the compositor.
+ * Follows the house motion system (see motion-tokens.ts). Transforms / opacity / clip-path
+ * only, so everything stays on the compositor.
  */
 
 const q = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) =>
@@ -23,11 +23,11 @@ export function heroMotion() {
 
   const intro = gsap.timeline({ defaults: { ease: ease.out, duration: duration.intro } });
   intro
-    .from(hero.querySelector("[data-hero-bg]"), { scale: 1.15, duration: 1.8 }, 0)
-    .from(hero.querySelector("[data-hero-watermark-inner]"), { yPercent: 30, autoAlpha: 0 }, 0.15)
-    .from(q("[data-hero-nav] > *", hero), { y: -16, autoAlpha: 0, duration: 0.7, stagger: 0.08 }, 0.3)
-    .from(q("[data-hero-line]", hero), { yPercent: 110, duration: 1, stagger: 0.12 }, 0.45)
-    .from(hero.querySelector("[data-hero-search]"), { y: 30, autoAlpha: 0, duration: 0.9 }, 0.75);
+    .from(hero.querySelector("[data-hero-bg]"), { scale: 1.12, duration: 1.6 }, 0)
+    .from(hero.querySelector("[data-hero-watermark-inner]"), { yPercent: 30, autoAlpha: 0 }, 0.1)
+    .from(q("[data-hero-nav] > *", hero), { y: -12, autoAlpha: 0, duration: 0.6, stagger: 0.06 }, 0.2)
+    .from(q("[data-hero-line]", hero), { yPercent: 110, duration: 0.9, stagger: 0.1 }, 0.3)
+    .from(hero.querySelector("[data-hero-search]"), { y: 24, autoAlpha: 0, duration: 0.8 }, 0.55);
 
   // Outer wrapper carries the scrub so it never fights the intro tween on the inner element.
   gsap.to(hero.querySelector("[data-hero-watermark]"), {
@@ -38,8 +38,8 @@ export function heroMotion() {
 }
 
 /**
- * About: house text-colour reveal — a dark overlay layer, stacked exactly on a muted base,
- * is uncovered by ONE vertical clip line sweeping left→right (so shorter lines finish first).
+ * About: house text-colour reveal. A dark overlay layer, stacked exactly on a muted base,
+ * is uncovered by ONE vertical clip line sweeping left to right (so shorter lines finish first).
  * Linear scrub across roughly the middle 60% of the block's scroll-through.
  */
 export function aboutMotion() {
@@ -62,21 +62,25 @@ export function aboutMotion() {
   );
 }
 
-/** Partner row: seamless infinite marquee, constant speed, independent of scroll. */
+/** Feature row: seamless infinite marquee, constant speed, independent of scroll. */
 export function marqueeMotion() {
   const track = document.querySelector<HTMLElement>("[data-marquee-track]");
   if (!track) return;
-  // The track renders the logo set twice; one set's width is the loop distance.
+  // The track renders the set twice; one set's width is the loop distance.
   const loop = track.scrollWidth / 2;
   gsap.to(track, { x: -loop, duration: loop / marqueePxPerSecond, ease: ease.linear, repeat: -1 });
 }
 
-/** Batch reveal: opacity 0→1, y 50→0, stagger 0.15 as elements enter. */
+/**
+ * Batch reveal: a short fade with a small rise as elements enter. Kept quick and shallow
+ * (0.6s, 20px, tight stagger) so content is readable almost as soon as it is on screen and
+ * nothing feels like it is lagging behind the scroll.
+ */
 export function revealMotion() {
   const items = q("[data-reveal]");
-  gsap.set(items, { autoAlpha: 0, y: 50 });
+  gsap.set(items, { autoAlpha: 0, y: 20 });
   ScrollTrigger.batch(items, {
-    start: "top 88%",
+    start: "top 92%",
     once: true,
     onEnter: (batch) =>
       gsap.to(batch, {
@@ -84,76 +88,13 @@ export function revealMotion() {
         y: 0,
         duration: duration.reveal,
         ease: ease.out,
-        stagger: 0.15,
+        stagger: 0.06,
         overwrite: true,
       }),
   });
-
-  // Footer wordmark: letters rise out of a mask.
-  const letters = q("[data-wordmark-letter]");
-  if (letters.length) {
-    gsap.from(letters, {
-      yPercent: 100,
-      duration: duration.intro,
-      stagger: 0.06,
-      ease: ease.out,
-      scrollTrigger: { trigger: letters[0].parentElement, start: "top 92%" },
-    });
-  }
-
-  // Community floats drift at different depths.
-  q("[data-float]").forEach((el) => {
-    const depth = Number(el.dataset.float) || 1;
-    gsap.fromTo(
-      el,
-      { y: 40 * depth },
-      {
-        y: -40 * depth,
-        ease: ease.linear,
-        scrollTrigger: { trigger: el.parentElement, start: "top bottom", end: "bottom top", scrub: true },
-      },
-    );
-  });
-}
-
-export const CAROUSEL_ID = "stays-carousel";
-export const CAROUSEL_EVENT = "staygo:carousel";
-
-/** Carousel: pin the section and translate the track on X by scroll depth. */
-export function carouselMotion() {
-  const section = document.querySelector<HTMLElement>("[data-carousel]");
-  const viewport = section?.querySelector<HTMLElement>("[data-carousel-viewport]");
-  const track = section?.querySelector<HTMLElement>("[data-carousel-track]");
-  if (!section || !viewport || !track) return;
-
-  const distance = () => Math.max(0, track.scrollWidth - viewport.clientWidth);
-  let last = -1;
-
-  const tl = gsap.timeline({
-    defaults: { ease: ease.linear },
-    scrollTrigger: {
-      id: CAROUSEL_ID,
-      trigger: section,
-      start: "top top",
-      end: () => `+=${distance()}`,
-      pin: true,
-      scrub: true,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        // Only notify the arrows when progress moves meaningfully.
-        const p = Math.round(self.progress * 100) / 100;
-        if (p !== last) {
-          last = p;
-          window.dispatchEvent(new CustomEvent(CAROUSEL_EVENT, { detail: p }));
-        }
-      },
-    },
-  });
-
-  tl.to(track, { x: () => -distance() }, 0);
-  // Optional inner image parallax (skipped for photos with burned-in captions, e.g. before/after).
-  const parallax = q("[data-stay-img]", track);
-  if (parallax.length) tl.fromTo(parallax, { xPercent: -6 }, { xPercent: 6 }, 0);
+  // Anything already past the trigger line when the page loads mid-way (a #hash link, a reload)
+  // must not stay hidden.
+  ScrollTrigger.refresh();
 }
 
 /** Hover: buttons scale to 1.05; destination images zoom gently inside their card. */

@@ -50,12 +50,25 @@ body {
   padding-inline: clamp(20px, 5.5vw, 88px);
 }
 
-[data-reveal] {
-  will-change: transform, opacity;
+/* Native scrolling. In-page links glide; a sticky bar may sit over the top of a section. */
+html {
+  scroll-behavior: smooth;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-reveal] {
-    will-change: auto;
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+main > section[id] {
+  scroll-margin-top: 56px;
+}
+
+/* Horizontal rows scroll by finger, trackpad or arrows; the bar itself is noise. */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }

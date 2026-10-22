@@ -88,12 +88,13 @@ export const pricingDisclaimer =
   "Prices vary by case. Contact the office at (832) 664-8640 for current fees and to verify your insurance benefits.";
 
 export const nav = [
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Doctors", href: "#doctors" },
-  { label: "Technology", href: "#technology" },
-  { label: "Before & After", href: "#before-after" },
-  { label: "Contact", href: "#contact" },
+  { label: "Services", href: "/#services" },
+  { label: "About", href: "/#about" },
+  { label: "Doctors", href: "/#doctors" },
+  { label: "Before & After", href: "/#before-after" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "FAQs", href: "/faq" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 // Client-approved hero copy (web/ git history: "Update Hero copy to client-approved version").

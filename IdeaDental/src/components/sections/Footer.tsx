@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="absolute inset-0 -z-10 bg-linear-to-b from-night/85 via-night/70 to-night" />
 
       {/* Final CTA + appointment request */}
-      <div className="container-x pt-24 text-center md:pt-32">
+      <div className="container-x pt-16 text-center md:pt-24">
         <p data-reveal className="text-[13px] uppercase tracking-[0.14em] text-white/50">
           {business.name} · Houston, TX
         </p>
@@ -41,7 +41,7 @@ export default function Footer() {
       </div>
 
       {/* Contact details */}
-      <div className="container-x mt-24 md:mt-32">
+      <div className="container-x mt-16 md:mt-20">
         <div className="grid gap-10 border-t border-white/10 pt-12 md:grid-cols-3 md:gap-8">
           <div data-reveal>
             <p className="flex items-center gap-2 text-[13px] uppercase tracking-[0.08em] text-white/50">
@@ -109,18 +109,18 @@ export default function Footer() {
         </div>
 
         {/* Footer mark: the logo, capped at the height the lettered wordmark used to fill */}
-        <div className="mt-16 flex justify-center">
+        <div className="mt-12 flex justify-center">
           <Image
             src="/images/logo-wordmark-white.png"
             alt={business.name}
             width={1428}
             height={528}
-            sizes="(min-width: 768px) 720px, 100vw"
-            className="h-auto w-full max-w-[720px]"
+            sizes="(min-width: 768px) 440px, 100vw"
+            className="h-auto w-full max-w-[440px]"
           />
         </div>
 
-        <div className="flex flex-col gap-4 border-t border-white/10 py-8 text-[14px] text-white/70 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 border-t border-white/10 py-8 pb-24 text-[14px] text-white/70 md:flex-row md:items-center md:justify-between lg:pb-8">
           <p>© {business.name}. All Rights Reserved</p>
           <p>
             {business.address.line1}, {business.address.line2}

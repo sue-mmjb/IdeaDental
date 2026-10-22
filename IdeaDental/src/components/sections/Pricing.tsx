@@ -4,7 +4,7 @@ import { ArrowPill, Eyebrow, Heading } from "../ui";
 /** Insurance + the practice's current price list, set as a quiet editorial table. */
 export default function Pricing() {
   return (
-    <section id="pricing" className="bg-paper pb-20 md:pb-28">
+    <section id="pricing" className="bg-paper pb-14 md:pb-20">
       <div className="container-x grid gap-12 md:grid-cols-[0.37fr_0.63fr] md:gap-8">
         <div data-reveal>
           <Eyebrow>Insurance &amp; Pricing</Eyebrow>
@@ -38,11 +38,11 @@ export default function Pricing() {
           <tbody>
             {pricing.map((p) => (
               <tr key={p.item} className="border-b border-line">
-                <th scope="row" className="py-4 pr-4 font-display text-[clamp(16px,1.3vw,19px)] font-medium tracking-[-0.01em]">
+                <th scope="row" className="py-3 pr-4 font-display text-[clamp(16px,1.3vw,19px)] font-medium tracking-[-0.01em]">
                   {p.item}
                   {p.note && <span className="mt-1 block font-sans text-[13px] font-normal text-muted">{p.note}</span>}
                 </th>
-                <td className="whitespace-nowrap py-4 text-right font-display text-[clamp(16px,1.3vw,19px)] font-semibold text-ink">
+                <td className="whitespace-nowrap py-3 text-right font-display text-[clamp(16px,1.3vw,19px)] font-semibold text-ink">
                   {p.price}
                 </td>
               </tr>

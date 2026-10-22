@@ -1,23 +1,16 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { gsap, ScrollSmoother, ScrollTrigger, useGSAP, MOTION_OK, REDUCED_MOTION } from "@/lib/gsap";
-import {
-  aboutMotion,
-  carouselMotion,
-  heroMotion,
-  hoverMotion,
-  marqueeMotion,
-  revealMotion,
-} from "@/lib/choreography";
+import { gsap, ScrollTrigger, useGSAP, MOTION_OK, REDUCED_MOTION } from "@/lib/gsap";
+import { aboutMotion, heroMotion, hoverMotion, marqueeMotion, revealMotion } from "@/lib/choreography";
 
 /**
- * Owns ScrollSmoother and every scroll-driven animation. Creating the smoother first and the
- * ScrollTriggers after it is required for correct pinning, which is why the choreography lives
- * here rather than in each section (React runs child effects before parent effects).
+ * Owns every scroll-driven animation. Scrolling itself is native (no smoother, no pinning):
+ * sections reveal with a short fade as they enter, and that is the extent of it, so the page
+ * feels as quick as the browser's own scroll on every device.
  */
 export default function MotionProvider({ children }: { children: ReactNode }) {
-  const wrapper = useRef<HTMLDivElement>(null);
+  const root = useRef<HTMLDivElement>(null);
 
   useGSAP(
     () => {
@@ -30,43 +23,14 @@ export default function MotionProvider({ children }: { children: ReactNode }) {
           let removeHover: (() => void) | undefined;
 
           if (motion) {
-            // A phone's address bar hides and reappears as you scroll, which resizes the
-            // viewport. Treated as a real resize it re-measures every pin mid-scroll, and the
-            // page ends up with the gallery slipping its pin and dead space past the footer.
-            // Ignoring it, and letting GSAP own touch scrolling, keeps the measurements still.
-            ScrollTrigger.config({ ignoreMobileResize: true });
-
-            ScrollSmoother.create({
-              wrapper: "#smooth-wrapper",
-              content: "#smooth-content",
-              smooth: 1.1,
-              smoothTouch: 0.1,
-              effects: false,
-              normalizeScroll: true,
-            });
             heroMotion();
             aboutMotion();
-            carouselMotion();
             marqueeMotion();
             revealMotion();
             if (hover) removeHover = hoverMotion();
           }
 
-          // In-page anchors: ScrollSmoother owns scrolling, so native #hash jumps must go through it.
-          const onAnchor = (e: MouseEvent) => {
-            const link = (e.target as Element | null)?.closest?.('a[href^="#"]');
-            const id = link?.getAttribute("href")?.slice(1);
-            const target = id ? document.getElementById(id) : null;
-            const smoother = ScrollSmoother.get();
-            if (!target || !smoother) return;
-            e.preventDefault();
-            smoother.scrollTo(target, true, "top top");
-            history.replaceState(null, "", `#${id}`);
-          };
-          document.addEventListener("click", onAnchor);
-
-          // Fonts and lazy images land after the first measurement, so the page height the
-          // smoother caches is a guess until they do. Re-measure once they have settled.
+          // Fonts and lazy images land after the first measurement; re-measure once they settle.
           const settle = () => ScrollTrigger.refresh();
           document.fonts?.ready.then(settle);
           if (document.readyState === "complete") settle();
@@ -74,18 +38,13 @@ export default function MotionProvider({ children }: { children: ReactNode }) {
 
           return () => {
             removeHover?.();
-            document.removeEventListener("click", onAnchor);
             window.removeEventListener("load", settle);
           };
         },
       );
     },
-    { scope: wrapper },
+    { scope: root },
   );
 
-  return (
-    <div id="smooth-wrapper" ref={wrapper}>
-      <div id="smooth-content">{children}</div>
-    </div>
-  );
+  return <div ref={root}>{children}</div>;
 }
