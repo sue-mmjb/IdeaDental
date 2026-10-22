@@ -1,5 +1,8 @@
 name: Deploy to GitHub Pages
 
+# The Next.js app lives in the IdeaDental/ subfolder, so this workflow has to sit at the repo
+# root (GitHub only reads .github/workflows/ from the root) and run every step inside IdeaDental/.
+
 on:
   push:
     branches: [main]
@@ -14,6 +17,10 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+defaults:
+  run:
+    working-directory: IdeaDental
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -23,7 +30,8 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      # Provides the Pages sub-path ("/IdeaDental3") that next.config.ts builds under.
+          cache-dependency-path: IdeaDental/package-lock.json
+      # Provides the Pages sub-path ("/IdeaDental") that next.config.ts builds under.
       - id: pages
         uses: actions/configure-pages@v5
       - run: npm ci
@@ -32,7 +40,7 @@ jobs:
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: out
+          path: IdeaDental/out
 
   deploy:
     needs: build
