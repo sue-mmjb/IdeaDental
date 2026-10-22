@@ -40,6 +40,7 @@ export default function Pricing() {
               <tr key={p.item} className="border-b border-line">
                 <th scope="row" className="py-4 pr-4 font-display text-[clamp(16px,1.3vw,19px)] font-medium tracking-[-0.01em]">
                   {p.item}
+                  {p.note && <span className="mt-1 block font-sans text-[13px] font-normal text-muted">{p.note}</span>}
                 </th>
                 <td className="whitespace-nowrap py-4 text-right font-display text-[clamp(16px,1.3vw,19px)] font-semibold text-ink">
                   {p.price}

@@ -147,8 +147,8 @@ export const services: ServiceCategory[] = [
   {
     key: "cosmetic",
     label: "Veneers",
-    description: "Custom porcelain shells for a brighter, even smile.",
-    treatments: ["Porcelain Veneers"],
+    description: "Porcelain or composite veneers for a brighter, even smile.",
+    treatments: ["Porcelain Veneers", "Composite Veneers"],
     image: "/images/services/cosmetic-dentistry.jpg",
     alt: "Close-up of a bright, even smile",
     cta: { label: "Learn more", href: "#contact" },
@@ -173,6 +173,7 @@ export const results: Result[] = [
   { key: "traditional-braces-1", treatment: "Traditional Braces", timing: "9 months later", category: "Braces" },
   { key: "traditional-braces-2", treatment: "Traditional Braces", timing: "1 week later", category: "Braces" },
   { key: "teeth-cleaning", treatment: "Teeth Cleaning", category: "General Dentistry" },
+  { key: "composite-veneers", treatment: "Composite Veneers", category: "Cosmetic Dentistry" },
   { key: "cosmetic-bonding", treatment: "Cosmetic Bonding", category: "Cosmetic Dentistry" },
   { key: "dentures", treatment: "Dentures", category: "Cosmetic Dentistry" },
   { key: "traditional-braces-3", treatment: "Traditional Braces", timing: "4 months later", category: "Braces" },
@@ -239,7 +240,9 @@ export const features = [
 
 // Client price list, 2026-10-01 (Ihna → Jun) — replaces the live site's old comparison table.
 // The update has no "other dentist" figures, so the comparison column is gone.
-export const pricing = [
+export type PriceRow = { item: string; price: string; note?: string };
+
+export const pricing: PriceRow[] = [
   { item: "Adult cleaning", price: "$75" },
   { item: "Full-mouth debridement", price: "$200" },
   { item: "Deep cleaning", price: "$500" },
@@ -253,6 +256,8 @@ export const pricing = [
   { item: "Dental implant", price: "$3,500" },
   { item: "Implant crown & abutment", price: "$1,800" },
   { item: "Braces", price: "$2,500–$5,500" },
+  // Dr. Vu, 2026-10-22: "Composite veneers $6000. Contact us for more information."
+  { item: "Composite veneers", price: "$6,000", note: "Contact us for more information." },
 ];
 
 export const insurance =
@@ -318,12 +323,16 @@ export const faqs = [
     a: "A dental implant is $3,500, and the implant crown and abutment is $1,800. If a bone graft and membrane are needed, that is $600. The dentist confirms your total after evaluating your teeth.",
   },
   {
+    q: "How much do composite veneers cost?",
+    a: "Composite veneers are $6,000. Contact the office at (832) 664-8640 for more information, and the dentist will confirm whether veneers are the right option after evaluating your teeth.",
+  },
+  {
     q: "What general dental treatments do you provide?",
     a: "Cleanings and deep cleanings, fillings, simple and surgical extractions, root canals, crowns, and dentures or partial dentures, along with dental implants, veneers and metal braces.",
   },
   {
     q: "Do you offer teeth whitening?",
-    a: "No, we don't offer teeth whitening. For teeth that are chipped, uneven or discolored, porcelain veneers may be an option. The dentist can talk through your choices.",
+    a: "No, we don't offer teeth whitening. For teeth that are chipped, uneven or discolored, porcelain or composite veneers may be an option. The dentist can talk through your choices.",
   },
   {
     q: "What should I expect at my first visit?",
