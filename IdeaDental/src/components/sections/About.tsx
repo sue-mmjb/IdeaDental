@@ -1,5 +1,5 @@
 import { about } from "@/lib/content";
-import { ArrowPill, Eyebrow } from "../ui";
+import { Eyebrow } from "../ui";
 
 export default function About() {
   return (
@@ -23,9 +23,6 @@ export default function About() {
               {about.intro}
             </span>
           </p>
-          <div data-reveal className="mt-12 md:mt-16">
-            <ArrowPill href="#doctors">Meet Our Doctors</ArrowPill>
-          </div>
         </div>
       </div>
     </section>
