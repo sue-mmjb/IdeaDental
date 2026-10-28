@@ -157,7 +157,7 @@ export default async function ServicePage({ params }: Props) {
                       </figure>
                     ))}
                   </div>
-                  <Link href="/#before-after" className="mt-4 inline-block text-[14px] font-medium text-primary hover:underline">
+                  <Link href="/before-after" className="mt-4 inline-block text-[14px] font-medium text-primary hover:underline">
                     See the full gallery →
                   </Link>
                 </div>
