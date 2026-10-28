@@ -72,13 +72,6 @@ export default function Footer() {
               >
                 Request an appointment
               </a>
-              <a
-                href={business.phoneHref}
-                data-hover-scale
-                className="inline-flex items-center gap-2 rounded-full border border-ink/40 px-7 py-3.5 text-[15px] font-medium text-ink transition-colors hover:border-primary hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-              >
-                Call {business.phone}
-              </a>
             </div>
           </div>
 
@@ -169,7 +162,7 @@ export default function Footer() {
 
           <div className="mt-12 flex flex-col gap-2 border-t border-white/10 py-6 pb-24 text-[13px] text-white/55 md:flex-row md:items-center md:justify-between lg:pb-6">
             <p>© {business.name} · Houston, Texas</p>
-            <p>Hablamos Español · {business.phone}</p>
+            <p>Hablamos Español</p>
           </div>
         </div>
       </footer>

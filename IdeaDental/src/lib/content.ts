@@ -85,7 +85,7 @@ export const pricingNotes = [
 ];
 
 export const pricingDisclaimer =
-  "Prices vary by case. Contact the office at (832) 664-8640 for current fees and to verify your insurance benefits.";
+  "Prices vary by case. Contact the office for current fees and to verify your insurance benefits.";
 
 export const nav = [
   { label: "Services", href: "/#services" },
@@ -297,7 +297,7 @@ export const faqs = [
   },
   {
     q: "Do you take walk-ins?",
-    a: "Yes, Idea Dental welcomes walk-ins on Tuesdays and Wednesdays from 10:00 AM to 6:00 PM. Calling ahead at (832) 664-8640 is still a good idea so the team can let you know about wait times and be ready for your visit.",
+    a: "Yes, Idea Dental welcomes walk-ins on Tuesdays and Wednesdays from 10:00 AM to 6:00 PM. Calling ahead is still a good idea so the team can let you know about wait times and be ready for your visit.",
   },
   {
     q: "How do I book an appointment?",
@@ -313,7 +313,7 @@ export const faqs = [
   },
   {
     q: "Do you accept my insurance?",
-    a: "Idea Dental works with many dental insurance plans. Because coverage and your out-of-pocket responsibility vary by plan and treatment, our team verifies your benefits before treatment so you know what to expect. Call (832) 664-8640 or ask at your visit and we’ll help check your coverage.",
+    a: "Idea Dental works with many dental insurance plans. Because coverage and your out-of-pocket responsibility vary by plan and treatment, our team verifies your benefits before treatment so you know what to expect. Call the office or ask at your visit and we’ll help check your coverage.",
   },
   {
     q: "What kind of braces do you offer?",
@@ -325,7 +325,7 @@ export const faqs = [
   },
   {
     q: "How much do composite veneers cost?",
-    a: "Composite veneers are $6,000. Contact the office at (832) 664-8640 for more information, and the dentist will confirm whether veneers are the right option after evaluating your teeth.",
+    a: "Composite veneers are $6,000. Contact the office for more information, and the dentist will confirm whether veneers are the right option after evaluating your teeth.",
   },
   {
     q: "What general dental treatments do you provide?",
@@ -353,7 +353,7 @@ export const faqs = [
   },
   {
     q: "Are you accepting new patients?",
-    a: "Yes, Idea Dental welcomes new patients of all ages, including families who want children and adults seen at the same office. You can request an appointment online or call (832) 664-8640 to schedule your first visit.",
+    a: "Yes, Idea Dental welcomes new patients of all ages, including families who want children and adults seen at the same office. Text or call the office to schedule your first visit.",
   },
   {
     q: "Do you treat children and families?",
@@ -409,6 +409,6 @@ export const faqs = [
   },
   {
     q: "Can I request an appointment online?",
-    a: "Yes. You can request an appointment through the form on our website and a member of the team will confirm your appointment by phone. For urgent problems or same-day care, calling (832) 664-8640 is the fastest way to be seen.",
+    a: "Yes. You can request an appointment through the form on our website and a member of the team will confirm your appointment by phone. For urgent problems or same-day care, calling the office is the fastest way to be seen.",
   },
 ];

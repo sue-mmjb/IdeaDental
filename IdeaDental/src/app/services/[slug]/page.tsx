@@ -7,7 +7,6 @@ import Header from "@/components/sections/Header";
 import Faq from "@/components/sections/Faq";
 import Footer from "@/components/sections/Footer";
 import { PrimaryButton } from "@/components/ui";
-import { Phone } from "@/components/icons";
 import { business, results, reviewSummary } from "@/lib/content";
 import { costLine, faqsFor, pricesFor, servicePages, serviceSlugs } from "@/lib/services";
 
@@ -52,12 +51,12 @@ export default async function ServicePage({ params }: Props) {
               <PrimaryButton href="/#contact" className="px-7 py-3.5">
                 Request an Appointment
               </PrimaryButton>
-              <a
-                href={business.phoneHref}
+              <Link
+                href="/#pricing"
                 className="inline-flex items-center gap-2 rounded-full border border-white/40 px-7 py-3.5 text-[15px] font-medium text-white transition-colors hover:border-white"
               >
-                <Phone className="size-4" /> Call {business.phone}
-              </a>
+                See our prices
+              </Link>
             </div>
             <p className="mt-6 flex items-center gap-2 text-[14px] text-white/80">
               <span aria-hidden className="tracking-[0.1em] text-brand">★★★★★</span>
