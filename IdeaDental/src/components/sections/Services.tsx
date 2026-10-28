@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { about, services, type ServiceCategory } from "@/lib/content";
 import { ArrowPill, Heading } from "../ui";
 import { ArrowUpRight } from "../icons";
@@ -10,7 +11,7 @@ import { ArrowUpRight } from "../icons";
  */
 function QuestionCard({ s, className = "" }: { s: ServiceCategory; className?: string }) {
   return (
-    <a
+    <Link
       href={s.cta.href}
       aria-label={`${s.label}: ${s.cta.label.toLowerCase()}`}
       data-reveal
@@ -42,14 +43,14 @@ function QuestionCard({ s, className = "" }: { s: ServiceCategory; className?: s
       <span className="absolute bottom-5 right-5 grid size-11 shrink-0 place-items-center rounded-full border border-ink/25 text-ink transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-white md:bottom-7 md:right-7">
         <ArrowUpRight className="size-5" />
       </span>
-    </a>
+    </Link>
   );
 }
 
 function ServiceCard({ s, large, className = "" }: { s: ServiceCategory; large?: boolean; className?: string }) {
   if (s.cutout) return <QuestionCard s={s} className={className} />;
   return (
-    <a
+    <Link
       href={s.cta.href}
       aria-label={`${s.label}: ${s.cta.label.toLowerCase()}`}
       data-reveal
@@ -94,7 +95,7 @@ function ServiceCard({ s, large, className = "" }: { s: ServiceCategory; large?:
           <ArrowUpRight className="size-5" />
         </span>
       </div>
-    </a>
+    </Link>
   );
 }
 

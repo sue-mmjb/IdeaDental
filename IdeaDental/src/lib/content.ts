@@ -134,7 +134,7 @@ export const services: ServiceCategory[] = [
     treatments: ["Dental Implants", "Implant Crowns", "Bone Grafts", "Dentures & Partials"],
     image: "/images/services/dental-implants.jpg",
     alt: "Dental implant model",
-    cta: { label: "Learn more", href: "#contact" },
+    cta: { label: "Learn more", href: "/services/dental-implants" },
   },
   {
     key: "braces",
@@ -143,7 +143,7 @@ export const services: ServiceCategory[] = [
     treatments: ["Braces for Kids", "Braces for Teens", "Adult Braces", "Early Treatment", "Retention", "iTero Scanner"],
     image: "/images/services/braces.jpg",
     alt: "A young patient smiling, wearing metal braces",
-    cta: { label: "Learn more", href: "#contact" },
+    cta: { label: "Learn more", href: "/services/braces" },
   },
   {
     key: "cosmetic",
@@ -152,7 +152,7 @@ export const services: ServiceCategory[] = [
     treatments: ["Porcelain Veneers", "Composite Veneers"],
     image: "/images/services/cosmetic-dentistry.jpg",
     alt: "Close-up of a bright, even smile",
-    cta: { label: "Learn more", href: "#contact" },
+    cta: { label: "Learn more", href: "/services/veneers" },
   },
   {
     key: "faq",

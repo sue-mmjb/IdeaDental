@@ -16,13 +16,17 @@ export const HOME_FAQ_COUNT = 6;
 type Props = {
   /** Homepage: the first few questions beside the assistant, with a link to the full list. */
   compact?: boolean;
+  /** A page's own subset of questions (service pages); defaults to the whole list. */
+  items?: typeof faqs;
+  /** Heading above the list when not compact. */
+  title?: string;
 };
 
-export default function Faq({ compact = false }: Props) {
+export default function Faq({ compact = false, items: given, title }: Props) {
   const root = useRef<HTMLElement>(null);
   const [open, setOpen] = useState<number | null>(INITIAL_OPEN);
   const { contextSafe } = useGSAP({ scope: root });
-  const items = compact ? faqs.slice(0, HOME_FAQ_COUNT) : faqs;
+  const items = given ?? (compact ? faqs.slice(0, HOME_FAQ_COUNT) : faqs);
 
   const toggle = contextSafe((i: number) => {
     const next = open === i ? null : i;
@@ -98,7 +102,14 @@ export default function Faq({ compact = false }: Props) {
     return (
       <section id="faq" ref={root} className="bg-paper py-14 md:py-20">
         <div className="container-x">
-          <div className="mx-auto max-w-[820px]">{list}</div>
+          <div className="mx-auto max-w-[820px]">
+            {title && (
+              <Heading data-reveal className="mb-8 text-[clamp(26px,2.8vw,40px)]">
+                {title}
+              </Heading>
+            )}
+            {list}
+          </div>
         </div>
       </section>
     );
