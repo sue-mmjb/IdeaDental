@@ -25,7 +25,7 @@ export default function FaqPage() {
             </h1>
             <p className="mt-5 max-w-[56ch] text-[15px] leading-relaxed text-white/75">
               Hours, prices, insurance, payment and what to expect at your first visit. Can’t find it here?
-              Text or call (832) 664-8640.
+              Text or call the office.
             </p>
           </div>
         </div>
