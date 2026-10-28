@@ -51,7 +51,7 @@ export default function Testimonials() {
         <div className="flex flex-col justify-between gap-6 md:gap-10">
           <div data-reveal>
             <Eyebrow>Patient Reviews</Eyebrow>
-            <p className="mt-3 max-w-[26ch] font-display text-[clamp(17px,1.9vw,28px)] font-medium leading-[1.3] tracking-[-0.02em] text-ink/75">
+            <p className="mt-3 font-display text-[clamp(17px,1.9vw,28px)] font-medium leading-[1.3] tracking-[-0.02em] text-ink/75 md:max-w-[26ch]">
               See why Houston patients choose Idea Dental for affordable, compassionate dental care.
             </p>
             <p data-reveal className="mt-4 flex items-baseline gap-3 md:mt-6">
@@ -64,7 +64,7 @@ export default function Testimonials() {
               <span className="text-[14px] text-muted">{reviewSummary.count}</span>
             </p>
           </div>
-          <div data-reveal className="flex items-center gap-3">
+          <div data-reveal className="hidden items-center gap-3 md:flex">
             <NavArrow dir="left" active={false} onClick={() => go(-1)} />
             <NavArrow dir="right" active onClick={() => go(1)} />
             <p className="ml-3 text-[13px] tabular-nums text-muted" aria-live="polite">
@@ -95,6 +95,13 @@ export default function Testimonials() {
                 <p className="mt-0.5 text-[13px] text-muted">Idea Dental patient</p>
               </div>
             </figcaption>
+          </div>
+          <div className="mt-5 flex items-center gap-3 md:hidden">
+            <NavArrow dir="left" active={false} onClick={() => go(-1)} />
+            <NavArrow dir="right" active onClick={() => go(1)} />
+            <p className="ml-2 text-[13px] tabular-nums text-muted">
+              {index + 1} / {testimonials.length}
+            </p>
           </div>
         </figure>
       </div>
