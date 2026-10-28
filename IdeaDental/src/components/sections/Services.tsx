@@ -17,16 +17,16 @@ function QuestionCard({ s, className = "" }: { s: ServiceCategory; className?: s
       aria-label={`${s.label}: ${s.cta.label.toLowerCase()}`}
       data-reveal
       data-zoom-card
-      className={`group relative block aspect-[4/5] overflow-hidden rounded-card bg-night text-white md:flex md:aspect-auto md:flex-row-reverse md:items-center md:bg-white md:text-ink md:ring-1 md:ring-line ${className}`}
+      className={`group relative block aspect-[4/5] overflow-hidden rounded-card bg-linear-to-b from-brand/55 via-primary/70 via-45% to-night text-white md:flex md:aspect-auto md:flex-row-reverse md:items-center md:bg-white md:bg-none md:text-ink md:ring-1 md:ring-line ${className}`}
     >
-      <div className="absolute right-3 top-3 w-[38%] md:static md:flex md:w-[42%] md:shrink-0 md:items-center md:justify-center md:px-8">
+      <div className="absolute left-1/2 top-[3%] w-[54%] -translate-x-1/2 drop-shadow-[0_18px_24px_rgba(0,30,45,0.35)] md:static md:flex md:w-[42%] md:shrink-0 md:translate-x-0 md:items-center md:justify-center md:px-8 md:drop-shadow-none">
         <Image
           data-zoom-img
           src={s.image}
           alt={s.alt}
           width={468}
           height={476}
-          sizes="(min-width: 768px) 28vw, 30vw"
+          sizes="(min-width: 768px) 28vw, 40vw"
           className="h-auto w-full object-contain will-change-transform md:max-w-[260px]"
         />
       </div>
