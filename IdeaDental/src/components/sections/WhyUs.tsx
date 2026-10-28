@@ -15,16 +15,16 @@ export default function WhyUs() {
           <Heading className="mt-5">{whyUs.heading}</Heading>
         </div>
 
-        <dl className="mt-10 grid gap-8 sm:grid-cols-2 md:mt-12 md:grid-cols-3 md:gap-10 xl:grid-cols-5">
+        <dl className="mt-8 grid grid-cols-2 gap-x-5 gap-y-6 md:mt-12 md:grid-cols-3 md:gap-10 xl:grid-cols-5">
           {whyUs.reasons.map((r, i) => (
-            <div key={r.title} data-reveal className="border-t border-line pt-5">
-              <p className="text-[13px] tabular-nums text-muted">
+            <div key={r.title} data-reveal className="border-t border-line pt-4 md:pt-5">
+              <p className="hidden text-[13px] tabular-nums text-muted sm:block">
                 {String(i + 1).padStart(2, "0")} / {String(whyUs.reasons.length).padStart(2, "0")}
               </p>
-              <dt className="mt-3 font-display text-[19px] font-semibold tracking-[-0.01em]">
+              <dt className="font-display text-[16px] font-semibold tracking-[-0.01em] sm:mt-3 md:text-[19px]">
                 {r.title}
               </dt>
-              <dd className="mt-2 text-[15px] leading-relaxed text-muted">{r.body}</dd>
+              <dd className="mt-1.5 text-[14px] leading-relaxed text-muted md:mt-2 md:text-[15px]">{r.body}</dd>
             </div>
           ))}
         </dl>

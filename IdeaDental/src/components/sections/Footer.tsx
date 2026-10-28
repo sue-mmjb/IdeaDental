@@ -83,11 +83,6 @@ export default function Footer() {
           </div>
 
           <dl data-reveal className="mx-auto mt-10 max-w-[760px] rounded-card bg-white px-5 py-2 ring-1 ring-line sm:px-8 md:mt-12">
-            <Row label="Practice">
-              {business.name}
-              <br />
-              <span className="text-muted">Dr. Stephanie Vu, DDS</span>
-            </Row>
             <Row label="Address">
               {business.address.line1}
               <br />
@@ -101,20 +96,22 @@ export default function Footer() {
               <a href={business.phoneHref} className="font-display text-[18px] font-semibold tracking-[-0.01em] hover:text-primary">
                 {business.phone}
               </a>
-              <span className="block text-[13px] text-muted">Call or text</span>
             </Row>
             <Row label="Hours">
               {dayGroups.map((g) => (
                 <span key={g.label} className="block whitespace-nowrap text-[14px]">
                   <span className="text-muted">{g.short}</span> {g.time}
-                  {g.note && <span className="block text-[12px] text-muted">{g.note}</span>}
                 </span>
               ))}
+              <span className="mt-1 block text-[12px] text-muted">
+                {dayGroups
+                  .filter((g) => g.note)
+                  .map((g) => `${g.short}: ${g.note}`)
+                  .join(" · ")}
+              </span>
             </Row>
-            <Row label="Languages">
-              {business.languages}
-              <span className="block text-[13px] text-muted">Se habla español</span>
-            </Row>
+            <Row label="Languages">{business.languages} (se habla español)</Row>
+            <Row label="Dentist">Dr. Stephanie Vu, DDS</Row>
             <Row label="Follow">
               {business.social.map((s, i) => (
                 <span key={s.label}>
