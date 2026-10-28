@@ -4,21 +4,21 @@ import { ArrowPill, Eyebrow, Heading } from "../ui";
 
 export default function Technology() {
   return (
-    <section id="technology" className="overflow-hidden bg-paper py-14 md:py-20">
+    <section id="technology" className="overflow-hidden bg-paper py-12 md:py-20">
       <div className="container-x text-center">
         <Eyebrow data-reveal>Technology</Eyebrow>
-        <Heading data-reveal className="mx-auto mt-4 max-w-[16ch]">
+        <Heading data-reveal className="mx-auto mt-3 max-w-[16ch] text-[clamp(28px,3.9vw,60px)] md:mt-4">
           Advanced Dental Technology
         </Heading>
-        <p data-reveal className="mx-auto mt-4 max-w-[58ch] text-[15px] leading-relaxed text-muted">
+        <p data-reveal className="mx-auto mt-3 max-w-[58ch] text-[14px] leading-relaxed text-muted md:mt-4 md:text-[15px]">
           {intros.technology}
         </p>
 
-        <dl className="mx-auto mt-8 grid max-w-[900px] gap-8 text-left md:mt-10 md:grid-cols-2 md:gap-12">
+        <dl className="mx-auto mt-6 grid max-w-[900px] grid-cols-2 gap-4 text-left md:mt-10 md:gap-12">
           {technology.map((t) => (
-            <div key={t.title} data-reveal className="border-t border-line pt-5">
-              <dt className="font-display text-[19px] font-semibold tracking-[-0.01em]">{t.title}</dt>
-              <dd className="mt-2 text-[15px] leading-relaxed text-muted">
+            <div key={t.title} data-reveal className="border-t border-line pt-3 md:pt-5">
+              <dt className="font-display text-[15px] font-semibold tracking-[-0.01em] md:text-[19px]">{t.title}</dt>
+              <dd className="mt-1 text-[13px] leading-relaxed text-muted md:mt-2 md:text-[15px]">
                 {t.description}
                 <VideoThumb id={t.video.id} title={t.video.title} start={t.video.start} />
               </dd>
@@ -26,7 +26,7 @@ export default function Technology() {
           ))}
         </dl>
 
-        <div data-reveal className="mt-10 flex flex-col items-center gap-3">
+        <div data-reveal className="mt-7 flex flex-col items-center gap-2 md:mt-10 md:gap-3">
           <ArrowPill solid href="#contact">
             Request an Appointment
           </ArrowPill>
@@ -37,7 +37,7 @@ export default function Technology() {
             with reduced motion only the first set shows, wrapped and centred. */}
         <div
           data-reveal
-          className="mt-12 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_14%,#000_86%,transparent)]"
+          className="mt-12 hidden overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_14%,#000_86%,transparent)] md:block"
         >
           <div data-marquee-track className="flex w-max motion-reduce:w-full motion-reduce:justify-center">
             {[0, 1].map((copy) => (
