@@ -91,7 +91,7 @@ export const nav = [
   { label: "Services", href: "/#services" },
   { label: "About", href: "/#about" },
   { label: "Doctors", href: "/#doctors" },
-  { label: "Before & After", href: "/#before-after" },
+  { label: "Before & After", href: "/before-after" },
   { label: "Pricing", href: "/#pricing" },
   { label: "FAQs", href: "/faq" },
   { label: "Contact", href: "/#contact" },
