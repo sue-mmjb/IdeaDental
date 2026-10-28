@@ -78,15 +78,6 @@ function ServiceCard({ s, large, className = "" }: { s: ServiceCategory; large?:
           <p className={`mt-2 text-[14px] leading-relaxed text-white/80 ${large ? "line-clamp-3" : "line-clamp-2"}`}>
             {s.description}
           </p>
-          {s.treatments.length > 0 && (
-            <ul className="mt-4 hidden flex-wrap gap-1.5 sm:flex" aria-label={`${s.label} treatments`}>
-              {s.treatments.map((t) => (
-                <li key={t} className="rounded-full border border-white/30 px-3 py-1 text-[12px] text-white/90">
-                  {t}
-                </li>
-              ))}
-            </ul>
-          )}
           <p className="mt-4 text-[14px] font-medium text-white">
             {s.cta.label} <span aria-hidden>→</span>
           </p>
