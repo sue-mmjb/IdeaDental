@@ -47,15 +47,15 @@ export default function Testimonials() {
       aria-label="Patient reviews"
       className="bg-surface py-14 md:py-20"
     >
-      <div className="container-x grid gap-12 md:grid-cols-[1fr_auto_1.15fr] md:gap-10 lg:gap-16">
-        <div className="flex flex-col justify-between gap-10">
+      <div className="container-x grid gap-8 md:grid-cols-[1fr_auto_1.15fr] md:gap-10 lg:gap-16">
+        <div className="flex flex-col justify-between gap-6 md:gap-10">
           <div data-reveal>
             <Eyebrow>Patient Reviews</Eyebrow>
-            <p className="mt-4 max-w-[26ch] font-display text-[clamp(20px,1.9vw,28px)] font-medium leading-[1.3] tracking-[-0.02em] text-ink/75">
+            <p className="mt-3 max-w-[26ch] font-display text-[clamp(17px,1.9vw,28px)] font-medium leading-[1.3] tracking-[-0.02em] text-ink/75">
               See why Houston patients choose Idea Dental for affordable, compassionate dental care.
             </p>
-            <p data-reveal className="mt-6 flex items-baseline gap-3">
-              <span className="font-display text-[34px] font-semibold tracking-[-0.02em]">
+            <p data-reveal className="mt-4 flex items-baseline gap-3 md:mt-6">
+              <span className="font-display text-[28px] font-semibold tracking-[-0.02em] md:text-[34px]">
                 {reviewSummary.rating}
               </span>
               <span aria-hidden className="text-[15px] tracking-[0.1em] text-primary">
@@ -78,12 +78,12 @@ export default function Testimonials() {
         <figure data-reveal>
           <div data-quote>
             <blockquote>
-              <p className="font-display text-[clamp(32px,3.7vw,58px)] font-semibold leading-[1.08] tracking-[-0.035em]">
+              <p className="font-display text-[clamp(24px,3.7vw,58px)] font-semibold leading-[1.1] tracking-[-0.035em]">
                 {t.headline}
               </p>
-              <p className="mt-6 max-w-[58ch] text-[16px] leading-relaxed text-muted">{t.body}</p>
+              <p className="mt-4 max-w-[58ch] text-[15px] leading-relaxed text-muted md:mt-6 md:text-[16px]">{t.body}</p>
             </blockquote>
-            <figcaption className="mt-8 flex items-center gap-3">
+            <figcaption className="mt-5 flex items-center gap-3 md:mt-8">
               <span
                 aria-hidden
                 className="grid size-12 place-items-center rounded-full bg-white font-display text-[15px] font-semibold text-ink ring-1 ring-line"
