@@ -170,12 +170,12 @@ export default function Header() {
                 <a
                   href={business.phoneHref}
                   tabIndex={stuck ? 0 : -1}
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/40 py-3 text-[15px] font-medium text-white"
+                  className="inline-flex flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full border border-white/40 px-3 py-3 text-[14px] font-medium text-white"
                 >
                   <Phone className="size-4" /> Call or text
                 </a>
-                <PrimaryButton href="/#contact" tabIndex={stuck ? 0 : -1} className="flex-1 py-3">
-                  Request an Appointment
+                <PrimaryButton href="/#contact" tabIndex={stuck ? 0 : -1} className="flex-1 whitespace-nowrap px-3 py-3 text-[14px]">
+                  Request appointment
                 </PrimaryButton>
               </div>
             </div>
