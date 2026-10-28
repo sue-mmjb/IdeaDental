@@ -5,12 +5,11 @@ import { ArrowPill, Heading } from "../ui";
 import { ArrowUpRight } from "../icons";
 
 /**
- * Service cards. From md up they are the photo tiles of the design: the image fills the card
- * and the copy sits over a dark gradient. On phones the same four become compact rows, a small
- * square picture beside the title and one line, so the whole set fits in one screen.
+ * Service cards. Four photo tiles: on phones a two-by-two grid of equal tiles, from md the
+ * uneven masonry of the design. The copy sits over a dark gradient at the foot of each tile.
  */
 
-/** The question card is a signpost, not a photo tile: ink on paper, the artwork in its own column. */
+/** The question card: on phones a night tile like the others, from md ink on paper with the artwork in its own column. */
 function QuestionCard({ s, className = "" }: { s: ServiceCategory; className?: string }) {
   return (
     <Link
@@ -18,32 +17,34 @@ function QuestionCard({ s, className = "" }: { s: ServiceCategory; className?: s
       aria-label={`${s.label}: ${s.cta.label.toLowerCase()}`}
       data-reveal
       data-zoom-card
-      className={`group relative flex items-center overflow-hidden rounded-card bg-white ring-1 ring-line md:flex-row-reverse ${className}`}
+      className={`group relative block aspect-[4/5] overflow-hidden rounded-card bg-night text-white md:flex md:aspect-auto md:flex-row-reverse md:items-center md:bg-white md:text-ink md:ring-1 md:ring-line ${className}`}
     >
-      <div className="flex w-24 shrink-0 items-center justify-center p-3 md:w-[42%] md:px-8 md:py-0">
+      <div className="absolute right-3 top-3 w-[38%] md:static md:flex md:w-[42%] md:shrink-0 md:items-center md:justify-center md:px-8">
         <Image
           data-zoom-img
           src={s.image}
           alt={s.alt}
           width={468}
           height={476}
-          sizes="(min-width: 768px) 28vw, 96px"
+          sizes="(min-width: 768px) 28vw, 30vw"
           className="h-auto w-full object-contain will-change-transform md:max-w-[260px]"
         />
       </div>
-      <div className="flex-1 py-3 pr-12 md:p-7 md:pr-20">
+      <div className="absolute inset-x-0 bottom-0 p-3 md:static md:flex-1 md:p-7">
         <div className="max-w-[40ch]">
-          <h3 className="font-display text-[17px] font-semibold tracking-[-0.02em] text-ink md:text-[clamp(22px,2.4vw,38px)] md:tracking-[-0.03em]">
+          <h3 className="font-display text-[17px] font-semibold tracking-[-0.02em] md:text-[clamp(22px,2.4vw,38px)] md:tracking-[-0.03em]">
             {s.label}
           </h3>
-          <p className="mt-1 text-[13px] leading-snug text-muted md:mt-2 md:text-[14px] md:leading-relaxed">{s.description}</p>
-          <p className="mt-2 text-[13px] font-medium text-primary md:mt-4 md:text-[14px]">
+          <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-white/80 md:mt-2 md:line-clamp-none md:text-[14px] md:leading-relaxed md:text-muted">
+            {s.description}
+          </p>
+          <p className="mt-2 text-[12px] font-medium text-white md:mt-4 md:text-[14px] md:text-primary">
             {s.cta.label} <span aria-hidden>→</span>
           </p>
         </div>
       </div>
-      <span className="absolute right-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full border border-ink/25 text-ink transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-white md:bottom-7 md:right-7 md:top-auto md:size-11 md:translate-y-0">
-        <ArrowUpRight className="size-4 md:size-5" />
+      <span className="absolute bottom-7 right-7 hidden size-11 shrink-0 place-items-center rounded-full border border-ink/25 text-ink transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-white md:grid">
+        <ArrowUpRight className="size-5" />
       </span>
     </Link>
   );
@@ -57,38 +58,35 @@ function ServiceCard({ s, large, className = "" }: { s: ServiceCategory; large?:
       aria-label={`${s.label}: ${s.cta.label.toLowerCase()}`}
       data-reveal
       data-zoom-card
-      className={`group relative flex items-center overflow-hidden rounded-card bg-white ring-1 ring-line md:block md:bg-night md:text-white md:ring-0 ${className}`}
+      className={`group relative block aspect-[4/5] overflow-hidden rounded-card bg-night text-white md:aspect-auto ${className}`}
     >
-      {/* Phone: a square picture at the left. Desktop: the picture fills the card. */}
-      <div className="relative m-3 size-24 shrink-0 overflow-hidden rounded-[14px] md:absolute md:inset-0 md:m-0 md:size-auto md:rounded-none">
-        <Image
-          data-zoom-img
-          src={s.image}
-          alt={s.alt}
-          fill
-          sizes={large ? "(min-width: 768px) 62vw, 96px" : "(min-width: 768px) 34vw, 96px"}
-          className="object-cover will-change-transform"
-        />
-      </div>
-      <div className="absolute inset-0 hidden bg-linear-to-t from-black/85 via-black/35 to-black/5 md:block" />
-      <div className="relative flex flex-1 items-center justify-between gap-3 py-3 pr-3 md:absolute md:inset-x-0 md:bottom-0 md:items-end md:p-7">
+      <Image
+        data-zoom-img
+        src={s.image}
+        alt={s.alt}
+        fill
+        sizes={large ? "(min-width: 768px) 62vw, 50vw" : "(min-width: 768px) 34vw, 50vw"}
+        className="object-cover will-change-transform"
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-black/5" />
+      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-3 md:p-7">
         <div className="max-w-[46ch]">
           <h3
-            className={`font-display text-[17px] font-semibold tracking-[-0.02em] text-ink md:text-white md:tracking-[-0.03em] ${
+            className={`font-display text-[17px] font-semibold tracking-[-0.02em] md:tracking-[-0.03em] ${
               large ? "md:text-[clamp(26px,2.7vw,42px)]" : "md:text-[clamp(22px,1.9vw,30px)]"
             }`}
           >
             {s.label}
           </h3>
-          <p className={`mt-1 text-[13px] leading-snug text-muted md:mt-2 md:text-[14px] md:leading-relaxed md:text-white/80 ${large ? "md:line-clamp-3" : "md:line-clamp-2"}`}>
+          <p className={`mt-1 line-clamp-2 text-[12px] leading-snug text-white/80 md:mt-2 md:text-[14px] md:leading-relaxed ${large ? "md:line-clamp-3" : "md:line-clamp-2"}`}>
             {s.description}
           </p>
-          <p className="mt-2 text-[13px] font-medium text-primary md:mt-4 md:text-[14px] md:text-white">
+          <p className="mt-2 text-[12px] font-medium text-white md:mt-4 md:text-[14px]">
             {s.cta.label} <span aria-hidden>→</span>
           </p>
         </div>
-        <span className="grid size-9 shrink-0 place-items-center rounded-full border border-ink/25 text-ink transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-white md:size-11 md:border-white/50 md:text-white">
-          <ArrowUpRight className="size-4 md:size-5" />
+        <span className="hidden size-11 shrink-0 place-items-center rounded-full border border-white/50 transition-colors group-hover:border-primary group-hover:bg-primary md:grid">
+          <ArrowUpRight className="size-5" />
         </span>
       </div>
     </Link>
@@ -117,13 +115,13 @@ export default function Services() {
           </div>
         </div>
 
-        {/* Phones: four rows. Desktop: uneven masonry, two rows with the wide card alternating sides. */}
+        {/* Phones: two by two. Desktop: uneven masonry, two rows with the wide card alternating sides. */}
         <div className="mt-6 grid gap-3 md:mt-12 md:gap-5">
-          <div className="grid gap-3 md:h-[clamp(340px,30vw,460px)] md:grid-cols-[1.866fr_1fr] md:gap-5">
+          <div className="grid grid-cols-2 gap-3 md:h-[clamp(340px,30vw,460px)] md:grid-cols-[1.866fr_1fr] md:gap-5">
             <ServiceCard s={restorative} large />
             <ServiceCard s={braces} />
           </div>
-          <div className="grid gap-3 md:h-[clamp(340px,30vw,460px)] md:grid-cols-[1fr_1.866fr] md:gap-5">
+          <div className="grid grid-cols-2 gap-3 md:h-[clamp(340px,30vw,460px)] md:grid-cols-[1fr_1.866fr] md:gap-5">
             <ServiceCard s={cosmetic} />
             <ServiceCard s={faq} large />
           </div>
