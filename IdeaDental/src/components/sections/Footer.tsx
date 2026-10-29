@@ -12,30 +12,11 @@ import { business, hours, nav } from "@/lib/content";
  *    line of small print.
  */
 
-const dayGroups = (() => {
-  const groups: { days: string[]; time: string; note: string }[] = [];
-  for (const h of hours) {
-    const g = groups.find((x) => x.time === h.time && x.note === h.note);
-    if (g) g.days.push(h.day);
-    else groups.push({ days: [h.day], time: h.time, note: h.note });
-  }
-  const abbr: Record<string, string> = {
-    Monday: "Mon", Tuesday: "Tues", Wednesday: "Wed", Thursday: "Thur", Friday: "Fri", Saturday: "Sat", Sunday: "Sun",
-  };
-  return groups
-    .map((g) => ({
-      ...g,
-      label: g.days.join(" & "),
-      short: g.days.map((d) => abbr[d] ?? d.slice(0, 3)).join(" and "),
-    }))
-    .sort((a, b) => Number(a.time === "Closed") - Number(b.time === "Closed"));
-})();
-
 const serviceLine = [
   "Dental implants",
   "Metal braces for kids, teens and adults",
   "Porcelain and composite veneers",
-  "Cleanings and deep cleanings",
+  "Cleanings, deep cleanings and perio maintenance",
   "Fillings, crowns and root canals",
   "Extractions and bone grafts",
   "Dentures and partials",
@@ -43,9 +24,10 @@ const serviceLine = [
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-[88px_1fr] gap-4 border-b border-line py-4 last:border-0 sm:grid-cols-[140px_1fr]">
-      <dt className="pt-0.5 text-[12px] uppercase tracking-[0.12em] text-muted">{label}</dt>
-      <dd className="text-right text-[15px] leading-relaxed text-ink">{children}</dd>
+    // Phones: label above the value, full width, so nothing wraps into a stray word. From sm: label left, value right.
+    <div className="grid gap-2 border-b border-line py-4 last:border-0 sm:grid-cols-[140px_1fr] sm:gap-4">
+      <dt className="text-[12px] uppercase tracking-[0.12em] text-muted sm:pt-0.5">{label}</dt>
+      <dd className="text-[15px] leading-relaxed text-ink sm:text-right">{children}</dd>
     </div>
   );
 }
@@ -95,18 +77,23 @@ export default function Footer() {
                 {business.phone}
               </a>
             </Row>
-            <Row label="Hours">
-              <span className="block space-y-2">
-                {dayGroups.map((g) => (
-                  <span key={g.label} className="block">
-                    <span className="block whitespace-nowrap text-[14px]">
-                      <span className="font-medium">{g.short}</span> · {g.time}
-                    </span>
-                    {g.note && <span className="block text-[12px] text-muted">{g.note}</span>}
-                  </span>
-                ))}
-              </span>
-            </Row>
+            {/* Office hours: one row per day, time and note on the right, after the schedule table Sue approved. */}
+            <div className="border-b border-line py-4">
+              <dt className="text-[12px] uppercase tracking-[0.12em] text-muted">Hours</dt>
+              <dd className="mt-2">
+                <ul className="divide-y divide-line/70">
+                  {hours.map((h) => (
+                    <li key={h.day} className="flex items-baseline justify-between gap-3 py-1.5 text-[14px] leading-relaxed">
+                      <span className="shrink-0 text-muted">{h.day}</span>
+                      <span className="text-right">
+                        <span className="block whitespace-nowrap font-medium tabular-nums text-ink">{h.time}</span>
+                        {h.note && <span className="block text-[12px] text-muted">{h.note}</span>}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </dd>
+            </div>
             <Row label="Fax">{business.fax}</Row>
             <Row label="Languages">{business.languages} (se habla español)</Row>
             <Row label="Dentist">Dr. Stephanie Vu, DDS</Row>
