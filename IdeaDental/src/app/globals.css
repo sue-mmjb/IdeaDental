@@ -37,6 +37,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Body copy is justified with hyphenation, so paragraphs fill their measure and the page has no
+   ragged right edges. Headings, labels and centred lines keep their own alignment: Tailwind's
+   text-* utilities override this base rule. */
+@layer base {
+  p {
+    text-align: justify;
+    text-wrap: pretty;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 3px;

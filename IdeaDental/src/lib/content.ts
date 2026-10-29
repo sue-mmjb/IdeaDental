@@ -308,7 +308,7 @@ export const faqs = [
   },
   {
     q: "How much does a cleaning cost?",
-    a: "An adult cleaning is $75. A full-mouth debridement is $200, and a deep cleaning is $500. The dentist confirms which one you need after evaluating your teeth.",
+    a: "An adult cleaning is $75. A full-mouth debridement is $200, a deep cleaning is $500, and perio maintenance after a deep cleaning is $200. The dentist confirms which one you need after evaluating your teeth.",
   },
   {
     q: "Do you offer payment plans?",
@@ -332,7 +332,7 @@ export const faqs = [
   },
   {
     q: "What general dental treatments do you provide?",
-    a: "Cleanings and deep cleanings, fillings, simple and surgical extractions, root canals, crowns, and dentures or partial dentures, along with dental implants, veneers and metal braces.",
+    a: "Cleanings, deep cleanings and perio maintenance, fillings, simple and surgical extractions, root canals, crowns, and dentures or partial dentures, along with dental implants, veneers and metal braces.",
   },
   {
     q: "Do you offer teeth whitening?",
