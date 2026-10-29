@@ -18,6 +18,7 @@ const jsonLd = {
   "@type": "Dentist",
   name: business.name,
   telephone: "+1-832-664-8640",
+  faxNumber: "+1-832-664-8623",
   address: {
     "@type": "PostalAddress",
     streetAddress: business.address.line1,

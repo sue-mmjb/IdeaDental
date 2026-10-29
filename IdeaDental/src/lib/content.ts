@@ -10,6 +10,7 @@ export const business = {
   name: "Idea Dental",
   phone: "(832) 664-8640",
   phoneHref: "tel:+18326648640",
+  fax: "(832) 664-8623",
   smsHref: "sms:+18326648640",
   address: { line1: "216 W Little York Road, Suite B", line2: "Houston, TX 77076" },
   locationNote: "Conveniently located in north Houston, just off I-45.",
@@ -247,6 +248,8 @@ export const pricing: PriceRow[] = [
   { item: "Adult cleaning", price: "$75" },
   { item: "Full-mouth debridement", price: "$200" },
   { item: "Deep cleaning", price: "$500" },
+  // Dr. Vu, 2026-10-29: "add Perio maintenance $200 under deep cleaning"
+  { item: "Perio maintenance", price: "$200" },
   { item: "Filling", price: "From $250" },
   { item: "Simple extraction", price: "$350" },
   { item: "Surgical extraction", price: "$450" },

@@ -19,11 +19,16 @@ const dayGroups = (() => {
     if (g) g.days.push(h.day);
     else groups.push({ days: [h.day], time: h.time, note: h.note });
   }
-  return groups.map((g) => ({
-    ...g,
-    label: g.days.join(" & "),
-    short: g.days.map((d) => d.slice(0, 3)).join(" & "),
-  }));
+  const abbr: Record<string, string> = {
+    Monday: "Mon", Tuesday: "Tues", Wednesday: "Wed", Thursday: "Thur", Friday: "Fri", Saturday: "Sat", Sunday: "Sun",
+  };
+  return groups
+    .map((g) => ({
+      ...g,
+      label: g.days.join(" & "),
+      short: g.days.map((d) => abbr[d] ?? d.slice(0, 3)).join(" and "),
+    }))
+    .sort((a, b) => Number(a.time === "Closed") - Number(b.time === "Closed"));
 })();
 
 const serviceLine = [
@@ -91,18 +96,18 @@ export default function Footer() {
               </a>
             </Row>
             <Row label="Hours">
-              {dayGroups.map((g) => (
-                <span key={g.label} className="block whitespace-nowrap text-[14px]">
-                  <span className="text-muted">{g.short}</span> {g.time}
-                </span>
-              ))}
-              <span className="mt-1 block text-[12px] text-muted">
-                {dayGroups
-                  .filter((g) => g.note)
-                  .map((g) => `${g.short}: ${g.note}`)
-                  .join(" · ")}
+              <span className="block space-y-2">
+                {dayGroups.map((g) => (
+                  <span key={g.label} className="block">
+                    <span className="block whitespace-nowrap text-[14px]">
+                      <span className="font-medium">{g.short}</span> · {g.time}
+                    </span>
+                    {g.note && <span className="block text-[12px] text-muted">{g.note}</span>}
+                  </span>
+                ))}
               </span>
             </Row>
+            <Row label="Fax">{business.fax}</Row>
             <Row label="Languages">{business.languages} (se habla español)</Row>
             <Row label="Dentist">Dr. Stephanie Vu, DDS</Row>
             <Row label="Follow">
