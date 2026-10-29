@@ -12,15 +12,18 @@ import { business, hours, nav } from "@/lib/content";
  *    line of small print.
  */
 
-const serviceLine = [
+const serviceList = [
   "Dental implants",
-  "Metal braces for kids, teens and adults",
-  "Porcelain and composite veneers",
-  "Cleanings, deep cleanings and perio maintenance",
-  "Fillings, crowns and root canals",
-  "Extractions and bone grafts",
-  "Dentures and partials",
-].join(" · ");
+  "Metal braces",
+  "Veneers",
+  "Cleanings",
+  "Deep cleanings",
+  "Perio maintenance",
+  "Fillings & crowns",
+  "Root canals",
+  "Extractions & bone grafts",
+  "Dentures & partials",
+];
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -67,8 +70,8 @@ export default function Footer() {
               {business.address.line1}
               <br />
               {business.address.line2}
-              <br />
-              <a href={business.mapsUrl} target="_blank" rel="noreferrer" className="text-primary underline-offset-4 hover:underline">
+              <span className="text-muted"> · </span>
+              <a href={business.mapsUrl} target="_blank" rel="noreferrer" className="whitespace-nowrap text-primary underline-offset-4 hover:underline">
                 Get directions
               </a>
             </Row>
@@ -111,20 +114,21 @@ export default function Footer() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer: on phones a tight two-column grid (brand, Visit | Explore, Services, small print) that fits
+          one screen; from md the four columns of the design. */}
       <footer className="bg-night text-white">
-        <div className="container-x pt-12 md:pt-16">
-          <div className="grid gap-10 md:grid-cols-[1.3fr_1fr_1fr_1.4fr] md:gap-8">
-            <div>
-              <Image src="/images/logo-wordmark-white.png" alt={business.name} width={1428} height={528} sizes="170px" className="h-auto w-[160px]" />
-              <p className="mt-4 max-w-[30ch] text-[14px] leading-relaxed text-white/70">
+        <div className="container-x pt-8 md:pt-16">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-[1.3fr_1fr_1fr_1.4fr] md:gap-8">
+            <div className="col-span-2 md:col-span-1">
+              <Image src="/images/logo-wordmark-white.png" alt={business.name} width={1428} height={528} sizes="160px" className="h-auto w-[128px] md:w-[160px]" />
+              <p className="mt-3 text-[13px] leading-relaxed text-white/70 md:mt-4 md:max-w-[30ch] md:text-[14px]">
                 Family and cosmetic dentistry in north Houston, in English and Spanish. Care provided by Dr. Stephanie Vu, DDS.
               </p>
             </div>
 
             <div>
-              <h3 className="text-[12px] uppercase tracking-[0.14em] text-white/60">Visit</h3>
-              <address className="mt-3 text-[14px] not-italic leading-relaxed text-white/85">
+              <h3 className="text-[11px] uppercase tracking-[0.14em] text-white/60 md:text-[12px]">Visit</h3>
+              <address className="mt-2 text-[13px] not-italic leading-relaxed text-white/85 md:mt-3 md:text-[14px]">
                 {business.name}
                 <br />
                 {business.address.line1}
@@ -134,8 +138,8 @@ export default function Footer() {
             </div>
 
             <div>
-              <h3 className="text-[12px] uppercase tracking-[0.14em] text-white/60">Explore</h3>
-              <ul className="mt-3 space-y-2 text-[14px] text-white/85">
+              <h3 className="text-[11px] uppercase tracking-[0.14em] text-white/60 md:text-[12px]">Explore</h3>
+              <ul className="mt-2 space-y-1 text-[13px] text-white/85 md:mt-3 md:space-y-2 md:text-[14px]">
                 {nav.map((item) => (
                   <li key={item.href}>
                     <Link href={item.href} className="transition-colors hover:text-white">
@@ -146,13 +150,17 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div>
-              <h3 className="text-[12px] uppercase tracking-[0.14em] text-white/60">Services</h3>
-              <p className="mt-3 text-[14px] leading-relaxed text-white/85">{serviceLine}.</p>
+            <div className="col-span-2 md:col-span-1">
+              <h3 className="text-[11px] uppercase tracking-[0.14em] text-white/60 md:text-[12px]">Services</h3>
+              <ul className="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-[13px] text-white/85 md:mt-3 md:grid-cols-1 md:gap-y-2 md:text-[14px]">
+                {serviceList.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col gap-2 border-t border-white/10 py-6 pb-24 text-[13px] text-white/55 md:flex-row md:items-center md:justify-between lg:pb-6">
+          <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 py-4 pb-24 text-[12px] text-white/55 md:mt-12 md:py-6 md:text-[13px] lg:pb-6">
             <p>© {business.name} · Houston, Texas</p>
             <p>Hablamos Español</p>
           </div>

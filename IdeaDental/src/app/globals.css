@@ -37,15 +37,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Body copy is justified with hyphenation, so paragraphs fill their measure and the page has no
-   ragged right edges. Headings, labels and centred lines keep their own alignment: Tailwind's
-   text-* utilities override this base rule. */
+/* Body copy wraps evenly with hyphenation. From md the measure is wide enough to justify without
+   word gaps; on phones it stays left so short lines don't stretch. Headings, labels and centred
+   lines keep their own alignment: Tailwind's text-* utilities override this base rule. */
 @layer base {
   p {
-    text-align: justify;
     text-wrap: pretty;
     -webkit-hyphens: auto;
     hyphens: auto;
+  }
+  @media (min-width: 48rem) {
+    p {
+      text-align: justify;
+    }
   }
 }
 
