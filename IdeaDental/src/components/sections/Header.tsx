@@ -98,8 +98,8 @@ export default function Header() {
   return (
     <header ref={bar} className="container-x relative pt-6 md:pt-8">
       <div data-hero-nav className="flex items-center justify-between gap-6 border-b border-white/25 pb-5">
-        <Link href="/" aria-label="Idea Dental home" className="shrink-0">
-          <Image src="/images/logo-white.png" alt="Idea Dental" width={476} height={176} className="h-10 w-auto md:h-11" preload />
+        <Link href="/" aria-label="Idea Dental home" className="shrink-0 rounded-xl bg-white px-3 py-1.5 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5)]">
+          <Image src="/images/logo.png" alt="Idea Dental" width={476} height={176} className="h-9 w-auto md:h-10" preload />
         </Link>
         <nav aria-label="Primary" className="hidden items-center gap-7 text-[15px] text-white/90 lg:flex">
           {nav.map((item) => (
@@ -125,17 +125,17 @@ export default function Header() {
             {/* Sticky bar: slides in once the hero header has scrolled away. */}
             <div
               aria-hidden={!stuck}
-              className={`fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-night/95 text-white backdrop-blur-md [transition:transform_.3s_cubic-bezier(.16,1,.3,1),visibility_.3s] ${
+              className={`fixed inset-x-0 top-0 z-40 border-b border-line bg-paper/95 text-ink backdrop-blur-md [transition:transform_.3s_cubic-bezier(.16,1,.3,1),visibility_.3s] ${
                 stuck ? "translate-y-0" : "invisible -translate-y-full"
               }`}
             >
               <div className="container-x flex h-14 items-center justify-between gap-4">
                 <Link href="/" aria-label="Idea Dental home" className="shrink-0" tabIndex={stuck ? 0 : -1}>
-                  <Image src="/images/logo-white.png" alt="" width={476} height={176} className="h-8 w-auto" />
+                  <Image src="/images/logo.png" alt="" width={476} height={176} className="h-8 w-auto" />
                 </Link>
-                <nav aria-label="Primary, sticky" className="hidden items-center gap-6 text-[14px] text-white/85 lg:flex">
+                <nav aria-label="Primary, sticky" className="hidden items-center gap-6 text-[14px] text-ink/80 lg:flex">
                   {nav.map((item) => (
-                    <Link key={item.href} href={item.href} tabIndex={stuck ? 0 : -1} className="transition-colors hover:text-white">
+                    <Link key={item.href} href={item.href} tabIndex={stuck ? 0 : -1} className="transition-colors hover:text-primary">
                       {item.label}
                     </Link>
                   ))}
@@ -145,7 +145,7 @@ export default function Header() {
                     href={business.phoneHref}
                     tabIndex={stuck ? 0 : -1}
                     aria-label={`Call or text ${business.phone}`}
-                    className="hidden items-center gap-2 px-3 text-[14px] text-white/85 transition-colors hover:text-white sm:inline-flex"
+                    className="hidden items-center gap-2 px-3 text-[14px] text-ink/80 transition-colors hover:text-primary sm:inline-flex"
                   >
                     <Phone className="size-4" />
                     {business.phone}
@@ -154,7 +154,7 @@ export default function Header() {
                     <span className="sm:hidden">Book</span>
                     <span className="hidden sm:inline">Request an Appointment</span>
                   </PrimaryButton>
-                  {menuButton("grid size-10 place-items-center rounded-full border border-white/30 text-white lg:hidden")}
+                  {menuButton("grid size-10 place-items-center rounded-full border border-ink/30 text-ink lg:hidden")}
                 </div>
               </div>
             </div>

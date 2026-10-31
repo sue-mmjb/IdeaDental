@@ -21,6 +21,7 @@
   --color-surface: #f1efe6;        /* was --paper-2, the alternating band */
   --color-night: #00405c;          /* was --accent-deep, the old dark/footer tone */
   --color-brand: #009adb;          /* the literal logo blue: fills and tints only */
+  --color-accent: #de1809;         /* the logo red: a trace on small elements only (stars, eyebrows, link labels) */
 
   --radius-card: 20px;
 }
