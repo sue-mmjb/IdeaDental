@@ -98,8 +98,16 @@ export default function Header() {
   return (
     <header ref={bar} className="container-x relative pt-6 md:pt-8">
       <div data-hero-nav className="flex items-center justify-between gap-6 border-b border-white/25 pb-5">
-        <Link href="/" aria-label="Idea Dental home" className="shrink-0 rounded-xl bg-white px-3 py-1.5 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5)]">
-          <Image src="/images/logo.png" alt="Idea Dental" width={476} height={176} className="h-9 w-auto md:h-10" preload />
+        <Link href="/" aria-label="Idea Dental home" className="shrink-0">
+          {/* Straight on the photo, larger, with a soft shadow so the blue letters and grey tooth lift off the scrim. */}
+          <Image
+            src="/images/logo.png"
+            alt="Idea Dental"
+            width={476}
+            height={176}
+            className="h-14 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)] md:h-16"
+            preload
+          />
         </Link>
         <nav aria-label="Primary" className="hidden items-center gap-7 text-[15px] text-white/90 lg:flex">
           {nav.map((item) => (
