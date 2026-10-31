@@ -75,7 +75,7 @@ export function NavArrow({
 
 export function Eyebrow({ children, className = "", ...rest }: ComponentProps<"p">) {
   return (
-    <p className={`text-[15px] text-muted ${className}`} {...rest}>
+    <p className={`text-[15px] font-medium text-accent ${className}`} {...rest}>
       {children}
     </p>
   );

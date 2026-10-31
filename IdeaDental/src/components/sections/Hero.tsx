@@ -53,7 +53,7 @@ export default function Hero() {
               {hero.body}
             </p>
             <p data-hero-line className="mt-4 flex items-center gap-2 text-[14px] text-white/85">
-              <span aria-hidden className="tracking-[0.1em] text-brand">★★★★★</span>
+              <span aria-hidden className="tracking-[0.1em] text-accent">★★★★★</span>
               <span>
                 <strong className="font-semibold text-white">{reviewSummary.rating}</strong> · {reviewSummary.count}
               </span>

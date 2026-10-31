@@ -38,7 +38,7 @@ function QuestionCard({ s, className = "" }: { s: ServiceCategory; className?: s
           <p className="mt-1 line-clamp-2 text-[12px] leading-snug text-white/80 md:mt-2 md:line-clamp-none md:text-[14px] md:leading-relaxed md:text-muted">
             {s.description}
           </p>
-          <p className="mt-2 text-[12px] font-medium text-white md:mt-4 md:text-[14px] md:text-primary">
+          <p className="mt-2 text-[12px] font-medium text-white md:mt-4 md:text-[14px] md:text-accent">
             {s.cta.label} <span aria-hidden>→</span>
           </p>
         </div>
