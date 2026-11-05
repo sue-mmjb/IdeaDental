@@ -413,6 +413,7 @@ export const faqs = [
   },
   {
     q: "Can I request an appointment online?",
-    a: "Yes. You can request an appointment through the form on our website and a member of the team will confirm your appointment by phone. For urgent problems or same-day care, calling the office is the fastest way to be seen.",
+    // Dr. Vu: patients book by texting or calling; there is no web form.
+    a: "There's no online form. Text or call (832) 664-8640 and a member of the team will confirm your appointment. Texting is the fastest way to reach us, and calling works just as well during office hours.",
   },
 ];
