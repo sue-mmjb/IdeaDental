@@ -78,3 +78,43 @@ export function Menu({ className = "size-5", open = false }: IconProps & { open?
     </svg>
   );
 }
+
+/* Why Us: one line icon per reason, 1.5px stroke, drawn to the same 24-grid as the rest. */
+
+export function SpeechBubbles({ className = "size-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
+      <path d="M4 4h9a2 2 0 0 1 2 2v4.5a2 2 0 0 1-2 2H9L5.5 15.5v-3H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" />
+      <path d="M17 9.5h3a2 2 0 0 1 2 2V16a2 2 0 0 1-2 2h-1.5v3L15 18h-4a2 2 0 0 1-2-2v-1.5" />
+    </svg>
+  );
+}
+
+export function ScanTooth({ className = "size-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
+      <path d="M7.5 3C5 3 3.5 5 3.5 7.5c0 2 .8 3.2 1.3 5.5.4 2 .6 4.5 1.5 7 .3.7 1.1.7 1.4 0L9.3 15c.4-.9 1.9-.9 2.3 0l1.6 5c.3.7 1.1.7 1.4 0 .9-2.5 1.1-5 1.5-7 .5-2.3 1.3-3.5 1.3-5.5C17.4 5 16 3 13.5 3c-1 0-1.8.6-3 .6S8.5 3 7.5 3Z" />
+      <path d="M4.5 9h12M5.5 12.5h10M19.5 7.5h1M19.5 11h1" />
+    </svg>
+  );
+}
+
+export function CalendarCheck({ className = "size-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M3 10h18M8 3v4M16 3v4M9 15.5l2 2 4-4" />
+    </svg>
+  );
+}
+
+export function Family({ className = "size-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden>
+      <circle cx="6.5" cy="7" r="2.5" />
+      <circle cx="17.5" cy="7" r="2.5" />
+      <circle cx="12" cy="11.5" r="2" />
+      <path d="M2 20a4.5 4.5 0 0 1 7.2-3.6M22 20a4.5 4.5 0 0 0-7.2-3.6M8.5 21a3.5 3.5 0 0 1 7 0" />
+    </svg>
+  );
+}

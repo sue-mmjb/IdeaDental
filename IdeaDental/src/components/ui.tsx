@@ -73,10 +73,12 @@ export function NavArrow({
   );
 }
 
+/** Section label: small caps in muted grey, led by a short dash in the logo red. */
 export function Eyebrow({ children, className = "", ...rest }: ComponentProps<"p">) {
   return (
-    <p className={`text-[15px] font-medium text-accent ${className}`} {...rest}>
-      {children}
+    <p className={`flex items-center gap-2.5 text-[12px] uppercase tracking-[0.14em] text-muted ${className}`} {...rest}>
+      <span aria-hidden className="h-px w-6 shrink-0 bg-accent" />
+      <span>{children}</span>
     </p>
   );
 }
