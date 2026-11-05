@@ -151,8 +151,11 @@ export default function Footer() {
           </div>
 
           <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 py-4 pb-24 text-[12px] text-white/55 md:mt-12 md:py-6 md:text-[13px] lg:pb-6">
-            <p>© {business.name} · Houston, Texas</p>
-            <p>Hablamos Español</p>
+            {/* Year comes from the build, so it never goes stale; Vercel rebuilds on every deploy. */}
+            <p>
+              © {new Date().getFullYear()} {business.name} · Houston, Texas · All rights reserved.
+            </p>
+            <p className="shrink-0">Hablamos Español</p>
           </div>
         </div>
       </footer>
