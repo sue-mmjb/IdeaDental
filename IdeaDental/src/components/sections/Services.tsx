@@ -118,8 +118,9 @@ export default function Services() {
         {/* Phones: two by two. Desktop: uneven masonry, two rows with the wide card alternating sides. */}
         <div className="mt-6 grid gap-3 md:mt-12 md:gap-5">
           <div className="grid grid-cols-2 gap-3 md:h-[clamp(340px,30vw,460px)] md:grid-cols-[1.866fr_1fr] md:gap-5">
-            <ServiceCard s={restorative} large />
-            <ServiceCard s={braces} />
+            {/* Dr. Vu, 2026-11-05: highlight braces, so they take the wide tile. */}
+            <ServiceCard s={braces} large />
+            <ServiceCard s={restorative} />
           </div>
           <div className="grid grid-cols-2 gap-3 md:h-[clamp(340px,30vw,460px)] md:grid-cols-[1fr_1.866fr] md:gap-5">
             <ServiceCard s={cosmetic} />

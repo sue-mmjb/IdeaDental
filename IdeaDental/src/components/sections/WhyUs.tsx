@@ -1,5 +1,16 @@
+import type { ReactNode } from "react";
 import { whyUs } from "@/lib/content";
 import { Eyebrow, Heading } from "../ui";
+import { CalendarCheck, Family, ScanTooth, SpeechBubbles } from "../icons";
+
+/** One visual per reason, in the order of `whyUs.reasons`. "Half the cost" gets the numeral itself. */
+const visuals: ReactNode[] = [
+  <span key="half" className="font-display text-[22px] font-semibold leading-none tracking-[-0.04em] md:text-[24px]">½</span>,
+  <SpeechBubbles key="bilingual" className="size-6" />,
+  <ScanTooth key="scanner" className="size-6" />,
+  <CalendarCheck key="payment" className="size-6" />,
+  <Family key="family" className="size-6" />,
+];
 
 /**
  * "Why patients choose Idea Dental" — the five reasons from the content file. Only their short
@@ -18,10 +29,8 @@ export default function WhyUs() {
         <dl className="mt-8 grid grid-cols-2 gap-x-5 gap-y-6 md:mt-12 md:grid-cols-3 md:gap-10 xl:grid-cols-5">
           {whyUs.reasons.map((r, i) => (
             <div key={r.title} data-reveal className="border-t border-line pt-4 md:pt-5">
-              <p className="hidden text-[13px] tabular-nums text-muted sm:block">
-                {String(i + 1).padStart(2, "0")} / {String(whyUs.reasons.length).padStart(2, "0")}
-              </p>
-              <dt className="font-display text-[16px] font-semibold tracking-[-0.01em] sm:mt-3 md:text-[19px]">
+              <span className="grid size-11 place-items-center rounded-full bg-brand/10 text-primary md:size-12">{visuals[i]}</span>
+              <dt className="mt-3 font-display text-[16px] font-semibold tracking-[-0.01em] md:mt-4 md:text-[19px]">
                 {r.title}
               </dt>
               <dd className="mt-1.5 text-[14px] leading-relaxed text-muted md:mt-2 md:text-[15px]">{r.body}</dd>

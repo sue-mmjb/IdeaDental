@@ -80,6 +80,7 @@ export default function Footer() {
                 {business.phone}
               </a>
             </Row>
+            <Row label="Fax">{business.fax}</Row>
             {/* Office hours: one row per day, time and note on the right, after the schedule table Sue approved. */}
             <div className="border-b border-line py-4">
               <dt className="text-[12px] uppercase tracking-[0.12em] text-muted">Hours</dt>
@@ -97,19 +98,8 @@ export default function Footer() {
                 </ul>
               </dd>
             </div>
-            <Row label="Fax">{business.fax}</Row>
             <Row label="Languages">{business.languages} (se habla español)</Row>
             <Row label="Dentist">Dr. Stephanie Vu, DDS</Row>
-            <Row label="Follow">
-              {business.social.map((s, i) => (
-                <span key={s.label}>
-                  {i > 0 && <span className="text-muted"> · </span>}
-                  <a href={s.href} target="_blank" rel="noreferrer" className="hover:text-primary">
-                    {s.label}
-                  </a>
-                </span>
-              ))}
-            </Row>
           </dl>
         </div>
       </section>
@@ -161,8 +151,11 @@ export default function Footer() {
           </div>
 
           <div className="mt-6 flex items-center justify-between gap-4 border-t border-white/10 py-4 pb-24 text-[12px] text-white/55 md:mt-12 md:py-6 md:text-[13px] lg:pb-6">
-            <p>© {business.name} · Houston, Texas</p>
-            <p>Hablamos Español</p>
+            {/* Year comes from the build, so it never goes stale; Vercel rebuilds on every deploy. */}
+            <p>
+              © {new Date().getFullYear()} {business.name} · Houston, Texas · All rights reserved.
+            </p>
+            <p className="shrink-0">Hablamos Español</p>
           </div>
         </div>
       </footer>
