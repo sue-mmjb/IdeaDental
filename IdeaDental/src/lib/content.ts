@@ -56,7 +56,8 @@ export const whyUs = {
       body: "Discuss your care comfortably in English or Spanish. Se habla español.",
     },
     {
-      title: "Modern iTero® 3D scanner",
+      // Dr. Vu, 2026-11-05: "Put 3D scanner and remove word iTero"
+      title: "Modern 3D scanner",
       body: "No goopy impressions, just a precise digital model the dentist uses to plan your treatment.",
     },
     {
@@ -300,7 +301,7 @@ export const faqs = [
   },
   {
     q: "Do you take walk-ins?",
-    a: "Yes, Idea Dental welcomes walk-ins on Tuesdays and Wednesdays from 10:00 AM to 6:00 PM. Calling ahead is still a good idea so the team can let you know about wait times and be ready for your visit.",
+    a: "Yes, Idea Dental welcomes walk-ins on Tuesdays and Wednesdays from 10:00 AM to 6:00 PM. Calling ahead is still recommended so the team can let you know about wait times and be ready for your visit.",
   },
   {
     q: "How do I book an appointment?",
