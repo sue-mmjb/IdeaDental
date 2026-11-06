@@ -142,7 +142,7 @@ export const services: ServiceCategory[] = [
     key: "braces",
     label: "Braces",
     description: "Metal braces for kids, teens and adults.",
-    treatments: ["Braces for Kids", "Braces for Teens", "Adult Braces", "Early Treatment", "Retention", "iTero Scanner"],
+    treatments: ["Braces for Kids", "Braces for Teens", "Adult Braces", "Early Treatment", "Retention", "3D Scanner"],
     image: "/images/services/braces.jpg",
     alt: "A young patient smiling, wearing metal braces",
     cta: { label: "Learn more", href: "/services/braces" },
@@ -218,10 +218,11 @@ export type TechItem = {
 
 export const technology: TechItem[] = [
   {
-    title: "iTero Element Scanner",
+    // Dr. Vu, 2026-11-06: "3D Scanner"
+    title: "3D Scanner",
     description:
       "Digital scanning technology that creates detailed 3D images of the teeth for modern treatment planning.",
-    video: { id: "cby3c8VHLgM", title: "Introducing the iTero Element 2 intraoral scanner" },
+    video: { id: "cby3c8VHLgM", title: "3D intraoral scanner demonstration" },
   },
   {
     title: "Piezotome Cube",
@@ -232,7 +233,7 @@ export const technology: TechItem[] = [
 
 // Short feature names for the marquee — each is a fact from the verified `features` list.
 export const features = [
-  "iTero digital scanning",
+  "3D digital scanning",
   "Piezotome technology",
   "Hablamos Español",
   "75″ TV in every patient room",
@@ -361,7 +362,7 @@ export const faqs = [
   },
   {
     q: "Do you treat children and families?",
-    a: "Yes. Idea Dental provides family dentistry, so children, teens and adults can be seen under one roof. This includes preventive care, orthodontics for kids and teens, and general treatment for the whole family.",
+    a: "Yes. Idea Dental provides family dentistry, so children, teens and adults can be seen under one roof. This includes preventive care, braces, and general treatment for the whole family.",
   },
   {
     q: "How does a dental implant work?",
@@ -380,8 +381,8 @@ export const faqs = [
     a: "The procedure itself is done with local anesthesia, so you should not feel pain during placement. Afterward, most patients have mild swelling or soreness for a few days that is usually managed with over-the-counter pain relief and settles quickly.",
   },
   {
-    q: "What is the iTero scanner?",
-    a: "The iTero scanner is a digital 3D scanner Idea Dental uses to create precise images of your teeth without the messy, uncomfortable putty impressions of the past. It makes appointments more comfortable and gives the dentist a detailed digital model to plan your treatment.",
+    q: "What is a 3D digital scanner?",
+    a: "Idea Dental uses a 3D digital scanner to create precise images of your teeth without the messy, uncomfortable putty impressions of the past. It makes appointments more comfortable and gives the dentist a detailed digital model to plan your treatment.",
   },
   {
     q: "At what age should my child’s bite be checked?",

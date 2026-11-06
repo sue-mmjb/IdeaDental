@@ -134,7 +134,7 @@ export const servicePages: Record<string, ServicePage> = {
       {
         heading: "What to expect",
         steps: [
-          "Consultation and scan. The dentist examines your teeth and takes a digital iTero scan, with no goopy impressions.",
+          "Consultation and scan. The dentist examines your teeth and takes a 3D digital scan, with no goopy impressions.",
           "Placement. Brackets and archwires are fitted in one visit.",
           "Adjustments. Regular visits tighten the wires and move your teeth step by step.",
           "Retention. Once the braces come off, a retainer keeps your new smile in place.",
@@ -147,7 +147,7 @@ export const servicePages: Record<string, ServicePage> = {
       items: ["Braces"],
     },
     gallery: ["traditional-braces-1", "traditional-braces-2", "traditional-braces-3"],
-    faqs: ["What kind of braces do you offer?", "At what age should my child’s bite be checked?", "What is the iTero scanner?"],
+    faqs: ["What kind of braces do you offer?", "At what age should my child’s bite be checked?", "What is a 3D digital scanner?"],
     related: [
       { label: "Dental implants", href: "/services/dental-implants" },
       { label: "Veneers", href: "/services/veneers" },
