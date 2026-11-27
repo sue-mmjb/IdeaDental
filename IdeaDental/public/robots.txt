@@ -1,2 +1,3 @@
+# Idea Dental, Houston TX
 User-agent: *
 Allow: /
