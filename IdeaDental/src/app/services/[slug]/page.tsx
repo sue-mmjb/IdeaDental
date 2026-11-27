@@ -6,7 +6,7 @@ import MotionProvider from "@/components/MotionProvider";
 import Header from "@/components/sections/Header";
 import Faq from "@/components/sections/Faq";
 import Footer from "@/components/sections/Footer";
-import { PrimaryButton } from "@/components/ui";
+import { PrimaryButton, raisePlus } from "@/components/ui";
 import { business, results, reviewSummary } from "@/lib/content";
 import { costLine, faqsFor, pricesFor, servicePages, serviceSlugs } from "@/lib/services";
 
@@ -112,7 +112,7 @@ export default async function ServicePage({ params }: Props) {
                 <h2 className="font-display text-[clamp(24px,2.4vw,34px)] font-semibold leading-[1.15] tracking-[-0.025em]">
                   Cost &amp; payment
                 </h2>
-                <p className="mt-4 text-[16px] leading-[1.7] text-muted">{page.cost.intro}</p>
+                <p className="mt-4 text-[16px] leading-[1.7] text-muted">{raisePlus(page.cost.intro)}</p>
                 {prices.length > 0 && (
                   <table className="mt-5 w-full border-collapse text-left">
                     <caption className="sr-only">Prices</caption>
@@ -122,7 +122,7 @@ export default async function ServicePage({ params }: Props) {
                           <th scope="row" className="py-3 pr-4 font-display text-[16px] font-medium">
                             {p.item}
                           </th>
-                          <td className="whitespace-nowrap py-3 text-right font-display text-[16px] font-semibold">{p.price}</td>
+                          <td className="whitespace-nowrap py-3 text-right font-display text-[16px] font-semibold">{raisePlus(p.price)}</td>
                         </tr>
                       ))}
                     </tbody>

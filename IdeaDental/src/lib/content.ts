@@ -261,7 +261,8 @@ export const pricing: PriceRow[] = [
   { item: "Denture or partial (per arch)", price: "$1,200" },
   { item: "Dental implant", price: "$3,500" },
   { item: "Implant crown & abutment", price: "$1,800" },
-  { item: "Braces", price: "$2,500–$5,500" },
+  // Dr. Vu, 2026-11-27: "Braces: $2500-$5500+", the plus written raised (see raisePlus in ui.tsx).
+  { item: "Braces", price: "$2,500–$5,500+" },
   // Dr. Vu, 2026-10-22: "Composite veneers $6000. Contact us for more information."
   { item: "Composite veneers", price: "$6,000", note: "Contact us for more information." },
 ];
@@ -322,7 +323,7 @@ export const faqs = [
   },
   {
     q: "What kind of braces do you offer?",
-    a: "We place traditional metal braces for children, teens and adults. Braces range from $2,500 to $5,500 depending on how much correction your teeth need. We don't offer Invisalign or clear aligners.",
+    a: "We place traditional metal braces for children, teens and adults. Braces range from $2,500 to $5,500+ depending on how much correction your teeth need. We don't offer Invisalign or clear aligners.",
   },
   {
     q: "How much does a dental implant cost?",
