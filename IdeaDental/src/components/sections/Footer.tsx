@@ -12,17 +12,19 @@ import { business, hours, nav } from "@/lib/content";
  *    line of small print.
  */
 
+// Every service is a link: the three with a page of their own go there, the rest go to the
+// price list, where each one is a row.
 const serviceList = [
-  "Dental implants",
-  "Metal braces",
-  "Veneers",
-  "Cleanings",
-  "Deep cleanings",
-  "Perio maintenance",
-  "Fillings & crowns",
-  "Root canals",
-  "Extractions & bone grafts",
-  "Dentures & partials",
+  { label: "Dental implants", href: "/services/dental-implants" },
+  { label: "Metal braces", href: "/services/braces" },
+  { label: "Veneers", href: "/services/veneers" },
+  { label: "Cleanings", href: "/#pricing" },
+  { label: "Deep cleanings", href: "/#pricing" },
+  { label: "Perio maintenance", href: "/#pricing" },
+  { label: "Fillings & crowns", href: "/#pricing" },
+  { label: "Root canals", href: "/#pricing" },
+  { label: "Extractions & bone grafts", href: "/#pricing" },
+  { label: "Dentures & partials", href: "/#pricing" },
 ];
 
 function Row({ label, children }: { label: string; children: React.ReactNode }) {
@@ -110,7 +112,9 @@ export default function Footer() {
         <div className="container-x pt-8 md:pt-16">
           <div className="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-[1.3fr_1fr_1fr_1.4fr] md:gap-8">
             <div className="col-span-2 md:col-span-1">
-              <Image src="/images/logo-wordmark-white.png" alt={business.name} width={1428} height={528} sizes="160px" className="h-auto w-[128px] md:w-[160px]" />
+              <Link href="/" aria-label={`${business.name} home`} className="inline-block">
+                <Image src="/images/logo-wordmark-white.png" alt={business.name} width={1428} height={528} sizes="160px" className="h-auto w-[128px] md:w-[160px]" />
+              </Link>
               <p className="mt-3 text-[13px] leading-relaxed text-white/70 md:mt-4 md:max-w-[30ch] md:text-[14px]">
                 Family and cosmetic dentistry in north Houston, in English and Spanish. Care provided by Dr. Stephanie Vu, DDS.
               </p>
@@ -119,11 +123,19 @@ export default function Footer() {
             <div>
               <h3 className="text-[11px] uppercase tracking-[0.14em] text-white/60 md:text-[12px]">Visit</h3>
               <address className="mt-2 text-[13px] not-italic leading-relaxed text-white/85 md:mt-3 md:text-[14px]">
-                {business.name}
-                <br />
-                {business.address.line1}
-                <br />
-                {business.address.line2}
+                <a
+                  href={business.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${business.name}, ${business.address.line1}, ${business.address.line2}: open in Google Maps`}
+                  className="transition-colors hover:text-white"
+                >
+                  {business.name}
+                  <br />
+                  {business.address.line1}
+                  <br />
+                  {business.address.line2}
+                </a>
               </address>
             </div>
 
@@ -144,7 +156,11 @@ export default function Footer() {
               <h3 className="text-[11px] uppercase tracking-[0.14em] text-white/60 md:text-[12px]">Services</h3>
               <ul className="mt-2 grid grid-cols-2 gap-x-6 gap-y-1 text-[13px] text-white/85 md:mt-3 md:grid-cols-1 md:gap-y-2 md:text-[14px]">
                 {serviceList.map((item) => (
-                  <li key={item}>{item}</li>
+                  <li key={item.label}>
+                    <Link href={item.href} className="transition-colors hover:text-white">
+                      {item.label}
+                    </Link>
+                  </li>
                 ))}
               </ul>
             </div>
