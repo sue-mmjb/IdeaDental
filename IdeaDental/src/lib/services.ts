@@ -109,7 +109,7 @@ export const servicePages: Record<string, ServicePage> = {
       "Straighten your smile with traditional metal braces, fitted by a team that treats the whole family. Payment plans for care spread over multiple visits.",
     metaTitle: "Braces in Houston, TX | Idea Dental",
     metaDescription:
-      "Traditional metal braces for children, teens and adults at Idea Dental, Houston. Braces $2,500 to $5,500. Payment plans for multi-visit care. Call (832) 664-8640.",
+      "Traditional metal braces for children, teens and adults at Idea Dental, Houston. Braces $2,500 to $5,500+. Payment plans for multi-visit care. Call (832) 664-8640.",
     image: "/images/services/braces.jpg",
     sections: [
       {
@@ -134,7 +134,8 @@ export const servicePages: Record<string, ServicePage> = {
       {
         heading: "What to expect",
         steps: [
-          "Consultation and scan. The dentist examines your teeth and takes a 3D digital scan, with no goopy impressions.",
+          // Dr. Vu, 2026-11-27: the 3D scan phrase replaced with "and orthodontic photos are taken."
+          "Consultation and scan. The dentist examines your teeth and orthodontic photos are taken.",
           "Placement. Brackets and archwires are fitted in one visit.",
           "Adjustments. Regular visits tighten the wires and move your teeth step by step.",
           "Retention. Once the braces come off, a retainer keeps your new smile in place.",
@@ -143,7 +144,7 @@ export const servicePages: Record<string, ServicePage> = {
     ],
     cost: {
       intro:
-        "Braces range from $2,500 to $5,500 depending on how much correction your teeth need, which the dentist confirms at your consultation.",
+        "Braces range from $2,500 to $5,500+ depending on how much correction your teeth need, which the dentist confirms at your consultation.",
       items: ["Braces"],
     },
     gallery: ["traditional-braces-1", "traditional-braces-2", "traditional-braces-3"],

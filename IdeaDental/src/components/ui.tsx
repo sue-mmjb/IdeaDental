@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from "react";
+import { Fragment, type ComponentProps, type ReactNode } from "react";
 import { ArrowUpRight, Chevron } from "./icons";
 
 type Common = { children: ReactNode; className?: string };
@@ -93,4 +93,27 @@ export function Heading({ children, className = "", ...rest }: ComponentProps<"h
       {children}
     </h2>
   );
+}
+
+/**
+ * Sets a "+" that follows a digit ("$5,500+") raised and small, the way a degree sign sits,
+ * as Dr. Vu asked for the braces price. Text without such a plus comes back unchanged.
+ */
+export function raisePlus(text: string): ReactNode {
+  const re = /\d\+/g;
+  const out: ReactNode[] = [];
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    out.push(
+      <Fragment key={m.index}>
+        {text.slice(last, m.index + 1)}
+        <sup className="relative -top-[0.4em] ml-px align-baseline text-[0.68em] leading-none">+</sup>
+      </Fragment>,
+    );
+    last = m.index + 2;
+  }
+  if (out.length === 0) return text;
+  out.push(text.slice(last));
+  return out;
 }

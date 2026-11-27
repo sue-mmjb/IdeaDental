@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { faqs } from "@/lib/content";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { delay, distance, duration, ease } from "@/lib/motion-tokens";
-import { Eyebrow, Heading } from "../ui";
+import { Eyebrow, Heading, raisePlus } from "../ui";
 import { Chevron } from "../icons";
 import AskIdeaDental from "./AskIdeaDental";
 
@@ -90,7 +90,7 @@ export default function Faq({ compact = false, items: given, title }: Props) {
               className="overflow-hidden"
               style={{ height: i === INITIAL_OPEN ? "auto" : 0 }}
             >
-              <p className="max-w-[62ch] px-3 pb-5 text-[15px] leading-relaxed text-muted">{f.a}</p>
+              <p className="max-w-[62ch] px-3 pb-5 text-[15px] leading-relaxed text-muted">{raisePlus(f.a)}</p>
             </div>
           </li>
         );

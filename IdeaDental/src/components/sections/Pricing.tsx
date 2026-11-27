@@ -1,5 +1,5 @@
 import { insurance, pricing, pricingDisclaimer, pricingNotes } from "@/lib/content";
-import { ArrowPill, Eyebrow, Heading } from "../ui";
+import { ArrowPill, Eyebrow, Heading, raisePlus } from "../ui";
 
 /** Insurance + the practice's current price list, set as a quiet editorial table. */
 export default function Pricing() {
@@ -43,7 +43,7 @@ export default function Pricing() {
                   {p.note && <span className="mt-1 block font-sans text-[13px] font-normal text-muted">{p.note}</span>}
                 </th>
                 <td className="whitespace-nowrap py-2 text-right font-display text-[clamp(14px,1.3vw,19px)] font-semibold text-ink md:py-3">
-                  {p.price}
+                  {raisePlus(p.price)}
                 </td>
               </tr>
             ))}
