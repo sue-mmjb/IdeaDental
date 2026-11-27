@@ -166,7 +166,7 @@ export const servicePages: Record<string, ServicePage> = {
     metaTitle: "Porcelain & Composite Veneers in Houston, TX | Idea Dental",
     metaDescription:
       "Transform your smile with custom porcelain or composite veneers at Idea Dental, Houston. Composite veneers $6,000. Payment plans for multi-visit care. Call (832) 664-8640.",
-    image: "/images/services/cosmetic-dentistry.jpg",
+    image: "/images/services/veneers.jpg",
     sections: [
       {
         heading: "What veneers are",

@@ -152,8 +152,8 @@ export const services: ServiceCategory[] = [
     label: "Veneers",
     description: "Porcelain or composite veneers for a brighter, even smile.",
     treatments: ["Porcelain Veneers", "Composite Veneers"],
-    image: "/images/services/cosmetic-dentistry.jpg",
-    alt: "Close-up of a bright, even smile",
+    image: "/images/services/veneers.jpg",
+    alt: "Veneer shade samples held up to a patient's smile",
     cta: { label: "Learn more", href: "/services/veneers" },
   },
   {
