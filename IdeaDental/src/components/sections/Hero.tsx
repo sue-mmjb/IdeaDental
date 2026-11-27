@@ -38,7 +38,7 @@ export default function Hero() {
       <Header />
 
       <div className="container-x absolute inset-x-0 bottom-0 pb-10 md:pb-14">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-8 2xl:flex-row 2xl:items-end 2xl:justify-between">
           <div>
             <h1 className="font-display text-[clamp(40px,5.4vw,88px)] font-semibold leading-[1.04] tracking-[-0.04em]">
               {hero.headline.map((line) => (
@@ -60,21 +60,24 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* Floating pill — StayGo's search bar, reworked as the appointment entry point. */}
+          {/* Floating pill — StayGo's search bar, reworked as the appointment entry point.
+              It never shrinks below its contents (that pushed the button out past the pill's edge):
+              full width on phones, hugging its contents under the headline from lg, and beside the
+              headline only from 2xl, where there is room for both without the headline wrapping further. */}
           <div
             data-hero-search
-            className="flex w-full items-center gap-2 rounded-full border border-white/30 bg-white/10 p-1 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)] backdrop-blur-md lg:mb-2 lg:w-auto"
+            className="flex w-full items-center gap-2 rounded-full border border-white/30 bg-white/10 p-1 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)] backdrop-blur-md lg:w-auto lg:self-start 2xl:mb-2 2xl:shrink-0 2xl:self-auto"
           >
             <a
               href={business.phoneHref}
               aria-label={`Call or text ${business.phone}`}
-              className="inline-flex shrink-0 items-center gap-2 px-4 text-[15px] text-white/90 transition-colors hover:text-white"
+              className="inline-flex shrink-0 items-center gap-2 whitespace-nowrap px-4 text-[15px] text-white/90 transition-colors hover:text-white"
             >
               <Phone className="size-4 shrink-0" />
               <span className="hidden sm:inline">Call or text {business.phone}</span>
               <span className="sm:hidden">Call</span>
             </a>
-            <PrimaryButton href="#contact" className="flex-1 px-6 py-2.5 lg:flex-none">
+            <PrimaryButton href="#contact" className="flex-1 whitespace-nowrap px-6 py-2.5 lg:flex-none">
               Request an Appointment
             </PrimaryButton>
           </div>
